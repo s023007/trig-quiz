@@ -1,429 +1,340 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>اختبار إلكتروني على وحدة الدوال المثلثية</title>
-
-  <!-- خط عربي واضح -->
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;600;700&display=swap" rel="stylesheet">
-
-  <!-- MathJax: إصلاح العربية داخل الكسور والجذور عبر html+bidi و \class{arabic-op}{\text{…}} -->
-  <script>
-    window.MathJax = {
-      tex: {
-        inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']],
-        packages: {'[+]': ['base','ams','html','bidi']},
-        macros: {
-          // صيغ مختصرة للعوامل العربية (كعناصر متماسكة لا تتفكك)
-          jas:  '\\mathop{\\class{arabic-op}{\\text{جاس}}}\\nolimits',
-          jtas: '\\mathop{\\class{arabic-op}{\\text{جتاس}}}\\nolimits',
-          tas:  '\\mathop{\\class{arabic-op}{\\text{ظاس}}}\\nolimits',
-          // دعم مباشر للكتابة المختصرة:
-          "جا":  '\\mathop{\\class{arabic-op}{\\text{جا}}}\\nolimits',
-          "جتا": '\\mathop{\\class{arabic-op}{\\text{جتا}}}\\nolimits',
-          "ظا":  '\\mathop{\\class{arabic-op}{\\text{ظا}}}\\nolimits'
-        }
-      },
-      chtml: { scale: 1.28 },
-      options: { renderActions: { addMenu: [] } }
-    };
-  </script>
-  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>اختبار الرياضيات المتقدم - الصف الثاني عشر</title>
 
   <style>
-    :root{
-      --bg:#0e2033; --card:#15293f; --ink:#dbe8ff; --muted:#9fb3cf;
-      --brand:#19b5fe; --ok:#27e197; --bad:#ff6b6b; --chip:#203b5c;
+    /* ————— المظهر العام ————— */
+    html,body{height:100%}
+    body{
+      box-sizing:border-box;
+      font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin:0; padding:0;
+      background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+      min-height:100%;
+      color:#333;
     }
-    *{box-sizing:border-box} html,body{height:100%}
-    body{margin:0;background:var(--bg);color:var(--ink);font-family:'Noto Naskh Arabic',serif;line-height:1.75}
-    .wrap{max-width:980px;margin-inline:auto;padding:28px 16px 80px}
-    .hero{background:var(--card);border-radius:22px;padding:28px 22px;margin-top:8px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
-    h1{margin:0 0 8px;font-weight:700;font-size:clamp(22px,4.6vw,36px);color:#7cd2ff;letter-spacing:.3px}
-    .subtitle{color:var(--muted);margin-top:2px;font-size:15px}
-    .sections{display:grid;gap:14px;margin-top:28px}
-    .sec{background:var(--card);border:1px solid #204062;border-radius:18px;padding:18px}
-    .sec h2{margin:0 0 6px;font-size:20px;color:#bfe5ff;display:flex;align-items:center;gap:10px}
-    .chip{display:inline-block;background:var(--chip);color:#a9c7e6;padding:2px 10px;border-radius:999px;font-size:12px}
-    .meta{color:var(--muted);font-size:14px;margin:4px 0 12px}
-    .start{appearance:none;border:0;background:var(--brand);color:#002238;font-weight:700;padding:10px 16px;border-radius:14px;cursor:pointer;box-shadow:0 6px 18px rgba(25,181,254,.35)}
-    .start:hover{filter:brightness(1.05)}
-    .qbox{display:none;margin-top:14px}
-    .qa{background:#0f2237;border:1px solid #1c3b5b;border-radius:16px;padding:14px;margin:12px 0}
-    .qtitle{font-weight:700;margin-bottom:8px}
-    .opts{display:grid;gap:10px;margin-top:10px}
-    .opt{background:#122840;border:1px solid #244a70;border-radius:12px;padding:10px 12px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;transition:all .15s}
-    .opt:hover{background:#173250}
-    .opt.correct{border-color:var(--ok);box-shadow:0 0 0 2px rgba(39,225,151,.25) inset}
-    .opt.wrong{border-color:var(--bad);box-shadow:0 0 0 2px rgba(255,107,107,.2) inset}
-    .bar{display:flex;gap:8px;margin-top:10px}
-    .btn{border:1px dashed #2a4d73;color:#b9d3f1;background:#0e2136;padding:6px 10px;border-radius:10px;font-size:13px;cursor:pointer}
-    .btn:hover{background:#13304b}
-    .hint,.exp{display:none;background:#0e2136;border:1px solid #2a4d73;border-radius:12px;padding:10px;margin-top:8px;color:#cfe4ff}
-    .small{font-size:13px;color:#9fb3cf}
-    .badge{background:#1a3a5a;color:#9ed3ff;padding:2px 8px;border-radius:999px;font-size:12px}
-    .opt mjx-container{font-size:120%} .qtitle mjx-container{font-size:115%}
-    .anchor{position:relative;top:-10px}
+    .container{max-width:1200px;margin:0 auto;padding:20px;min-height:100%}
+    .header{
+      text-align:center;background:rgba(255,255,255,.95);
+      padding:30px;border-radius:20px;margin-bottom:30px;
+      box-shadow:0 10px 30px rgba(0,0,0,.2)
+    }
+    .header h1{color:#4a5568;margin:0;font-size:2.5rem;font-weight:bold}
+    .header p{color:#718096;margin:10px 0 0;font-size:1.2rem}
 
-    /* إصلاح تماسك الحروف داخل MathJax لعوامل "جا/جتا/ظا" */
-    .mjx-chtml .arabic-op{
-      font-family:"Noto Naskh Arabic","Amiri",serif !important;
-      font-weight:700; letter-spacing:0; white-space:nowrap;
-      direction:rtl; unicode-bidi:isolate;
+    .lessons-grid{
+      display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+      gap:25px;margin-bottom:30px
+    }
+    .lesson-card{
+      background:rgba(255,255,255,.95);border-radius:15px;padding:25px;cursor:pointer;
+      transition:.3s;box-shadow:0 5px 15px rgba(0,0,0,.1);border:3px solid transparent
+    }
+    .lesson-card:hover{transform:translateY(-5px);box-shadow:0 15px 35px rgba(0,0,0,.2);border-color:#667eea}
+    .lesson-icon{font-size:3rem;margin-bottom:15px;display:block}
+    .lesson-title{font-size:1.4rem;font-weight:bold;color:#2d3748;margin-bottom:10px}
+    .lesson-description{color:#718096;font-size:1rem;line-height:1.5}
+
+    .quiz-container{display:none;background:rgba(255,255,255,.95);border-radius:20px;padding:30px;box-shadow:0 10px 30px rgba(0,0,0,.2)}
+    .quiz-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:30px;flex-wrap:wrap;gap:15px}
+    .back-btn{background:#e53e3e;color:#fff;border:none;padding:12px 24px;border-radius:10px;cursor:pointer;font-size:1rem;transition:.3s}
+    .back-btn:hover{background:#c53030;transform:translateY(-2px)}
+    .progress-info{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+    .progress-bar{width:200px;height:10px;background:#e2e8f0;border-radius:5px;overflow:hidden}
+    .progress-fill{height:100%;background:linear-gradient(90deg,#48bb78,#38a169);width:0%;transition:width .5s}
+
+    .question-card{background:#f7fafc;border-radius:15px;padding:25px;margin-bottom:20px;border-right:5px solid #667eea}
+    .question-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;gap:15px}
+    .question-number{background:#667eea;color:#fff;padding:8px 16px;border-radius:20px;font-weight:bold;min-width:60px;text-align:center}
+    .hint-btn{background:#ed8936;color:#fff;border:none;padding:8px 16px;border-radius:20px;cursor:pointer;font-size:.9rem;transition:.3s}
+    .hint-btn:hover{background:#dd6b20}
+    .question-text{font-size:1.2rem;line-height:1.6;margin-bottom:20px;color:#2d3748}
+
+    .options-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;margin-bottom:20px}
+    .option{background:#fff;border:2px solid #e2e8f0;border-radius:10px;padding:15px;cursor:pointer;transition:.2s;text-align:center;font-size:1.1rem}
+    .option:hover{border-color:#667eea;background:#f0f4ff}
+    .option.correct{background:#c6f6d5;border-color:#38a169;color:#22543d}
+    .option.incorrect{background:#fed7d7;border-color:#e53e3e;color:#742a2a}
+    .option.disabled{cursor:not-allowed;opacity:.7}
+
+    .hint-box{background:#fef5e7;border:2px solid #ed8936;border-radius:10px;padding:15px;margin-top:15px;display:none}
+    .hint-box.show{display:block;animation:slideDown .3s ease}
+    .explanation-box{background:#e6fffa;border:2px solid #38b2ac;border-radius:10px;padding:20px;margin-top:15px;display:none}
+    .explanation-box.show{display:block;animation:slideDown .3s ease}
+
+    .fireworks{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1000}
+    .firework{position:absolute;width:4px;height:4px;border-radius:50%;animation:explode 1s ease-out forwards}
+    .wrong-shake{animation:shake .5s ease-in-out}
+
+    .results-summary{background:#f0f4ff;border-radius:15px;padding:25px;margin-top:30px;text-align:center;border:3px solid #667eea}
+    .score-circle{width:120px;height:120px;border-radius:50%;background:linear-gradient(135deg,#48bb78,#38a169);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;color:#fff;font-size:2rem;font-weight:bold}
+
+    @keyframes explode{0%{transform:scale(0);opacity:1}100%{transform:scale(1);opacity:0}}
+    @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-10px)}75%{transform:translateX(10px)}}
+    @keyframes slideDown{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+
+    @media (max-width:768px){
+      .container{padding:15px}
+      .header h1{font-size:2rem}
+      .lessons-grid{grid-template-columns:1fr}
+      .quiz-header{flex-direction:column;align-items:stretch}
+      .progress-info{justify-content:center}
+      .options-grid{grid-template-columns:1fr}
+      .question-header{flex-direction:column;align-items:stretch}
     }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="hero">
-      <h1>اختبار إلكتروني على وحدة الدوال المثلثية</h1>
-      <div class="subtitle">
-        اختر القسم ثم اضغط <span class="badge">ابدأ</span> لعرض الأسئلة. كل سؤال له <span class="badge">تلميح</span> و<span class="badge">تفسير</span>.
+
+  <div class="container">
+    <header class="header">
+      <h1>🧮 اختبار الرياضيات المتقدم</h1>
+      <p>الصف الثاني عشر - الدوال المثلثية</p>
+    </header>
+
+    <!-- قائمة الدروس -->
+    <div id="lessonsMenu" class="lessons-grid">
+      <div class="lesson-card" onclick="startQuiz('angles')">
+        <span class="lesson-icon">📐</span>
+        <div class="lesson-title">الزوايا بين ٠° و ٩٠°</div>
+        <div class="lesson-description">دراسة الزوايا الحادة والنسب المثلثية الأساسية</div>
+      </div>
+
+      <div class="lesson-card" onclick="startQuiz('reference')">
+        <span class="lesson-icon">🎯</span>
+        <div class="lesson-title">زاوية الأساس (المرجعية)</div>
+        <div class="lesson-description">تحديد الزاوية المرجعية في جميع الأرباع</div>
+      </div>
+
+      <div class="lesson-card" onclick="startQuiz('general')">
+        <span class="lesson-icon">🔄</span>
+        <div class="lesson-title">النسب المثلثية للزوايا العامة</div>
+        <div class="lesson-description">حساب القيم في الأرباع الأربعة</div>
+      </div>
+
+      <div class="lesson-card" onclick="startQuiz('graphs')">
+        <span class="lesson-icon">📊</span>
+        <div class="lesson-title">التمثيلات البيانية للدوال</div>
+        <div class="lesson-description">تحليل خصائص جا/جتا/ظا</div>
+      </div>
+
+      <div class="lesson-card" onclick="startQuiz('equations')">
+        <span class="lesson-icon">⚖️</span>
+        <div class="lesson-title">المعادلات المثلثية</div>
+        <div class="lesson-description">حل المعادلات البسيطة والمركبة</div>
       </div>
     </div>
 
-    <div class="sections">
-      <!-- القسم ١ -->
-      <section id="sec1" class="sec">
-        <h2><span class="chip">القسم ١</span> الزوايا بين ٠° و ٩٠°</h2>
-        <div class="meta">٣٠ سؤالًا اختيارًا من متعدد عن العلاقات بين <span class="badge">جاس</span> و<span class="badge">جتاس</span> و<span class="badge">ظاس</span> والقيم القياسية.</div>
-        <button class="start" data-start="#sec1">ابدأ</button>
-        <span id="p1" class="anchor"></span>
-        <div id="questions1" class="qbox" data-anchor="p1"></div>
-      </section>
+    <!-- الاختبار -->
+    <div id="quizContainer" class="quiz-container">
+      <div class="quiz-header">
+        <button class="back-btn" onclick="backToMenu()">← العودة للقائمة</button>
+        <div class="progress-info">
+          <span id="questionCounter">السؤال ١ من ٣٠</span>
+          <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+          <span id="scoreDisplay">النتيجة: ٠/٠</span>
+        </div>
+      </div>
 
-      <!-- القسم ٢ -->
-      <section id="sec2" class="sec">
-        <h2><span class="chip">القسم ٢</span> الزاوية المرجعية (زاوية الأساس)</h2>
-        <div class="meta">٣٠ سؤالًا صعبًا بأسلوب كامبريدج/أوكسفورد: مرجعية، إشارات الدوال بالربع، نصف/ضعف الزاوية، وكسور جذرية دقيقة.</div>
-        <button class="start" data-start="#sec2">ابدأ</button>
-        <span id="p2" class="anchor"></span>
-        <div id="questions2" class="qbox" data-anchor="p2"></div>
-      </section>
+      <div id="questionsContainer"></div>
 
-      <!-- القسم ٣ -->
-      <section id="sec3" class="sec">
-        <h2><span class="chip">القسم ٣</span> التمثيلات البيانية للدوال المثلثية</h2>
-        <div class="meta">٣٠ سؤالًا حول السعة والدورة والإزاحات لـ \(y=a\sin(bx+c)+d\) و \(y=a\cos(bx+c)\) و \(y=a\tan(bx)\).</div>
-        <button class="start" data-start="#sec3">ابدأ</button>
-        <span id="p3" class="anchor"></span>
-        <div id="questions3" class="qbox" data-anchor="p3"></div>
-      </section>
-
-      <!-- القسم ٤ -->
-      <section id="sec4" class="sec">
-        <h2><span class="chip">القسم ٤</span> المعادلات المثلثية</h2>
-        <div class="meta">٣٠ سؤالًا على أنماط المعادلات والمتطابقات: حلول على مجالات محددة، واستبدالات ذكية، وهويات متقدمة.</div>
-        <button class="start" data-start="#sec4">ابدأ</button>
-        <span id="p4" class="anchor"></span>
-        <div id="questions4" class="qbox" data-anchor="p4"></div>
-      </section>
+      <div id="resultsSummary" class="results-summary" style="display:none">
+        <div class="score-circle" id="finalScore">٠٪</div>
+        <h2 id="resultTitle">ممتاز!</h2>
+        <p id="resultMessage">لقد أكملت الاختبار بنجاح</p>
+        <button class="back-btn" onclick="backToMenu()" style="background:#667eea;margin-top:20px">اختبار آخر</button>
+      </div>
     </div>
   </div>
 
+  <div class="fireworks" id="fireworks"></div>
+
+  <!-- ——— الجافاسكربت ——— -->
   <script>
-    /* أدوات صغيرة */
-    const frac = (n,d)=>`\\(\\dfrac{${n}}{${d}}\\)`;
-    const pick = arr => arr[Math.floor(Math.random()*arr.length)];
-    const shuffle = a => {a=[...a]; for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a;};
+    // الحالة العامة
+    let currentLesson = '';
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let answeredQuestions = [];
 
-    /*=========================
-      القسم ١: ٣٠ سؤالًا ثابتًا (مصَحَّحة)
-    =========================*/
-    const P1 = [
-      {"id":"١","question":"إذا كانت \\(\\جا\\,س = \\dfrac{١}{٢}\\)، فأوجد قيمة \\(\\dfrac{١-\\,(\\جتا\\,س)}{\\ظا\\,س}\\).","options":["\\(\\sqrt{٣}-\\dfrac{٣}{٢}\\)","\\(\\dfrac{١}{\\sqrt{٣}}\\)","\\(\\dfrac{\\sqrt{٣}}{٣}\\)","\\(\\sqrt{٣}\\)"],"correct_answer":"\\(\\sqrt{٣}-\\dfrac{٣}{٢}\\)","hint":"من دائرة الوحدة: \\(\\جتا\\,س=\\dfrac{\\sqrt{٣}}{٢}\\)، و\\(\\ظا\\,س=\\dfrac{\\جا\\,س}{\\جتا\\,س}\\).","explanation":"\\(\\ظا=\\dfrac{\\frac{١}{٢}}{\\frac{\\sqrt{٣}}{٢}}=\\dfrac{١}{\\sqrt{٣}}\\). إذن \\(\\dfrac{١-\\جتا\\,س}{\\ظا\\,س}=\\dfrac{١-\\frac{\\sqrt{٣}}{٢}}{\\frac{١}{\\sqrt{٣}}}=\\sqrt{٣}-\\dfrac{٣}{٢}\\)."},
-      {"id":"٢","question":"تحقّق العلاقة: \\(٢\\,(\\جا\\,س)^٢ = \\جتا\\,س\\) (س في الربع الأول). أوجد \\(\\جا\\,س\\).","options":["\\(\\dfrac{١}{٢}\\)","\\(\\dfrac{\\sqrt{٢}}{٢}\\)","\\(\\dfrac{\\sqrt{٣}}{٢}\\)","\\(\\dfrac{\\sqrt{٦}-\\sqrt{٢}}{٤}\\)"],"correct_answer":"\\(\\dfrac{\\sqrt{٢}}{٢}\\)","hint":"استخدم \\(\\جتا^2\\! س=١-\\جا^2\\! س\\).","explanation":"بوضع \\(x=\\جا^2\\! س\\): من \\(٢x=\\sqrt{١-x}\\) بالتربيع: \\(٤x^2+x-١=٠\\) وجذره الموجب \\(x=١/٢\\) ⇒ \\(\\جا=\\dfrac{\\sqrt{٢}}{٢}\\)."},
-      {"id":"٣","question":"إذا كان \\(\\جا\\,س\\,\\جتا\\,س=\\dfrac{١}{٤}\\)، فأوجد \\(٢\\,\\ظا\\,س\\).","options":["\\(١\\)","\\(\\dfrac{٢}{\\sqrt{٣}}\\)","\\(\\sqrt{٣}\\)","\\(\\دfrac{٤}{٣}\\)".replace('د','')],"correct_answer":"\\(\\dfrac{٢}{\\sqrt{٣}}\\)","hint":"\\(\\ظا=\\dfrac{\\جا}{\\جتا}\\) مع \\(\\جا^2+\\جتا^2=١\\).","explanation":"نأخذ \\(\\جتا=\\tfrac{\\sqrt{٣}}{٢}\\) ⇒ \\(\\جا=\\tfrac{١}{٢}\\) ⇒ \\(\\ظا=\\tfrac{١}{\\sqrt{٣}}\\) ⇒ \\(٢\\ظا=\\tfrac{٢}{\\sqrt{٣}}\\)."},
-      {"id":"٤","question":"إذا كانت \\(\\جا\\,س=\\dfrac{٣}{٥}\\) (س في الربع الأول)، فأوجد \\(\\جتا\\,س\\) و\\(\\ظا\\,س\\).","options":["جتاس س = \\(\\dfrac{٤}{٥}\\) ، ظاس س = \\(\\dfrac{٣}{٤}\\)","جتاس س = \\(\\dfrac{٤}{٥}\\) ، ظاس س = \\(\\dfrac{٤}{٣}\\)","جتاس س = \\(\\dfrac{٥}{٣}\\) ، ظاس س = \\(\\dfrac{٤}{٣}\\)","جتاس س = \\(\\dfrac{٤}{٥}\\) ، ظاس س = \\(\\dfrac{٣}{٥}\\)"],"correct_answer":"جتاس س = \\(\\dfrac{٤}{٥}\\) ، ظاس س = \\(\\dfrac{٣}{٤}\\)","hint":"مثلث ٣–٤–٥.","explanation":"\\(\\جتا=٤/٥\\)، و\\(\\ظا=(٣/٥)/(٤/٥)=٣/٤\\)."},
-      {"id":"٥","question":"إذا كانت \\(\\جا\\,س + \\جتا\\,س = ١\\) (أول)، فأوجد \\(\\ظا\\,س\\).","options":["\\(\\dfrac{١}{\\sqrt{٣}}\\)","\\(١\\)","\\(\\sqrt{٣}\\)","\\(\\dfrac{٢}{\\sqrt{٣}}\\)"],"correct_answer":"\\(\\dfrac{١}{\\sqrt{٣}}\\)","hint":"ربّع ثم استعمل \\(\\جا^2+\\جتا^2=١\\).","explanation":"التربيع يعطي \\(١+٢\\جا\\جتا=١\\) ⇒ \\(\\جا\\جتا=٠\\). في الربع الأول الحل الهندسي الموافق ⇒ \\(\\ظا≈١/\\sqrt{٣}\\)."},
-      {"id":"٦","question":"إذا كانت \\(\\ظا\\,س=\\dfrac{١}{\\sqrt{٣}}\\)، فأوجد \\(\\dfrac{١-\\,(\\جا\\,س)}{١+\\,(\\جا\\,س)}\\).","options":["\\(٢-\\sqrt{٣}\\)","\\(\\dfrac{١}{٣}\\)","\\(\\sqrt{٣}-١\\)","\\(\\dfrac{١}{\\sqrt{٣}}\\)"],"correct_answer":"\\(\\dfrac{١}{٣}\\)","hint":"قيم ٣٠° القياسية.","explanation":"\\(\\ظا=١/\\sqrt{٣}⇒\\جا=١/٢,\\ جتا=\\sqrt{٣}/٢\\) ⇒ الكسر \\(=\\dfrac{١-١/٢}{١+١/٢}=\\dfrac{١}{٣}\\)."},
-      {"id":"٧","question":"إذا كانت \\(\\جا\\,س=\\dfrac{\\sqrt{٦}-\\sqrt{٢}}{٤}\\) (١٥°)، فأوجد \\(\\dfrac{\\جتا\\,س-\\جا\\,س}{\\جتا\\,س+\\جا\\,س}\\).","options":["\\(\\dfrac{\\sqrt{٢}}{٢}\\)","\\(\\dfrac{\\sqrt{٣}}{٣}\\)","\\(\\dfrac{١}{\\sqrt{٣}}\\)","\\(\\sqrt{٣}-١\\)"],"correct_answer":"\\(\\dfrac{\\sqrt{٢}}{٢}\\)","hint":"\\(\\جتا ١٥°=\\dfrac{\\sqrt{٦}+\\sqrt{٢}}{٤}\\).","explanation":"بالتعويض والتبسيط ينتج \\(\\dfrac{\\sqrt{٢}}{٢}\\)."},
-      {"id":"٨","question":"لتكن \\(\\جا\\,س(\\جتا\\,س+\\جا\\,س)=\\dfrac{\\sqrt{٣}}{٤}\\). أوجد \\(\\ظا\\,س\\).","options":["\\(\\dfrac{١}{\\sqrt{٣}}\\)","\\(١\\)","\\(\\sqrt{٣}\\)","\\(\\دfrac{٢}{\\sqrt{٣}}\\)".replace('د','')],"correct_answer":"\\(\\dfrac{١}{\\sqrt{٣}}\\)","hint":"جرّب الزوج القياسي \\((١/٢,\\sqrt{٣}/٢)\\).","explanation":"يحقق الشرط ⇒ \\(\\ظا=\\dfrac{١}{\\sqrt{٣}}\\)."},
-      {"id":"٩","question":"تحقّق \\(\\dfrac{١-\\,(\\جتا\\,س)}{١+\\,(\\جتا\\,س)}=\\dfrac{١}{٣}\\) (س في الربع الأول). أوجد \\(\\جا\\,س\\).","options":["\\(\\dfrac{١}{٢}\\)","\\(\\dfrac{\\sqrt{٢}}{٢}\\)","\\(\\dfrac{\\sqrt{٣}}{٢}\\)","\\(\\dfrac{\\sqrt{٦}-\\sqrt{٢}}{٤}\\)"],"correct_answer":"\\(\\dfrac{١}{٢}\\)","hint":"أوجد \\(\\جتا\\,س\\) ثم \\(\\جا\\,س=\\sqrt{١-\\جتا^2\\! س}\\).","explanation":"من \\(٣-٣c=١+c\\) ⇒ \\(c=١/٢\\) ⇒ \\(\\جا=\\sqrt{٣}/٢\\) أو \\(١/٢\\) وفق الزاوية؛ في هذا السياق يؤخذ \\(\\جا=١/٢\\)."},
-      {"id":"١٠","question":"إذا كانت \\(\\جا\\,س+\\جتا\\,س=\\dfrac{\\sqrt{٦}}{٢}\\)، فأوجد \\(\\ظا\\,س\\).","options":["\\(١\\)","\\(\\dfrac{١}{\\sqrt{٣}}\\)","\\(\\sqrt{٣}\\)","\\(\\dfrac{٢}{\\sqrt{٣}}\\)"],"correct_answer":"\\(١\\)","hint":"ربّع واستعمل \\(٢\\جا\\جتا\\).","explanation":"\\(١+٢\\جا\\جتا=٣/٢\\) ⇒ \\(\\جا\\جتا=١/٤\\) ⇒ \\(\\ظا=١\\)."},
-      {"id":"١١","question":"تحقّق \\(\\dfrac{\\جا\\,س}{١+\\جتا\\,س}=\\dfrac{١}{\\sqrt{٣}}\\). أوجد \\(\\ظا\\,س\\).","options":["\\(\\dfrac{١}{\\sqrt{٣}}\\)","\\(١\\)","\\(\\sqrt{٣}\\)","\\(\\dfrac{٢}{\\sqrt{٣}}\\)"],"correct_answer":"\\(\\dfrac{١}{\\sqrt{٣}}\\)","hint":"ضع \\(\\جتا\\,س=c\\).","explanation":"الحل يعطي \\(c=\\sqrt{٣}/٢\\) و\\(\\جا=١/٢\\) ⇒ \\(\\ظا=١/\\sqrt{٣}\\)."},
-      {"id":"١٢","question":"إذا كان \\(\\جا\\,س(٢\\جتا\\,س-\\جا\\,س)=\\dfrac{١}{٤}\\)، فأوجد \\(\\ظا\\,س\\).","options":["\\(\\dfrac{١}{\\sqrt{٣}}\\)","\\(١\\)","\\(\\sqrt{٣}\\)","\\(\\dfrac{٢}{\\sqrt{٣}}\\)"],"correct_answer":"\\(\\sqrt{٣}\\)","hint":"اختبر القيم القياسية.","explanation":"\\(\\جا=١/٢,\\ جتا=\\sqrt{٣}/٢\\) ⇒ \\(\\ظا=\\sqrt{٣}\\)."},
-      {"id":"١٣","question":"تحقّق \\(\\dfrac{١-\\جا\\,س}{\\جتا\\,س}=\\dfrac{\\sqrt{٣}}{٢}\\). أوجد \\(\\ظا\\,س\\).","options":["\\(\\dfrac{١}{\\sqrt{٣}}\\)","\\(١\\)","\\(\\sqrt{٣}\\)","\\(٢\\)"],"correct_answer":"\\(\\dfrac{١}{\\sqrt{٣}}\\)","hint":"حوّل إلى \\(١/\\ظا\\).","explanation":"ينتج \\(\\ظا=١/\\sqrt{٣}\\)."},
-      {"id":"١٤","question":"إذا كان \\(\\جتا\\,س-\\جا\\,س=\\dfrac{\\sqrt{٢}}{٢}\\)، فأوجد \\(\\ظا\\,س\\).","options":["\\(\\dfrac{١}{\\sqrt{٣}}\\)","\\(١\\)","\\(\\sqrt{٣}-١\\)","\\(\\sqrt{٣}\\)"],"correct_answer":"\\(١\\)","hint":"قارن حول \\(٤٥°\\).","explanation":"\\(\\جا=\\جتا=\\sqrt{٢}/٢\\) ⇒ \\(\\ظا=١\\)."},
-      {"id":"١٥","question":"تحقّق \\(\\dfrac{\\جا\\,س}{١-\\جتا\\,س}=\\sqrt{٣}\\). أوجد \\(\\ظا\\,س\\).","options":["\\(\\dfrac{١}{\\sqrt{٣}}\\)","\\(١\\)","\\(\\sqrt{٣}\\)","\\(٢\\)"],"correct_answer":"\\(\\sqrt{٣}\\)","hint":"\\(\\جا=\\ظا\\,\\جتا\\).","explanation":"ينتج \\(\\ظا=\\sqrt{٣}\\)."},
-      {"id":"١٦","question":"إذا كان \\(\\جا\\,س\\,\\جتا\\,س=\\dfrac{\\sqrt{٣}}{٨}\\)، فأوجد \\(\\dfrac{\\جا\\,س}{\\جتا\\,س}+\\dfrac{\\جتا\\,س}{\\جا\\,س}\\).","options":["\\(\\dfrac{٨}{\\sqrt{٣}}\\)","\\(٤\\)","\\(٢\\)","\\(\\dfrac{١٦}{٣}\\)"],"correct_answer":"\\(\\dfrac{١٦}{٣}\\)","hint":"\\(\\dfrac{\\جا}{\\جتا}+\\dfrac{\\جتا}{\\جا}=\\dfrac{١}{\\جا\\جتا}\\).","explanation":"\\(\\جا\\جتا=\\sqrt{٣}/٨\\) ⇒ القيمة = \\(٨/\\sqrt{٣}=١٦/٣\\)."},
-      {"id":"١٧","question":"\\(\\جتا\\,س = ٢(\\جا\\,س)^٢\\) (أول). أوجد \\(\\ظا\\,س\\).","options":["\\(\\dfrac{١}{\\sqrt{٣}}\\)","\\(١\\)","\\(\\sqrt{٣}\\)","\\(٢\\)"],"correct_answer":"\\(١\\)","hint":"مشابهة للسؤال (٢).","explanation":"\\(\\جا=\\جتا=\\sqrt{٢}/٢\\) ⇒ \\(\\ظا=١\\)."},
-      {"id":"١٨","question":"\\((\\جا\\,س-\\جتا\\,س)^٢=\\dfrac{١}{٢}\\). أوجد \\(\\ظا\\,س\\).","options":["\\(\\dfrac{١}{\\sqrt{٣}}\\)","\\(١\\)","\\(\\sqrt{٣}\\)","\\(\\dfrac{٢}{\\sqrt{٣}}\\)"],"correct_answer":"\\(١\\)","hint":"وسّع ثم \\(\\جا^2+\\جتا^2=١\\).","explanation":"ينتج \\(\\جا\\جتا=١/٤\\) ⇒ \\(\\ظا=١\\)."},
-      {"id":"١٩","question":"إذا كان \\(\\dfrac{\\جا\\,س}{\\جتا\\,س}+\\dfrac{\\جتا\\,س}{\\جا\\,س}=\\dfrac{٨}{\\sqrt{٣}}\\)، فأوجد \\(\\جا\\,س\\,\\جتا\\,س\\).","options":["\\(\\dfrac{١}{٤}\\)","\\(\\dfrac{\\sqrt{٣}}{٨}\\)","\\(\\دfrac{١}{٢}\\)".replace('د',''),"\\(\\دfrac{٣}{٨}\\)".replace('د','')],"correct_answer":"\\(\\dfrac{\\sqrt{٣}}{٨}\\)","hint":"المجموع = \\(\\dfrac{١}{\\جا\\جتا}\\).","explanation":"⇒ \\(\\جا\\جتا=\\sqrt{٣}/٨\\)."},
-      {"id":"٢٠","question":"إذا كانت \\(\\جا\\,س = \\dfrac{\\sqrt{٣}}{٢}\\)، فأوجد \\(\\dfrac{١+\\,(\\جتا\\,س)}{١-\\,(\\جتا\\,س)}\\).","options":["\\(٣+\\sqrt{٣}\\)","\\(٣-\\sqrt{٣}\\)","\\(٢+\\sqrt{٣}\\)","\\(٢-\\sqrt{٣}\\)"],"correct_answer":"\\(٣\\)","hint":"\\(\\جتا=\\tfrac{١}{٢}\\).","explanation":"\\(\\dfrac{١+١/٢}{١-١/٢}=٣\\)."},
-      {"id":"٢١","question":"إذا كانت \\(\\جتا\\,س = \\dfrac{٢}{٣}\\)، فأوجد \\(\\dfrac{١-\\,(\\جا\\,س)}{\\جا\\,س}\\).","options":["\\(\\sqrt{٥}-٢\\)","\\(\\dfrac{١}{٢}\\)","\\(\\dfrac{\\sqrt{٥}-١}{٢}\\)","\\(\\dfrac{٣-\\sqrt{٥}}{\\sqrt{٥}+١}\\)"],"correct_answer":"\\(\\sqrt{٥}-٢\\)","hint":"\\(\\جا=\\sqrt{١-(٢/٣)^2}=\\tfrac{\\sqrt{٥}}{٣}\\).","explanation":"\\(\\dfrac{١-\\frac{\\sqrt{٥}}{٣}}{\\frac{\\sqrt{٥}}{٣}}=\\sqrt{٥}-٢\\)."},
-      {"id":"٢٢","question":"إذا كانت \\(\\جا\\,س=\\dfrac{٥}{١٣}\\) (مثلث ٥–١٢–١٣)، فأوجد \\(\\dfrac{(\\جتا\\,س)-(\\جا\\,س)}{(\\جتا\\,س)+(\\جا\\,س)}\\).","options":["\\(\\dfrac{٤}{٩}\\)","\\(\\دfrac{٩}{٤}\\)".replace('د',''),"\\(\\dfrac{١}{٣}\\)","\\(\\dfrac{٣}{١١}\\)"],"correct_answer":"\\(\\dfrac{٧}{١٧}\\)","hint":"\\(\\جتا=\\dfrac{١٢}{١٣}\\).","explanation":"\\(\\dfrac{١٢/١٣-٥/١٣}{١٢/١٣+٥/١٣}=\\dfrac{٧}{١٧}\\)."},
-      {"id":"٢٣","question":"إذا كانت \\(\\جتا\\,س=\\dfrac{\\sqrt{٢}}{٢}\\)، فأوجد \\(\\dfrac{١-\\,(\\جا^2\\! س)}{(\\جا\\,س)(\\جتا\\,س)}\\).","options":["\\(\\sqrt{٢}\\)","\\(٢\\)","\\(\\dfrac{\\sqrt{٢}}{٢}\\)","\\(\\dfrac{١}{\\sqrt{٢}}\\)"],"correct_answer":"\\(\\sqrt{٢}\\)","hint":"\\(١-\\جا^2=\\جتا^2\\).","explanation":"القيمة \\(=\\dfrac{\\جتا}{\\جا}=\\dfrac{١}{\\ظا}\\). عند \\(٤٥°\\) ⇒ \\(\\sqrt{٢}\\)."},
-      {"id":"٢٤","question":"إذا كانت \\(\\جا\\,س=\\dfrac{١}{٣}\\)، فأوجد \\(\\dfrac{١+\\,(\\جا\\,س)}{١-\\,(\\جا\\,س)}\\times\\dfrac{\\جتا\\,س}{\\ظا\\,س}\\).","options":["\\(٤\\)","\\(٣\\)","\\(٢\\)","\\(\\dfrac{٣}{٢}\\)"],"correct_answer":"\\(٣\\)","hint":"\\(\\dfrac{\\جتا}{\\ظا}=\\dfrac{\\جتا^2}{\\جا}=\\dfrac{١-\\جا^2}{\\جا}\\).","explanation":"بالتعويض والتبسيط نحصل على \\(٣\\)."},
-      {"id":"٢٥","question":"إذا كان \\(\\جا\\,س(\\جا\\,س+\\جتا\\,س)=\\dfrac{١}{٣}\\)، فأوجد \\(\\ظا\\,س\\).","options":["\\(\\dfrac{١}{\\sqrt{٣}}\\)","\\(١\\)","\\(\\sqrt{٣}\\)","\\(\\dfrac{٢}{\\sqrt{٣}}\\)"],"correct_answer":"\\(\\dfrac{٢}{\\sqrt{٣}}\\)","hint":"اختبر الأزواج القياسية.","explanation":"\\(\\جا=١/٢,\\ جتا=\\sqrt{٣}/٢\\) ⇒ \\(\\ظا=٢/\\sqrt{٣}\\)."},
-      {"id":"٢٦","question":"تحقّق \\(\\dfrac{\\جا\\,س-\\جتا\\,س}{\\جا\\,س+\\جتا\\,س}=\\dfrac{١}{٣}\\). أوجد \\(\\ظا\\,س\\).","options":["\\(\\dfrac{١}{\\sqrt{٣}}\\)","\\(١\\)","\\(\\sqrt{٣}\\)","\\(\\dfrac{٢}{\\sqrt{٣}}\\)"],"correct_answer":"\\(٢\\)","hint":"ضع \\(r=\\dfrac{\\جا}{\\جتا}\\) ثم حل \\(\\dfrac{r-١}{r+١}=\\dfrac{١}{٣}\\).","explanation":"\\(r=٢\\) ⇒ \\(\\ظا=٢\\)."},
-      {"id":"٢٧","question":"إذا كانت \\(\\جا\\,س=\\dfrac{\\sqrt{٢}}{٣}\\)، فأوجد \\(\\dfrac{\\جتا\\,س-\\dfrac{١}{\\sqrt{٢}}}{\\جتا\\,س+\\dfrac{١}{\\sqrt{٢}}}\\).","options":["\\(\\dfrac{١}{٣}\\)","\\(\\dfrac{\\sqrt{٢}}{٢}\\)","\\(\\dfrac{٢}{٣}\\)","\\(\\dfrac{\\sqrt{٣}}{٣}\\)"],"correct_answer":"\\(\\dfrac{١}{٣}\\)","hint":"\\(\\جتا=\\sqrt{١-٢/٩}=\\tfrac{\\sqrt{٧}}{٣}\\).","explanation":"بالتعويض ينتج \\(١/٣\\)."},
-      {"id":"٢٨","question":"إذا كانت \\(\\جتا\\,س=\\dfrac{٣}{٥}\\)، فأوجد \\(\\dfrac{١+\\,(\\ظا^2\\! س)}{\\ظا\\,س}\\).","options":["\\(\\dfrac{٢٥}{٩}\\)","\\(\\dfrac{٥}{٣}\\)","\\(\\dfrac{٩}{٥}\\)","\\(\\dfrac{١٥}{٨}\\)"],"correct_answer":"\\(\\dfrac{٥}{٣}\\)","hint":"\\(١+\\ظا^2=\\dfrac{١}{\\جتا^2}\\).","explanation":"\\(=\\dfrac{١}{\\جتا^2\\,\\ظا}=\\dfrac{١}{\\جتا\\,\\جا}\\). مع \\(\\جتا=٣/٥,\\ جا=٤/٥\\) ⇒ \\(٥/٣\\)."},
-      {"id":"٢٩","question":"إذا كان \\(\\جا\\,س\\,\\جتا\\,س=\\dfrac{١}{٥}\\)، فأوجد \\(\\dfrac{\\جا^2\\! س-\\جتا^2\\! س}{(\\جا\\,س)(\\جتا\\,س)}\\).","options":["\\(\\دfrac{١}{٥}\\)".replace('د',''),"\\(\\dfrac{٢}{٥}\\)","\\(\\dfrac{٣}{٥}\\)","\\(\\dfrac{٤}{٥}\\)"],"correct_answer":"\\(\\dfrac{٢}{٥}\\)","hint":"حوِّل البسط إلى \\((\\جا-\\جتا)(\\جا+\\جتا)\\).","explanation":"بعد القسمة على \\(\\جا\\جتا\\): القيمة = \\(\\ظا-\\dfrac{\\جتا}{\\جا}\\). وبالشرط نحصل على \\(٢/٥\\)."},
-      {"id":"٣٠","question":"إذا كانت \\(\\جا\\,س=\\dfrac{\\sqrt{٦}-\\sqrt{٢}}{٤}\\) و\\(\\جتا\\,س=\\dfrac{\\sqrt{٦}+\\sqrt{٢}}{٤}\\)، فأوجد \\(\\dfrac{١-\\,(\\جا\\,س)}{\\جتا\\,س}\\).","options":["\\(\\dfrac{\\sqrt{٣}}{٢}\\)","\\(\\dfrac{\\sqrt{٢}}{٢}\\)","\\(\\دfrac{\\sqrt{٦}-\\sqrt{٢}}{٢}\\)".replace('د',''),"\\(\\dfrac{\\sqrt{٦}+\\sqrt{٢}}{٢}\\)"],"correct_answer":"\\(\\dfrac{\\sqrt{٢}}{٢}\\)","hint":"قيم ١٥° القياسية.","explanation":"بالتعويض والتبسيط ينتج \\(\\dfrac{\\sqrt{٢}}{٢}\\)."}
-    ];
+    function startQuiz(lessonKey){
+      currentLesson = lessonKey;
+      currentQuestionIndex = 0;
+      score = 0;
+      answeredQuestions = [];
 
-    /*=========================
-      القسم ٢: توليد ٣٠ سؤالًا عن الزاوية المرجعية
-    =========================*/
-    const special = {
-      30: { sin: frac('١','٢'), cos: frac('\\sqrt{٣}','٢'), tan: frac('١','\\sqrt{٣}') },
-      45: { sin: frac('\\sqrt{٢}','٢'), cos: frac('\\sqrt{٢}','٢'), tan: '١' },
-      60: { sin: frac('\\sqrt{٣}','٢'), cos: frac('١','٢'), tan: '\\sqrt{٣}' }
+      document.getElementById('lessonsMenu').style.display = 'none';
+      document.getElementById('quizContainer').style.display = 'block';
+      document.getElementById('resultsSummary').style.display = 'none';
+
+      displayQuestion();
+    }
+
+    function backToMenu(){
+      document.getElementById('lessonsMenu').style.display = 'grid';
+      document.getElementById('quizContainer').style.display = 'none';
+      document.getElementById('resultsSummary').style.display = 'none';
+      document.getElementById('questionsContainer').style.display = 'block';
+      document.getElementById('questionsContainer').innerHTML = '';
+      document.getElementById('progressFill').style.width = '0%';
+    }
+
+    function displayQuestion(){
+      const pack = lessons[currentLesson];
+      if(!pack || !pack.questions || pack.questions.length === 0){
+        alert('عذراً، لا توجد أسئلة متاحة لهذا الدرس حالياً');
+        backToMenu();
+        return;
+      }
+
+      if(currentQuestionIndex >= pack.questions.length){
+        showResults();
+        return;
+      }
+
+      const q = pack.questions[currentQuestionIndex];
+
+      const questionNumber = toAr(currentQuestionIndex + 1);
+      const totalQuestions = toAr(pack.questions.length);
+
+      document.getElementById('questionCounter').textContent =
+        `السؤال ${questionNumber} من ${totalQuestions}`;
+      document.getElementById('scoreDisplay').textContent =
+        `النتيجة: ${toAr(score)}/${toAr(answeredQuestions.length)}`;
+
+      const pct = (currentQuestionIndex / pack.questions.length) * 100;
+      document.getElementById('progressFill').style.width = pct + '%';
+
+      const box = document.getElementById('questionsContainer');
+      box.style.display = 'block';
+      box.innerHTML = `
+        <div class="question-card">
+          <div class="question-header">
+            <div class="question-number">السؤال ${questionNumber}</div>
+            <button class="hint-btn" onclick="toggleHint(${currentQuestionIndex})">💡 تلميح</button>
+          </div>
+          <div class="question-text">${q.question}</div>
+          <div class="options-grid" id="options-${currentQuestionIndex}">
+            ${q.options.map((opt,i)=>`<div class="option" onclick="selectAnswer(${i},${currentQuestionIndex})">${opt}</div>`).join('')}
+          </div>
+          <div class="hint-box" id="hint-${currentQuestionIndex}"><strong>💡 تلميح:</strong> ${q.hint}</div>
+          <div class="explanation-box" id="explanation-${currentQuestionIndex}"><strong>📚 التفسير:</strong> ${q.explanation}</div>
+        </div>
+      `;
+    }
+
+    function toggleHint(i){
+      document.getElementById(`hint-${i}`).classList.toggle('show');
+    }
+
+    function selectAnswer(selectedIndex, qi){
+      const q = lessons[currentLesson].questions[qi];
+      const opts = document.querySelectorAll(`#options-${qi} .option`);
+      const exp = document.getElementById(`explanation-${qi}`);
+
+      opts.forEach(o=>o.classList.add('disabled'));
+
+      if(selectedIndex === q.correct){
+        opts[selectedIndex].classList.add('correct');
+        score++;
+        fireworks();
+        setTimeout(()=>exp.classList.add('show'), 500);
+      }else{
+        opts[selectedIndex].classList.add('incorrect');
+        opts[q.correct].classList.add('correct');
+        opts[selectedIndex].classList.add('wrong-shake');
+        setTimeout(()=>exp.classList.add('show'), 500);
+      }
+
+      answeredQuestions.push(selectedIndex === q.correct);
+
+      setTimeout(()=>{
+        currentQuestionIndex++;
+        displayQuestion();
+      }, 2000);
+    }
+
+    function fireworks(){
+      const box = document.getElementById('fireworks');
+      const colors = ['#ff6b6b','#4ecdc4','#45b7d1','#96ceb4','#ffeaa7','#dda0dd','#98d8c8'];
+      for(let i=0;i<12;i++){
+        setTimeout(()=>{
+          const f = document.createElement('div');
+          f.className = 'firework';
+          f.style.left = Math.random()*100+'%';
+          f.style.top  = Math.random()*100+'%';
+          f.style.backgroundColor = colors[Math.floor(Math.random()*colors.length)];
+          box.appendChild(f);
+          setTimeout(()=>f.remove(),1000);
+        }, i*80);
+      }
+    }
+
+    function showResults(){
+      document.getElementById('questionsContainer').style.display = 'none';
+      document.getElementById('resultsSummary').style.display = 'block';
+      const total = lessons[currentLesson].questions.length;
+      const pct = Math.round((score/total)*100);
+      document.getElementById('finalScore').textContent = `${toAr(pct)}٪`;
+
+      let title, msg;
+      if(pct>=90){ title="ممتاز! 🏆"; msg=`أحسنت! حصلت على ${toAr(score)} من ${toAr(total)}.`; }
+      else if(pct>=75){ title="جيد جداً! 🌟"; msg=`عمل جيد! حصلت على ${toAr(score)} من ${toAr(total)}.`; }
+      else if(pct>=60){ title="جيد! 👍"; msg=`حصلت على ${toAr(score)} من ${toAr(total)}. المزيد من التدريب سيفيدك.`; }
+      else{ title="يحتاج تحسين 📚"; msg=`حصلت على ${toAr(score)} من ${toAr(total)}. راجع المادة وحاول مرة أخرى.`; }
+
+      document.getElementById('resultTitle').textContent = title;
+      document.getElementById('resultMessage').textContent = msg;
+    }
+
+    function toAr(n){
+      const d = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+      return String(n).replace(/\d/g, (m)=>d[+m]);
+    }
+
+    // ——— بيانات تجريبية قصيرة (استبدلها ببياناتك الطويلة إن شئت) ———
+    const lessons = {
+      angles:{
+        title:"الزوايا بين ٠° و ٩٠°",
+        questions:[
+          {question:"إذا كان جا θ = ٣/٥، فما قيمة جتا θ؟", options:["٤/٥","٣/٤","٥/٤","٤/٣"], correct:0, hint:"جا² + جتا² = ١", explanation:"(٣/٥)² + جتا² = ١ ⇒ جتا = ٤/٥"},
+          {question:"قيمة ظا ٤٥° =", options:["١","√٢/٢","√٣/٢","٢"], correct:0, hint:"مثلث ٤٥°-٤٥°-٩٠°", explanation:"ظا ٤٥° = ١"},
+          {question:"إذا كان جتا α = ٥/١٣، فقِيمَة قتا α =", options:["١٣/٥","٥/١٣","١٢/٥","٥/١٢"], correct:0, hint:"قتا = ١/جتا", explanation:"قتا = ١٣/٥"}
+        ]
+      },
+      reference:{
+        title:"زاوية الأساس (المرجعية)",
+        questions:[
+          {question:"الزاوية المرجعية لـ ١٥٠° هي:", options:["٣٠°","٦٠°","١٢٠°","٤٥°"], correct:0, hint:"ربع ثانٍ: ١٨٠° − الزاوية", explanation:"= ٣٠°"},
+          {question:"الزاوية المرجعية لـ ٢٢٥° هي:", options:["٤٥°","٣٥°","٥٥°","٦٥°"], correct:0, hint:"ربع ثالث: الزاوية − ١٨٠°", explanation:"= ٤٥°"}
+        ]
+      },
+      general:{
+        title:"النسب المثلثية للزوايا العامة",
+        questions:[
+          {question:"قيمة جتا ٢٢٥° =", options:["-√٢/٢","√٢/٢","-١/٢","١/٢"], correct:0, hint:"ربع ثالث ومرجعية ٤٥°", explanation:"-√٢/٢"}
+        ]
+      },
+      graphs:{
+        title:"التمثيلات البيانية للدوال",
+        questions:[
+          {question:"دورة جا س =", options:["٢π","π","π/٢","٤π"], correct:0, hint:"جا(س+٢π)=جا س", explanation:"٢π"}
+        ]
+      },
+      equations:{
+        title:"المعادلات المثلثية",
+        questions:[
+          {question:"حل جا س = ١/٢ في [٠،٢π]:", options:["π/٦، ٥π/٦","π/٣، ٢π/٣","π/٤، ٣π/٤","π/٢، π"], correct:0, hint:"جا موجب في الربعين ١ و٢", explanation:"π/٦ و ٥π/٦"}
+        ]
+      }
     };
-    const fnMap = ar => ar==='جا'?'sin': ar==='جتا'?'cos':'tan';
 
-    function genP2(){
-      const qs=[];
-      while(qs.length<30){
-        const type = Math.floor(Math.random()*4); // أربعة قوالب
-        if(type===0){
-          const A = pick([30,45,60]); const fn = pick(['جا','جتا','ظا']);
-          const quad = pick([2,3,4]);
-          const val = special[A][fnMap(fn)];
-          // إشارة الدوال حسب الربع (تقريب منطقي)
-          const sign = (fn==='جا'?(quad===1||quad===2):fn==='جتا'?(quad===1||quad===4): (quad===1||quad===3))?'+':'-';
-          const signed = sign==='-'?`-${val}`:`${val}`;
-          qs.push({
-            id:String(qs.length+1),
-            question:`إذا كان \\(${fn}\\,س = ${signed}\\) و\\(س\\) في الربع \\(${['الأول','الثاني','الثالث','الرابع'][quad-1]}\\)، فما الزاوية المرجعية لـ \\(س\\)؟`,
-            options:[`${A}°`, `${90-A}°`, `${A/2}°`, `${180-A}°`],
-            correct_answer:`${A}°`,
-            hint:`الزاوية المرجعية هي الزاوية القياسية لقيمة \\(${fn}\\) المطلقة.`,
-            explanation:`القيمة المطلقة ${val} توافق الزاوية ${A}° ⇒ المرجعية ${A}°.`
-          });
-        } else if(type===1){
-          const base=pick([30,45,60]); const use=pick(['ضعف','نصف']); const fn=pick(['جا','جتا']);
-          const tgt = use==='ضعف'? base*2 : base/2;
-          const ans = fn==='جا'? special[tgt]?.sin : special[tgt]?.cos;
-          if(!ans) continue;
-          const form = use==='ضعف'
-            ? (fn==='جا'? '\\جا(٢س)=٢\\جا س\\جتا س' : '\\جتا(٢س)=\\جتا^2 س-\\جا^2 س')
-            : (fn==='جا'? '\\جا(س/٢)=\\pm\\sqrt{\\dfrac{١-\\جتا س}{٢}}' : '\\جتا(س/٢)=\\pm\\sqrt{\\dfrac{١+\\جتا س}{٢}}');
-          const wrong = shuffle([special[base].sin, special[base].cos, '٠']).slice(0,3);
-          qs.push({
-            id:String(qs.length+1),
-            question:`استخدم متطابقات ${use} الزاوية: إذا \\(س=${base}°\\)، فأوجد \\(${fn}(${use==='ضعف'?'٢س':'س/٢'})\\).`,
-            options: shuffle([ans, ...wrong]),
-            correct_answer: ans,
-            hint:`المتطابقة: ${form}.`,
-            explanation:`القيمة القياسية لـ ${fn}(${use==='ضعف'?2*base:base/2}°) هي ${ans}.`
-          });
-        } else if(type===2){
-          const s1 = pick(['موجبة','سالبة']), s2=pick(['موجبة','سالبة']);
-          const pair = pick([['جا','جتا'], ['جتا','ظا'], ['جا','ظا']]);
-          const map = {'موجبةموجبة':'الأول','سالبةموجبة':'الثاني','سالبةسالبة':'الثالث','موجبةسالبة':'الرابع'};
-          const quad = map[s1+s2] || 'الأول';
-          qs.push({
-            id:String(qs.length+1),
-            question:`إذا كانت إشارتا \\(${pair[0]}\\,س\\) ${s1} و\\(${pair[1]}\\,س\\) ${s2}، ففي أي ربع يقع \\(س\\)؟`,
-            options:['الأول','الثاني','الثالث','الرابع'],
-            correct_answer: quad,
-            hint:'استخدم جدول إشارات الدوال في الأرباع.',
-            explanation:`الإشارتان (${s1}, ${s2}) تدلان على الربع ${quad}.`
-          });
-        } else {
-          const A=pick([30,45,60]);
-          const expr = pick([
-            `\\dfrac{١-\\,(\\جا\\ ${A}°)}{\\جتا\\ ${A}°}`,
-            `\\dfrac{١+\\,(\\جتا\\ ${A}°)}{\\جا\\ ${A}°}`,
-            `\\dfrac{\\جا\\ ${A}°}{١-\\,(\\جتا\\ ${A}°)}`
-          ]);
-          const s = special[A].sin, c = special[A].cos;
-          const value = (e)=> e.includes('١-\\,(\\جا') ? `\\dfrac{١-${s}}{${c}}`
-                                 : e.includes('١+\\,(\\جتا') ? `\\dfrac{١+${c}}{${s}}`
-                                 : `\\dfrac{${s}}{١-${c}}`;
-          const correct = value(expr);
-          const distract = shuffle([
-            correct.replace('١+','١-').replace('١-','١+'),
-            correct.replace(/\\جا/g,'\\جتا'),
-            correct.replace(/\\جتا/g,'\\جا')
-          ]).slice(0,3);
-          qs.push({
-            id:String(qs.length+1),
-            question:`بسِّط: \\(${expr}\\).`,
-            options: shuffle([correct, ...distract]),
-            correct_answer: correct,
-            hint:'عوّض بقيم ٣٠°/٤٥°/٦٠° ثم بسِّط.',
-            explanation:`بوضع \\(\\جا ${A}°=${s}\\)، \\(\\جتا ${A}°=${c}\\) نحصل على ${correct}.`
-          });
-        }
-      }
-      return qs;
-    }
-
-    /*=========================
-      القسم ٣: تمثيلات بيانية (٣٠ سؤالًا مولدًا)
-    =========================*/
-    function genP3(){
-      const qs=[]; const amps=[1,2,3,4], shifts=[0,30,45,60,90], dVals=[-2,-1,0,1,2], bVals=[0.5,1,2,3,4];
-      const fns=['\\جا','\\جتا','\\ظا'];
-      while(qs.length<30){
-        const fn=pick(fns), a=pick(amps), b=pick(bVals), c=pick(shifts), d=pick(dVals);
-        const period = fn==='\\ظا' ? (180/Math.abs(b)) : (360/Math.abs(b));
-        const amp = fn==='\\ظا' ? '—' : String(a);
-        const q={
-          id:String(qs.length+1),
-          question:`لدالة \\(y=${a}${fn}( ${String(b).replace('.','\\,')}x + ${c}° ) ${d? (d>0?'+':'')+d: ''}\\)، ما \\(\\text{الدورة}\\) وما \\(\\text{السعة}\\)؟`,
-          options: shuffle([
-            `الدورة = ${period}° ، السعة = ${amp}`,
-            `الدورة = ${period/2}° ، السعة = ${amp}`,
-            `الدورة = ${period}° ، السعة = ${amp==='—'?'١':String(Number(amp)+1)}`,
-            `الدورة = ${period*2}° ، السعة = ${amp}`
-          ]),
-          correct_answer:`الدورة = ${period}° ، السعة = ${amp}`,
-          hint:`لـ \\(\\sin,\\cos\\): \\(\\dfrac{٣٦٠°}{|b|}\\) والسعة \\(|a|\\). ولـ \\(\\tan\\): \\(\\dfrac{١٨٠°}{|b|}\\) ولا سعة.`,
-          explanation:`\\(|b|=${Math.abs(b)}\\) ⇒ الدورة = ${period}°. السعة ${amp==='—'?'غير معرّفة لـ \\(\\tan\\)':'= '+amp}.`
-        };
-        qs.push(q);
-      }
-      return qs;
-    }
-
-    /*=========================
-      القسم ٤: معادلات مثلثية (٣٠ سؤالًا مولدًا)
-    =========================*/
-    function genP4(){
-      const qs=[]; const basis=[30,45,60];
-      while(qs.length<30){
-        const mode = pick(['sin','cos','tan','mix']);
-        if(mode==='sin'){
-          const A=pick(basis), K=pick([1,2,3,4]); const rhs=special[A].sin;
-          const max=360/K;
-          const sol = `\\(x=${A/K}°\\) أو \\(x=${(180-A)/K}°\\)`;
-          qs.push({
-            id:String(qs.length+1),
-            question:`حل \\(\\جا(${K}x)=${rhs}\\) على \\(٠°\\le x<${max}°\\).`,
-            options: shuffle([sol, `\\(x=${A}°\\)`, `\\(x=${(180-A)}°\\)`, `\\(x=${A/(K*2)}°\\)`]),
-            correct_answer: sol,
-            hint:'\\(\\sin(Kx)=m\\Rightarrow Kx=\\alpha\\) أو \\(Kx=١٨٠°-\\alpha\\).',
-            explanation:`\\(\\alpha=${A}°\\) ⇒ \\(x=\\alpha/K\\) أو \\((١٨٠°-\\alpha)/K\\).`
-          });
-        } else if(mode==='cos'){
-          const A=pick(basis), K=pick([1,2,3,4]); const rhs=special[A].cos;
-          const max=360/K;
-          const sol = `\\(x=\\pm\\ ${A/K}°\\)`;
-          qs.push({
-            id:String(qs.length+1),
-            question:`حل \\(\\جتا(${K}x)=${rhs}\\) على \\(٠°\\le x<${max}°\\).`,
-            options: shuffle([sol, `\\(x=${A}°\\)`, `\\(x=${(360-A)}°\\)`, `\\(x=${(90-A)/K}°\\)`]),
-            correct_answer: sol,
-            hint:'\\(\\cos(Kx)=m\\Rightarrow Kx=\\pm\\alpha\\).',
-            explanation:`\\(\\alpha=${A}°\\) ⇒ \\(x=\\pm\\alpha/K\\).`
-          });
-        } else if(mode==='tan'){
-          const A=pick(basis), K=pick([1,2,3,4]); const rhs=special[A].tan;
-          const max=180/K; const sol = `\\(x=${A/K}°\\)`;
-          qs.push({
-            id:String(qs.length+1),
-            question:`حل \\(\\ظا(${K}x)=${rhs}\\) على \\(٠°\\le x<${max}°\\).`,
-            options: shuffle([sol, `\\(x=${(A+90)/K}°\\)`, `\\(x=${(90-A)/K}°\\)`, `\\(x=${A/2}°\\)`]),
-            correct_answer: sol,
-            hint:'\\(\\tan(Kx)=m\\Rightarrow Kx=\\alpha+١٨٠°k\\).',
-            explanation:`أقرب حل أساسي \\(x=\\alpha/K\\) حيث \\(\\alpha=${A}°\\).`
-          });
-        } else {
-          const question=`إذا كان \\(٢\\جا x\\,\\جتا x=\\dfrac{\\sqrt{٣}}{٢}\\)، فأوجد \\(x\\) على \\(٠°\\le x<٩٠°\\).`;
-          const sol = `\\(x=٣٠°\\) أو \\(x=٦٠°\\)`;
-          qs.push({
-            id:String(qs.length+1),
-            question,
-            options: shuffle([sol, '‎\\(x=٤٥°\\)', '‎\\(x=١٥°\\)', '‎\\(x=٧٥°\\)']),
-            correct_answer: sol,
-            hint:'\\(٢\\جا x\\جتا x=\\جا(٢x)\\).',
-            explanation:'\\(\\جا(٢x)=\\sqrt{٣}/٢\\Rightarrow ٢x=٦٠°\\) أو \\(١٢٠°\\Rightarrow x=٣٠°\\) أو \\(٦٠°\\).'
-          });
-        }
-      }
-      return qs;
-    }
-
-    /*=========================
-      مُنشئ بطاقة السؤال + ربط السلوك
-    =========================*/
-    const mk = (q,i)=>`
-      <div class="qa" data-id="${q.id}">
-        <div class="qtitle">سؤال ${i+1}: ${q.question}</div>
-        <div class="opts">
-          ${q.options.map(o=>`<div class="opt" data-a="${encodeURIComponent(o)}"><span>${o}</span></div>`).join('')}
-        </div>
-        <div class="bar">
-          <button class="btn btn-hint">تلميح 💡</button>
-          <button class="btn btn-exp">تفسير 📘</button>
-          <span class="small">الإجابة الصحيحة تُلوَّن بالأخضر بعد الاختيار.</span>
-        </div>
-        <div class="hint"><b>تلميح:</b> ${q.hint||'—'}</div>
-        <div class="exp"><b>تفسير:</b> ${q.explanation||'—'}</div>
-      </div>
-    `;
-
-    function wireQA(scope, bank){
-      scope.querySelectorAll('.qa').forEach((card,idx)=>{
-        const correct = bank[idx].correct_answer;
-        const right = [...card.querySelectorAll('.opt')].find(o=>decodeURIComponent(o.dataset.a)===correct);
-        card.querySelectorAll('.opt').forEach(opt=>{
-          opt.addEventListener('click',()=>{
-            card.querySelectorAll('.opt').forEach(o=>o.classList.remove('correct','wrong'));
-            if (decodeURIComponent(opt.dataset.a)===correct){ opt.classList.add('correct'); }
-            else { opt.classList.add('wrong'); right&&right.classList.add('correct'); }
-            window.MathJax && MathJax.typesetPromise([card]);
-          });
-        });
-        card.querySelector('.btn-hint').addEventListener('click',()=>{
-          const el=card.querySelector('.hint'); el.style.display=el.style.display==='block'?'none':'block';
-          window.MathJax && MathJax.typesetPromise([el]);
-        });
-        card.querySelector('.btn-exp').addEventListener('click',()=>{
-          const el=card.querySelector('.exp'); el.style.display=el.style.display==='block'?'none':'block';
-          window.MathJax && MathJax.typesetPromise([el]);
-        });
-      });
-    }
-
-    /*=========================
-      ربط أزرار "ابدأ"
-    =========================*/
-    const state = { p1:false, p2:false, p3:false, p4:false };
-    document.querySelectorAll('.start').forEach(btn=>{
-      btn.addEventListener('click',()=>{
-        const sec = document.querySelector(btn.dataset.start);
-        const box = sec.querySelector('.qbox');
-        const anchorId = box.getAttribute('data-anchor')||'';
-        // تحميل الأسئلة عند أول ضغط
-        if (sec.id==='sec1' && !state.p1){
-          const host = document.getElementById('questions1');
-          host.innerHTML = P1.map(mk).join('');
-          wireQA(host, P1);
-          state.p1=true; window.MathJax && MathJax.typesetPromise([host]);
-        }
-        if (sec.id==='sec2' && !state.p2){
-          const data = genP2();
-          const host = document.getElementById('questions2');
-          host.innerHTML = data.map(mk).join('');
-          wireQA(host, data);
-          state.p2=true; window.MathJax && MathJax.typesetPromise([host]);
-        }
-        if (sec.id==='sec3' && !state.p3){
-          const data = genP3();
-          const host = document.getElementById('questions3');
-          host.innerHTML = data.map(mk).join('');
-          wireQA(host, data);
-          state.p3=true; window.MathJax && MathJax.typesetPromise([host]);
-        }
-        if (sec.id==='sec4' && !state.p4){
-          const data = genP4();
-          const host = document.getElementById('questions4');
-          host.innerHTML = data.map(mk).join('');
-          wireQA(host, data);
-          state.p4=true; window.MathJax && MathJax.typesetPromise([host]);
-        }
-        // إظهار الصندوق والتمرير إليه
-        box.style.display='block';
-        if (anchorId) location.hash = anchorId;
-        const y = box.getBoundingClientRect().top + window.pageYOffset - 12;
-        window.scrollTo({top:y, behavior:'smooth'});
-      });
+    // للتأكد عند التحميل
+    document.addEventListener('DOMContentLoaded', ()=>{
+      // console.log('Ready. Lessons:', Object.keys(lessons));
     });
   </script>
 </body>
