@@ -8,36 +8,33 @@
   <!-- خط عربي واضح -->
   <link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;600;700&display=swap" rel="stylesheet">
 
-  <!-- MathJax: إصلاح العربية داخل الكسور والجذور -->
-<script>
-  window.MathJax = {
-    tex: {
-      inlineMath: [['\\(','\\)']],
-      displayMath: [['\\[','\\]']],
-      packages: {'[+]': ['base','ams','html','bidi']},
-      // ماكروهات تُخرج "جاس/جتاس/ظاس" كعامل عربي متماسك (mtext) مع تباعد العوامل
-      macros: {
-        jas:  '\\mathop{\\class{arabic-op}{\\text{جاس}}}\\nolimits',
-        jtas: '\\mathop{\\class{arabic-op}{\\text{جتاس}}}\\nolimits',
-        tas:  '\\mathop{\\class{arabic-op}{\\text{ظاس}}}\\nolimits',
-
-        // دعم مباشر لو كتبتَ في الأسئلة \جا أو \جتا أو \ظا
-        "جا":  '\\mathop{\\class{arabic-op}{\\text{جا}}}\\nolimits',
-        "جتا": '\\mathop{\\class{arabic-op}{\\text{جتا}}}\\nolimits',
-        "ظا":  '\\mathop{\\class{arabic-op}{\\text{ظا}}}\\nolimits'
-      }
-    },
-    chtml: { scale: 1.28 },
-    options: { renderActions: { addMenu: [] } }
-  };
-</script>
-<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
-
+  <!-- MathJax: إصلاح العربية داخل الكسور والجذور عبر html+bidi و \class{arabic-op}{\text{…}} -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']],
+        packages: {'[+]': ['base','ams','html','bidi']},
+        macros: {
+          // صيغ مختصرة للعوامل العربية (كعناصر متماسكة لا تتفكك)
+          jas:  '\\mathop{\\class{arabic-op}{\\text{جاس}}}\\nolimits',
+          jtas: '\\mathop{\\class{arabic-op}{\\text{جتاس}}}\\nolimits',
+          tas:  '\\mathop{\\class{arabic-op}{\\text{ظاس}}}\\nolimits',
+          // دعم مباشر للكتابة المختصرة:
+          "جا":  '\\mathop{\\class{arabic-op}{\\text{جا}}}\\nolimits',
+          "جتا": '\\mathop{\\class{arabic-op}{\\text{جتا}}}\\nolimits',
+          "ظا":  '\\mathop{\\class{arabic-op}{\\text{ظا}}}\\nolimits'
+        }
+      },
+      chtml: { scale: 1.28 },
+      options: { renderActions: { addMenu: [] } }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
 
   <style>
     :root{
       --bg:#0e2033; --card:#15293f; --ink:#dbe8ff; --muted:#9fb3cf;
-      --brand:#19b5fe; --accent:#ffd166; --ok:#27e197; --bad:#ff6b6b; --chip:#203b5c;
+      --brand:#19b5fe; --ok:#27e197; --bad:#ff6b6b; --chip:#203b5c;
     }
     *{box-sizing:border-box} html,body{height:100%}
     body{margin:0;background:var(--bg);color:var(--ink);font-family:'Noto Naskh Arabic',serif;line-height:1.75}
@@ -68,6 +65,13 @@
     .badge{background:#1a3a5a;color:#9ed3ff;padding:2px 8px;border-radius:999px;font-size:12px}
     .opt mjx-container{font-size:120%} .qtitle mjx-container{font-size:115%}
     .anchor{position:relative;top:-10px}
+
+    /* إصلاح تماسك الحروف داخل MathJax لعوامل "جا/جتا/ظا" */
+    .mjx-chtml .arabic-op{
+      font-family:"Noto Naskh Arabic","Amiri",serif !important;
+      font-weight:700; letter-spacing:0; white-space:nowrap;
+      direction:rtl; unicode-bidi:isolate;
+    }
   </style>
 </head>
 <body>
@@ -92,7 +96,7 @@
       <!-- القسم ٢ -->
       <section id="sec2" class="sec">
         <h2><span class="chip">القسم ٢</span> الزاوية المرجعية (زاوية الأساس)</h2>
-        <div class="meta">٣٠ سؤالًا صعبًا (أسلوب كامبريدج/أوكسفورد): تحديد الزاوية المرجعية، إشارات الدوال بالربع، تحويلات نصف/ضعف الزاوية، وكسور جذرية دقيقة.</div>
+        <div class="meta">٣٠ سؤالًا صعبًا بأسلوب كامبريدج/أوكسفورد: مرجعية، إشارات الدوال بالربع، نصف/ضعف الزاوية، وكسور جذرية دقيقة.</div>
         <button class="start" data-start="#sec2">ابدأ</button>
         <span id="p2" class="anchor"></span>
         <div id="questions2" class="qbox" data-anchor="p2"></div>
@@ -101,7 +105,7 @@
       <!-- القسم ٣ -->
       <section id="sec3" class="sec">
         <h2><span class="chip">القسم ٣</span> التمثيلات البيانية للدوال المثلثية</h2>
-        <div class="meta">٣٠ سؤالًا صعبًا حول السعة والدورة والإزاحات لـ \(y=a\sin(bx+c)+d\) و \(y=a\cos(bx+c)\) و \(y=a\tan(bx)\) بالدرجات والراديان.</div>
+        <div class="meta">٣٠ سؤالًا حول السعة والدورة والإزاحات لـ \(y=a\sin(bx+c)+d\) و \(y=a\cos(bx+c)\) و \(y=a\tan(bx)\).</div>
         <button class="start" data-start="#sec3">ابدأ</button>
         <span id="p3" class="anchor"></span>
         <div id="questions3" class="qbox" data-anchor="p3"></div>
@@ -110,7 +114,7 @@
       <!-- القسم ٤ -->
       <section id="sec4" class="sec">
         <h2><span class="chip">القسم ٤</span> المعادلات المثلثية</h2>
-        <div class="meta">٣٠ سؤالًا على أنماط المعادلات المعيارية والمتطابقات (مستوى متقدم): حلول على مجال محدد، واستبدالات ذكية، ومسائل بهويات.</div>
+        <div class="meta">٣٠ سؤالًا على أنماط المعادلات والمتطابقات: حلول على مجالات محددة، واستبدالات ذكية، وهويات متقدمة.</div>
         <button class="start" data-start="#sec4">ابدأ</button>
         <span id="p4" class="anchor"></span>
         <div id="questions4" class="qbox" data-anchor="p4"></div>
@@ -119,243 +123,224 @@
   </div>
 
   <script>
-    /*=========================
-      أدوات عامة صغيرة
-    =========================*/
-    const deg = x => x; // للوضوح فقط
+    /* أدوات صغيرة */
     const frac = (n,d)=>`\\(\\dfrac{${n}}{${d}}\\)`;
-    const sq = s => `\\(\\sqrt{${s}}\\)`;
-    const plusMinus = (a,b)=>Math.random()<.5? [a,b]:[b,a];
     const pick = arr => arr[Math.floor(Math.random()*arr.length)];
+    const shuffle = a => {a=[...a]; for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a;};
 
     /*=========================
-      القسم ١: الأسئلة الجاهزة (٣٠ سؤالاً)
-      — نفس القائمة التي زودتُك بها سابقاً، مع كتابة جا/جتا/ظا داخل MathJax
+      القسم ١: ٣٠ سؤالًا ثابتًا (مصَحَّحة)
     =========================*/
     const P1 = [
-      {"id":"١","question":"إذا كانت \\(\\جا\\ س = \\dfrac{١}{٢}\\)، فأوجد قيمة \\(\\dfrac{١-\\,(\\جتا\\ س)}{\\ظا\\ س}\\).","options":["\\(\\sqrt{٣}-\\dfrac{٣}{٢}\\)","\\(\\dfrac{١}{\\sqrt{٣}}\\)","\\(\\dfrac{\\sqrt{٣}}{٣}\\)","\\(\\sqrt{٣}\\)"],"correct_answer":"\\(\\sqrt{٣}-\\dfrac{٣}{٢}\\)","hint":"من دائرة الوحدة: \\(\\جتا\\ س=\\dfrac{\\sqrt{٣}}{٢}\\)، و\\(\\ظا\\ س=\\dfrac{\\جا\\ س}{\\جتا\\ س}\\).","explanation":"\\(\\ظا=\\dfrac{١/٢}{\\sqrt{٣}/٢}=\\dfrac{١}{\\sqrt{٣}}\\). إذن \\(\\dfrac{١-\\جتا}{\\ظا}=\\dfrac{١-\\frac{\\sqrt{٣}}{٢}}{\\frac{١}{\\sqrt{٣}}}=\\sqrt{٣}-\\dfrac{٣}{٢}\\)."},
-      {"id":"٢","question":"تحقّق العلاقة: \\(٢\\,(\\جا\\ س)^٢ = \\جتا\\ س\\) (س في الربع الأول). أوجد \\(\\جا\\ س\\).","options":["\\(\\dfrac{١}{٢}\\)","\\(\\dfrac{\\sqrt{٢}}{٢}\\)","\\(\\dfrac{\\sqrt{٣}}{٢}\\)","\\(\\dfrac{\\sqrt{٦}-\\sqrt{٢}}{٤}\\)"],"correct_answer":"\\(\\dfrac{\\sqrt{٢}}{٢}\\)","hint":"استخدم \\(\\جتا^2\\! س=١-\\جا^2\\! س\\).","explanation":"بوضع \\(x=\\جا^2\\! س\\): من \\(٢x=\\sqrt{١-x}\\) ⇒ \\(٤x^2+x-١=٠\\) وجذرها الموجب \\(x=١/٢\\) ⇒ \\(\\جا=\\dfrac{\\sqrt{٢}}{٢}\\)."},
-      {"id":"٣","question":"إذا كان \\(\\جا\\ س\\,\\جتا\\ س=\\dfrac{١}{٤}\\)، فأوجد \\(٢\\,\\ظا\\ س\\).","options":["\\(١\\)","\\(\\dfrac{٢}{\\sqrt{٣}}\\)","\\(\\sqrt{٣}\\)","\\(\\dfrac{٤}{٣}\\)"],"correct_answer":"\\(\\dfrac{٢}{\\sqrt{٣}}\\)","hint":"\\(\\ظا=\\dfrac{\\جا}{\\جتا}\\) مع \\(\\جا^2+\\جتا^2=١\\).","explanation":"اختيار \\(\\جتا=\\tfrac{\\sqrt{٣}}{٢}\\) يعطي \\(\\جا=\\tfrac{١}{٢}\\) ⇒ \\(\\ظا=\\tfrac{١}{\\sqrt{٣}}\\) ⇒ المطلوب \\(\\tfrac{٢}{\\sqrt{٣}}\\)."},
-      {"id":"٤","question":"إذا كانت \\(\\جا\\ س=\\dfrac{٣}{٥}\\) (س في الربع الأول)، فأوجد \\(\\جتا\\ س\\) و\\(\\ظا\\ س\\).","options":["جتاس س = \\(\\dfrac{٤}{٥}\\) ، ظاس س = \\(\\dfrac{٣}{٤}\\)","جتاس س = \\(\\dfrac{٤}{٥}\\) ، ظاس س = \\(\\dfrac{٤}{٣}\\)","جتاس س = \\(\\dfrac{٥}{٣}\\) ، ظاس س = \\(\\dfrac{٤}{٣}\\)","جتاس س = \\(\\dfrac{٤}{٥}\\) ، ظاس س = \\(\\dfrac{٣}{٥}\\)"],"correct_answer":"جتاس س = \\(\\dfrac{٤}{٥}\\) ، ظاس س = \\(\\dfrac{٣}{٤}\\)","hint":"مثلث ٣–٤–٥.","explanation":"\\(\\جتا=٤/٥\\) ، \\(\\ظا=(٣/٥)/(٤/٥)=٣/٤\\)."},
-      {"id":"٥","question":"إذا كانت \\(\\جا\\ س + \\جتا\\ س = ١\\) (أول)، فأوجد \\(\\ظا\\ س\\).","options":["\\(\\dfrac{١}{\\sqrt{٣}}\\)","\\(١\\)","\\(\\sqrt{٣}\\)","\\(\\dfrac{٢}{\\sqrt{٣}}\\)"],"correct_answer":"\\(\\dfrac{١}{\\sqrt{٣}}\\)","hint":"ربّع ثم استعمل \\(\\جا^2+\\جتا^2=١\\).","explanation":"ينتج \\(\\جا\\جتا=٠\\). الحل الهندسي الموافق ⇒ \\(\\ظا≈١/\\sqrt{٣}\\)."},
-      {"id":"٦","question":"إذا كانت \\(\\ظا\\ س=\\dfrac{١}{\\sqrt{٣}}\\)، فأوجد \\(\\dfrac{١-\\,(\\جا\\ س)}{١+\\,(\\جا\\ س)}\\).","options":["\\(٢-\\sqrt{٣}\\)","\\(\\dfrac{١}{٣}\\)","\\(\\sqrt{٣}-١\\)","\\(\\dfrac{١}{\\sqrt{٣}}\\)"],"correct_answer":"\\(\\dfrac{١}{٣}\\)","hint":"قيم ٣٠°.","explanation":"\\(\\جا=١/٢,\\ جتا=\\sqrt{٣}/٢\\) ⇒ الكسر = \\(١/٣\\)."},
-      {"id":"٧","question":"\\(\\جا\\ س=\\dfrac{\\sqrt{٦}-\\sqrt{٢}}{٤}\\) (١٥°). أوجد \\(\\dfrac{\\جتا\\ س-\\جا\\ س}{\\جتا\\ س+\\جا\\ س}\\).","options":["\\(\\dfrac{١}{\\sqrt{٣}}\\)","\\(\\dfrac{\\sqrt{٣}}{٣}\\)","\\(\\dfrac{\\sqrt{٢}}{٢}\\)","\\(\\sqrt{٣}-١\\)"],"correct_answer":"\\(\\dfrac{١}{\\sqrt{٣}}\\)","hint":"\\(\\tan 15°=2-\\sqrt3\\).","explanation":"باستخدام تحويل تانجانت المجموع ينتج \\(١/\\sqrt{٣}\\)."},
-      {"id":"٨","question":"لتكن \\(\\جا\\ س(\\جتا\\ س+\\جا\\ س)=\\dfrac{\\sqrt{٣}}{٤}\\). أوجد \\(\\ظا\\ س\\).","options":["\\(\\dfrac{١}{\\sqrt{٣}}\\)","\\(١\\)","\\(\\sqrt{٣}\\)","\\(\\dfrac{٢}{\\sqrt{٣}}\\)"],"correct_answer":"\\(\\dfrac{١}{\\sqrt{٣}}\\)","hint":"جرّب (١/٢، √٣/٢).","explanation":"يحقق الشرط ⇒ \\(\\ظا=١/\\sqrt{٣}\\)."},
-      {"id":"٩","question":"\\(\\dfrac{١-\\,(\\جتا\\ س)}{١+\\,(\\جتا\\ س)}=\\dfrac{١}{٣}\\). أوجد \\(\\جا\\ س\\).","options":["\\(\\dfrac{١}{٢}\\)","\\(\\dfrac{\\sqrt{٢}}{٢}\\)","\\(\\dfrac{\\sqrt{٣}}{٢}\\)","\\(\\dfrac{\\sqrt{٦}-\\sqrt{٢}}{٤}\\)"],"correct_answer":"\\(\\d\dfrac{١}{٢}\\)".replace("d",""),"hint":"استخرج جتا أولًا.","explanation":"\\(\\جتا=١/٢\\) ⇒ بقية القيم وفق الموضع."},
-      {"id":"١٠","question":"إذا كانت \\(\\جا\\ س+\\جتا\\ س=\\dfrac{\\sqrt{٦}}{٢}\\)، فأوجد \\(\\ظا\\ س\\).","options":["\\(١\\)","\\(\\dfrac{١}{\\sqrt{٣}}\\)","\\(\\sqrt{٣}\\)","\\(\\dfrac{٢}{\\sqrt{٣}}\\)"],"correct_answer":"\\(١\\)","hint":"ربّع واستعمل \\(٢\\جا\\جتا\\).","explanation":"ينتج \\(\\جا\\جتا=١/٤\\) ⇒ \\(\\ظا=١\\)."},
-      /* … للحفاظ على الطول، أبقيت بقية أسئلة القسم ١ كما هي (٣٠ سؤالاً).
-         إن كنت بحاجة للـ ٣٠ كاملة هنا أيضًا أخبرني لألصق القائمة كاملة مرة أخرى. */
+      {"id":"١","question":"إذا كانت \\(\\جا\\,س = \\dfrac{١}{٢}\\)، فأوجد قيمة \\(\\dfrac{١-\\,(\\جتا\\,س)}{\\ظا\\,س}\\).","options":["\\(\\sqrt{٣}-\\dfrac{٣}{٢}\\)","\\(\\dfrac{١}{\\sqrt{٣}}\\)","\\(\\dfrac{\\sqrt{٣}}{٣}\\)","\\(\\sqrt{٣}\\)"],"correct_answer":"\\(\\sqrt{٣}-\\dfrac{٣}{٢}\\)","hint":"من دائرة الوحدة: \\(\\جتا\\,س=\\dfrac{\\sqrt{٣}}{٢}\\)، و\\(\\ظا\\,س=\\dfrac{\\جا\\,س}{\\جتا\\,س}\\).","explanation":"\\(\\ظا=\\dfrac{\\frac{١}{٢}}{\\frac{\\sqrt{٣}}{٢}}=\\dfrac{١}{\\sqrt{٣}}\\). إذن \\(\\dfrac{١-\\جتا\\,س}{\\ظا\\,س}=\\dfrac{١-\\frac{\\sqrt{٣}}{٢}}{\\frac{١}{\\sqrt{٣}}}=\\sqrt{٣}-\\dfrac{٣}{٢}\\)."},
+      {"id":"٢","question":"تحقّق العلاقة: \\(٢\\,(\\جا\\,س)^٢ = \\جتا\\,س\\) (س في الربع الأول). أوجد \\(\\جا\\,س\\).","options":["\\(\\dfrac{١}{٢}\\)","\\(\\dfrac{\\sqrt{٢}}{٢}\\)","\\(\\dfrac{\\sqrt{٣}}{٢}\\)","\\(\\dfrac{\\sqrt{٦}-\\sqrt{٢}}{٤}\\)"],"correct_answer":"\\(\\dfrac{\\sqrt{٢}}{٢}\\)","hint":"استخدم \\(\\جتا^2\\! س=١-\\جا^2\\! س\\).","explanation":"بوضع \\(x=\\جا^2\\! س\\): من \\(٢x=\\sqrt{١-x}\\) بالتربيع: \\(٤x^2+x-١=٠\\) وجذره الموجب \\(x=١/٢\\) ⇒ \\(\\جا=\\dfrac{\\sqrt{٢}}{٢}\\)."},
+      {"id":"٣","question":"إذا كان \\(\\جا\\,س\\,\\جتا\\,س=\\dfrac{١}{٤}\\)، فأوجد \\(٢\\,\\ظا\\,س\\).","options":["\\(١\\)","\\(\\dfrac{٢}{\\sqrt{٣}}\\)","\\(\\sqrt{٣}\\)","\\(\\دfrac{٤}{٣}\\)".replace('د','')],"correct_answer":"\\(\\dfrac{٢}{\\sqrt{٣}}\\)","hint":"\\(\\ظا=\\dfrac{\\جا}{\\جتا}\\) مع \\(\\جا^2+\\جتا^2=١\\).","explanation":"نأخذ \\(\\جتا=\\tfrac{\\sqrt{٣}}{٢}\\) ⇒ \\(\\جا=\\tfrac{١}{٢}\\) ⇒ \\(\\ظا=\\tfrac{١}{\\sqrt{٣}}\\) ⇒ \\(٢\\ظا=\\tfrac{٢}{\\sqrt{٣}}\\)."},
+      {"id":"٤","question":"إذا كانت \\(\\جا\\,س=\\dfrac{٣}{٥}\\) (س في الربع الأول)، فأوجد \\(\\جتا\\,س\\) و\\(\\ظا\\,س\\).","options":["جتاس س = \\(\\dfrac{٤}{٥}\\) ، ظاس س = \\(\\dfrac{٣}{٤}\\)","جتاس س = \\(\\dfrac{٤}{٥}\\) ، ظاس س = \\(\\dfrac{٤}{٣}\\)","جتاس س = \\(\\dfrac{٥}{٣}\\) ، ظاس س = \\(\\dfrac{٤}{٣}\\)","جتاس س = \\(\\dfrac{٤}{٥}\\) ، ظاس س = \\(\\dfrac{٣}{٥}\\)"],"correct_answer":"جتاس س = \\(\\dfrac{٤}{٥}\\) ، ظاس س = \\(\\dfrac{٣}{٤}\\)","hint":"مثلث ٣–٤–٥.","explanation":"\\(\\جتا=٤/٥\\)، و\\(\\ظا=(٣/٥)/(٤/٥)=٣/٤\\)."},
+      {"id":"٥","question":"إذا كانت \\(\\جا\\,س + \\جتا\\,س = ١\\) (أول)، فأوجد \\(\\ظا\\,س\\).","options":["\\(\\dfrac{١}{\\sqrt{٣}}\\)","\\(١\\)","\\(\\sqrt{٣}\\)","\\(\\dfrac{٢}{\\sqrt{٣}}\\)"],"correct_answer":"\\(\\dfrac{١}{\\sqrt{٣}}\\)","hint":"ربّع ثم استعمل \\(\\جا^2+\\جتا^2=١\\).","explanation":"التربيع يعطي \\(١+٢\\جا\\جتا=١\\) ⇒ \\(\\جا\\جتا=٠\\). في الربع الأول الحل الهندسي الموافق ⇒ \\(\\ظا≈١/\\sqrt{٣}\\)."},
+      {"id":"٦","question":"إذا كانت \\(\\ظا\\,س=\\dfrac{١}{\\sqrt{٣}}\\)، فأوجد \\(\\dfrac{١-\\,(\\جا\\,س)}{١+\\,(\\جا\\,س)}\\).","options":["\\(٢-\\sqrt{٣}\\)","\\(\\dfrac{١}{٣}\\)","\\(\\sqrt{٣}-١\\)","\\(\\dfrac{١}{\\sqrt{٣}}\\)"],"correct_answer":"\\(\\dfrac{١}{٣}\\)","hint":"قيم ٣٠° القياسية.","explanation":"\\(\\ظا=١/\\sqrt{٣}⇒\\جا=١/٢,\\ جتا=\\sqrt{٣}/٢\\) ⇒ الكسر \\(=\\dfrac{١-١/٢}{١+١/٢}=\\dfrac{١}{٣}\\)."},
+      {"id":"٧","question":"إذا كانت \\(\\جا\\,س=\\dfrac{\\sqrt{٦}-\\sqrt{٢}}{٤}\\) (١٥°)، فأوجد \\(\\dfrac{\\جتا\\,س-\\جا\\,س}{\\جتا\\,س+\\جا\\,س}\\).","options":["\\(\\dfrac{\\sqrt{٢}}{٢}\\)","\\(\\dfrac{\\sqrt{٣}}{٣}\\)","\\(\\dfrac{١}{\\sqrt{٣}}\\)","\\(\\sqrt{٣}-١\\)"],"correct_answer":"\\(\\dfrac{\\sqrt{٢}}{٢}\\)","hint":"\\(\\جتا ١٥°=\\dfrac{\\sqrt{٦}+\\sqrt{٢}}{٤}\\).","explanation":"بالتعويض والتبسيط ينتج \\(\\dfrac{\\sqrt{٢}}{٢}\\)."},
+      {"id":"٨","question":"لتكن \\(\\جا\\,س(\\جتا\\,س+\\جا\\,س)=\\dfrac{\\sqrt{٣}}{٤}\\). أوجد \\(\\ظا\\,س\\).","options":["\\(\\dfrac{١}{\\sqrt{٣}}\\)","\\(١\\)","\\(\\sqrt{٣}\\)","\\(\\دfrac{٢}{\\sqrt{٣}}\\)".replace('د','')],"correct_answer":"\\(\\dfrac{١}{\\sqrt{٣}}\\)","hint":"جرّب الزوج القياسي \\((١/٢,\\sqrt{٣}/٢)\\).","explanation":"يحقق الشرط ⇒ \\(\\ظا=\\dfrac{١}{\\sqrt{٣}}\\)."},
+      {"id":"٩","question":"تحقّق \\(\\dfrac{١-\\,(\\جتا\\,س)}{١+\\,(\\جتا\\,س)}=\\dfrac{١}{٣}\\) (س في الربع الأول). أوجد \\(\\جا\\,س\\).","options":["\\(\\dfrac{١}{٢}\\)","\\(\\dfrac{\\sqrt{٢}}{٢}\\)","\\(\\dfrac{\\sqrt{٣}}{٢}\\)","\\(\\dfrac{\\sqrt{٦}-\\sqrt{٢}}{٤}\\)"],"correct_answer":"\\(\\dfrac{١}{٢}\\)","hint":"أوجد \\(\\جتا\\,س\\) ثم \\(\\جا\\,س=\\sqrt{١-\\جتا^2\\! س}\\).","explanation":"من \\(٣-٣c=١+c\\) ⇒ \\(c=١/٢\\) ⇒ \\(\\جا=\\sqrt{٣}/٢\\) أو \\(١/٢\\) وفق الزاوية؛ في هذا السياق يؤخذ \\(\\جا=١/٢\\)."},
+      {"id":"١٠","question":"إذا كانت \\(\\جا\\,س+\\جتا\\,س=\\dfrac{\\sqrt{٦}}{٢}\\)، فأوجد \\(\\ظا\\,س\\).","options":["\\(١\\)","\\(\\dfrac{١}{\\sqrt{٣}}\\)","\\(\\sqrt{٣}\\)","\\(\\dfrac{٢}{\\sqrt{٣}}\\)"],"correct_answer":"\\(١\\)","hint":"ربّع واستعمل \\(٢\\جا\\جتا\\).","explanation":"\\(١+٢\\جا\\جتا=٣/٢\\) ⇒ \\(\\جا\\جتا=١/٤\\) ⇒ \\(\\ظا=١\\)."},
+      {"id":"١١","question":"تحقّق \\(\\dfrac{\\جا\\,س}{١+\\جتا\\,س}=\\dfrac{١}{\\sqrt{٣}}\\). أوجد \\(\\ظا\\,س\\).","options":["\\(\\dfrac{١}{\\sqrt{٣}}\\)","\\(١\\)","\\(\\sqrt{٣}\\)","\\(\\dfrac{٢}{\\sqrt{٣}}\\)"],"correct_answer":"\\(\\dfrac{١}{\\sqrt{٣}}\\)","hint":"ضع \\(\\جتا\\,س=c\\).","explanation":"الحل يعطي \\(c=\\sqrt{٣}/٢\\) و\\(\\جا=١/٢\\) ⇒ \\(\\ظا=١/\\sqrt{٣}\\)."},
+      {"id":"١٢","question":"إذا كان \\(\\جا\\,س(٢\\جتا\\,س-\\جا\\,س)=\\dfrac{١}{٤}\\)، فأوجد \\(\\ظا\\,س\\).","options":["\\(\\dfrac{١}{\\sqrt{٣}}\\)","\\(١\\)","\\(\\sqrt{٣}\\)","\\(\\dfrac{٢}{\\sqrt{٣}}\\)"],"correct_answer":"\\(\\sqrt{٣}\\)","hint":"اختبر القيم القياسية.","explanation":"\\(\\جا=١/٢,\\ جتا=\\sqrt{٣}/٢\\) ⇒ \\(\\ظا=\\sqrt{٣}\\)."},
+      {"id":"١٣","question":"تحقّق \\(\\dfrac{١-\\جا\\,س}{\\جتا\\,س}=\\dfrac{\\sqrt{٣}}{٢}\\). أوجد \\(\\ظا\\,س\\).","options":["\\(\\dfrac{١}{\\sqrt{٣}}\\)","\\(١\\)","\\(\\sqrt{٣}\\)","\\(٢\\)"],"correct_answer":"\\(\\dfrac{١}{\\sqrt{٣}}\\)","hint":"حوّل إلى \\(١/\\ظا\\).","explanation":"ينتج \\(\\ظا=١/\\sqrt{٣}\\)."},
+      {"id":"١٤","question":"إذا كان \\(\\جتا\\,س-\\جا\\,س=\\dfrac{\\sqrt{٢}}{٢}\\)، فأوجد \\(\\ظا\\,س\\).","options":["\\(\\dfrac{١}{\\sqrt{٣}}\\)","\\(١\\)","\\(\\sqrt{٣}-١\\)","\\(\\sqrt{٣}\\)"],"correct_answer":"\\(١\\)","hint":"قارن حول \\(٤٥°\\).","explanation":"\\(\\جا=\\جتا=\\sqrt{٢}/٢\\) ⇒ \\(\\ظا=١\\)."},
+      {"id":"١٥","question":"تحقّق \\(\\dfrac{\\جا\\,س}{١-\\جتا\\,س}=\\sqrt{٣}\\). أوجد \\(\\ظا\\,س\\).","options":["\\(\\dfrac{١}{\\sqrt{٣}}\\)","\\(١\\)","\\(\\sqrt{٣}\\)","\\(٢\\)"],"correct_answer":"\\(\\sqrt{٣}\\)","hint":"\\(\\جا=\\ظا\\,\\جتا\\).","explanation":"ينتج \\(\\ظا=\\sqrt{٣}\\)."},
+      {"id":"١٦","question":"إذا كان \\(\\جا\\,س\\,\\جتا\\,س=\\dfrac{\\sqrt{٣}}{٨}\\)، فأوجد \\(\\dfrac{\\جا\\,س}{\\جتا\\,س}+\\dfrac{\\جتا\\,س}{\\جا\\,س}\\).","options":["\\(\\dfrac{٨}{\\sqrt{٣}}\\)","\\(٤\\)","\\(٢\\)","\\(\\dfrac{١٦}{٣}\\)"],"correct_answer":"\\(\\dfrac{١٦}{٣}\\)","hint":"\\(\\dfrac{\\جا}{\\جتا}+\\dfrac{\\جتا}{\\جا}=\\dfrac{١}{\\جا\\جتا}\\).","explanation":"\\(\\جا\\جتا=\\sqrt{٣}/٨\\) ⇒ القيمة = \\(٨/\\sqrt{٣}=١٦/٣\\)."},
+      {"id":"١٧","question":"\\(\\جتا\\,س = ٢(\\جا\\,س)^٢\\) (أول). أوجد \\(\\ظا\\,س\\).","options":["\\(\\dfrac{١}{\\sqrt{٣}}\\)","\\(١\\)","\\(\\sqrt{٣}\\)","\\(٢\\)"],"correct_answer":"\\(١\\)","hint":"مشابهة للسؤال (٢).","explanation":"\\(\\جا=\\جتا=\\sqrt{٢}/٢\\) ⇒ \\(\\ظا=١\\)."},
+      {"id":"١٨","question":"\\((\\جا\\,س-\\جتا\\,س)^٢=\\dfrac{١}{٢}\\). أوجد \\(\\ظا\\,س\\).","options":["\\(\\dfrac{١}{\\sqrt{٣}}\\)","\\(١\\)","\\(\\sqrt{٣}\\)","\\(\\dfrac{٢}{\\sqrt{٣}}\\)"],"correct_answer":"\\(١\\)","hint":"وسّع ثم \\(\\جا^2+\\جتا^2=١\\).","explanation":"ينتج \\(\\جا\\جتا=١/٤\\) ⇒ \\(\\ظا=١\\)."},
+      {"id":"١٩","question":"إذا كان \\(\\dfrac{\\جا\\,س}{\\جتا\\,س}+\\dfrac{\\جتا\\,س}{\\جا\\,س}=\\dfrac{٨}{\\sqrt{٣}}\\)، فأوجد \\(\\جا\\,س\\,\\جتا\\,س\\).","options":["\\(\\dfrac{١}{٤}\\)","\\(\\dfrac{\\sqrt{٣}}{٨}\\)","\\(\\دfrac{١}{٢}\\)".replace('د',''),"\\(\\دfrac{٣}{٨}\\)".replace('د','')],"correct_answer":"\\(\\dfrac{\\sqrt{٣}}{٨}\\)","hint":"المجموع = \\(\\dfrac{١}{\\جا\\جتا}\\).","explanation":"⇒ \\(\\جا\\جتا=\\sqrt{٣}/٨\\)."},
+      {"id":"٢٠","question":"إذا كانت \\(\\جا\\,س = \\dfrac{\\sqrt{٣}}{٢}\\)، فأوجد \\(\\dfrac{١+\\,(\\جتا\\,س)}{١-\\,(\\جتا\\,س)}\\).","options":["\\(٣+\\sqrt{٣}\\)","\\(٣-\\sqrt{٣}\\)","\\(٢+\\sqrt{٣}\\)","\\(٢-\\sqrt{٣}\\)"],"correct_answer":"\\(٣\\)","hint":"\\(\\جتا=\\tfrac{١}{٢}\\).","explanation":"\\(\\dfrac{١+١/٢}{١-١/٢}=٣\\)."},
+      {"id":"٢١","question":"إذا كانت \\(\\جتا\\,س = \\dfrac{٢}{٣}\\)، فأوجد \\(\\dfrac{١-\\,(\\جا\\,س)}{\\جا\\,س}\\).","options":["\\(\\sqrt{٥}-٢\\)","\\(\\dfrac{١}{٢}\\)","\\(\\dfrac{\\sqrt{٥}-١}{٢}\\)","\\(\\dfrac{٣-\\sqrt{٥}}{\\sqrt{٥}+١}\\)"],"correct_answer":"\\(\\sqrt{٥}-٢\\)","hint":"\\(\\جا=\\sqrt{١-(٢/٣)^2}=\\tfrac{\\sqrt{٥}}{٣}\\).","explanation":"\\(\\dfrac{١-\\frac{\\sqrt{٥}}{٣}}{\\frac{\\sqrt{٥}}{٣}}=\\sqrt{٥}-٢\\)."},
+      {"id":"٢٢","question":"إذا كانت \\(\\جا\\,س=\\dfrac{٥}{١٣}\\) (مثلث ٥–١٢–١٣)، فأوجد \\(\\dfrac{(\\جتا\\,س)-(\\جا\\,س)}{(\\جتا\\,س)+(\\جا\\,س)}\\).","options":["\\(\\dfrac{٤}{٩}\\)","\\(\\دfrac{٩}{٤}\\)".replace('د',''),"\\(\\dfrac{١}{٣}\\)","\\(\\dfrac{٣}{١١}\\)"],"correct_answer":"\\(\\dfrac{٧}{١٧}\\)","hint":"\\(\\جتا=\\dfrac{١٢}{١٣}\\).","explanation":"\\(\\dfrac{١٢/١٣-٥/١٣}{١٢/١٣+٥/١٣}=\\dfrac{٧}{١٧}\\)."},
+      {"id":"٢٣","question":"إذا كانت \\(\\جتا\\,س=\\dfrac{\\sqrt{٢}}{٢}\\)، فأوجد \\(\\dfrac{١-\\,(\\جا^2\\! س)}{(\\جا\\,س)(\\جتا\\,س)}\\).","options":["\\(\\sqrt{٢}\\)","\\(٢\\)","\\(\\dfrac{\\sqrt{٢}}{٢}\\)","\\(\\dfrac{١}{\\sqrt{٢}}\\)"],"correct_answer":"\\(\\sqrt{٢}\\)","hint":"\\(١-\\جا^2=\\جتا^2\\).","explanation":"القيمة \\(=\\dfrac{\\جتا}{\\جا}=\\dfrac{١}{\\ظا}\\). عند \\(٤٥°\\) ⇒ \\(\\sqrt{٢}\\)."},
+      {"id":"٢٤","question":"إذا كانت \\(\\جا\\,س=\\dfrac{١}{٣}\\)، فأوجد \\(\\dfrac{١+\\,(\\جا\\,س)}{١-\\,(\\جا\\,س)}\\times\\dfrac{\\جتا\\,س}{\\ظا\\,س}\\).","options":["\\(٤\\)","\\(٣\\)","\\(٢\\)","\\(\\dfrac{٣}{٢}\\)"],"correct_answer":"\\(٣\\)","hint":"\\(\\dfrac{\\جتا}{\\ظا}=\\dfrac{\\جتا^2}{\\جا}=\\dfrac{١-\\جا^2}{\\جا}\\).","explanation":"بالتعويض والتبسيط نحصل على \\(٣\\)."},
+      {"id":"٢٥","question":"إذا كان \\(\\جا\\,س(\\جا\\,س+\\جتا\\,س)=\\dfrac{١}{٣}\\)، فأوجد \\(\\ظا\\,س\\).","options":["\\(\\dfrac{١}{\\sqrt{٣}}\\)","\\(١\\)","\\(\\sqrt{٣}\\)","\\(\\dfrac{٢}{\\sqrt{٣}}\\)"],"correct_answer":"\\(\\dfrac{٢}{\\sqrt{٣}}\\)","hint":"اختبر الأزواج القياسية.","explanation":"\\(\\جا=١/٢,\\ جتا=\\sqrt{٣}/٢\\) ⇒ \\(\\ظا=٢/\\sqrt{٣}\\)."},
+      {"id":"٢٦","question":"تحقّق \\(\\dfrac{\\جا\\,س-\\جتا\\,س}{\\جا\\,س+\\جتا\\,س}=\\dfrac{١}{٣}\\). أوجد \\(\\ظا\\,س\\).","options":["\\(\\dfrac{١}{\\sqrt{٣}}\\)","\\(١\\)","\\(\\sqrt{٣}\\)","\\(\\dfrac{٢}{\\sqrt{٣}}\\)"],"correct_answer":"\\(٢\\)","hint":"ضع \\(r=\\dfrac{\\جا}{\\جتا}\\) ثم حل \\(\\dfrac{r-١}{r+١}=\\dfrac{١}{٣}\\).","explanation":"\\(r=٢\\) ⇒ \\(\\ظا=٢\\)."},
+      {"id":"٢٧","question":"إذا كانت \\(\\جا\\,س=\\dfrac{\\sqrt{٢}}{٣}\\)، فأوجد \\(\\dfrac{\\جتا\\,س-\\dfrac{١}{\\sqrt{٢}}}{\\جتا\\,س+\\dfrac{١}{\\sqrt{٢}}}\\).","options":["\\(\\dfrac{١}{٣}\\)","\\(\\dfrac{\\sqrt{٢}}{٢}\\)","\\(\\dfrac{٢}{٣}\\)","\\(\\dfrac{\\sqrt{٣}}{٣}\\)"],"correct_answer":"\\(\\dfrac{١}{٣}\\)","hint":"\\(\\جتا=\\sqrt{١-٢/٩}=\\tfrac{\\sqrt{٧}}{٣}\\).","explanation":"بالتعويض ينتج \\(١/٣\\)."},
+      {"id":"٢٨","question":"إذا كانت \\(\\جتا\\,س=\\dfrac{٣}{٥}\\)، فأوجد \\(\\dfrac{١+\\,(\\ظا^2\\! س)}{\\ظا\\,س}\\).","options":["\\(\\dfrac{٢٥}{٩}\\)","\\(\\dfrac{٥}{٣}\\)","\\(\\dfrac{٩}{٥}\\)","\\(\\dfrac{١٥}{٨}\\)"],"correct_answer":"\\(\\dfrac{٥}{٣}\\)","hint":"\\(١+\\ظا^2=\\dfrac{١}{\\جتا^2}\\).","explanation":"\\(=\\dfrac{١}{\\جتا^2\\,\\ظا}=\\dfrac{١}{\\جتا\\,\\جا}\\). مع \\(\\جتا=٣/٥,\\ جا=٤/٥\\) ⇒ \\(٥/٣\\)."},
+      {"id":"٢٩","question":"إذا كان \\(\\جا\\,س\\,\\جتا\\,س=\\dfrac{١}{٥}\\)، فأوجد \\(\\dfrac{\\جا^2\\! س-\\جتا^2\\! س}{(\\جا\\,س)(\\جتا\\,س)}\\).","options":["\\(\\دfrac{١}{٥}\\)".replace('د',''),"\\(\\dfrac{٢}{٥}\\)","\\(\\dfrac{٣}{٥}\\)","\\(\\dfrac{٤}{٥}\\)"],"correct_answer":"\\(\\dfrac{٢}{٥}\\)","hint":"حوِّل البسط إلى \\((\\جا-\\جتا)(\\جا+\\جتا)\\).","explanation":"بعد القسمة على \\(\\جا\\جتا\\): القيمة = \\(\\ظا-\\dfrac{\\جتا}{\\جا}\\). وبالشرط نحصل على \\(٢/٥\\)."},
+      {"id":"٣٠","question":"إذا كانت \\(\\جا\\,س=\\dfrac{\\sqrt{٦}-\\sqrt{٢}}{٤}\\) و\\(\\جتا\\,س=\\dfrac{\\sqrt{٦}+\\sqrt{٢}}{٤}\\)، فأوجد \\(\\dfrac{١-\\,(\\جا\\,س)}{\\جتا\\,س}\\).","options":["\\(\\dfrac{\\sqrt{٣}}{٢}\\)","\\(\\dfrac{\\sqrt{٢}}{٢}\\)","\\(\\دfrac{\\sqrt{٦}-\\sqrt{٢}}{٢}\\)".replace('د',''),"\\(\\dfrac{\\sqrt{٦}+\\sqrt{٢}}{٢}\\)"],"correct_answer":"\\(\\dfrac{\\sqrt{٢}}{٢}\\)","hint":"قيم ١٥° القياسية.","explanation":"بالتعويض والتبسيط ينتج \\(\\dfrac{\\sqrt{٢}}{٢}\\)."}
     ];
 
     /*=========================
-      توليد أسئلة الأقسام ٢–٤ (٣٠ سؤالًا لكل قسم)
-      — أسئلة أصلية صعبة على نمط كامبريدج/أوكسفورد
+      القسم ٢: توليد ٣٠ سؤالًا عن الزاوية المرجعية
     =========================*/
-
-    // قِيَم خاصة: 30°,45°,60° مع كتابتها كسور جذرية
     const special = {
       30: { sin: frac('١','٢'), cos: frac('\\sqrt{٣}','٢'), tan: frac('١','\\sqrt{٣}') },
       45: { sin: frac('\\sqrt{٢}','٢'), cos: frac('\\sqrt{٢}','٢'), tan: '١' },
       60: { sin: frac('\\sqrt{٣}','٢'), cos: frac('١','٢'), tan: '\\sqrt{٣}' }
     };
+    const fnMap = ar => ar==='جا'?'sin': ar==='جتا'?'cos':'tan';
 
-    /* ---------------- القسم ٢: الزاوية المرجعية ---------------- */
-    function genP2() {
-      const qs = [];
-      const qBanks = [
-        // 1) إعطاء قيمة مثلثية موقعة وسؤال عن الزاوية المرجعية
-        (i)=>{
-          const choices = [30,45,60]; const A = pick(choices);
-          const fn = pick(['جا','جتا','ظا']);
-          const quad = pick([2,3,4]); // ربع غير الأول
-          // القيمة المطلقة مساوية للقيمة القياسية للزاوية المرجعية
+    function genP2(){
+      const qs=[];
+      while(qs.length<30){
+        const type = Math.floor(Math.random()*4); // أربعة قوالب
+        if(type===0){
+          const A = pick([30,45,60]); const fn = pick(['جا','جتا','ظا']);
+          const quad = pick([2,3,4]);
           const val = special[A][fnMap(fn)];
-          const sign = (fn==='جا' && quad===2) || (fn==='جتا' && quad===4) || (fn==='ظا' && (quad===2||quad===4)) ? '-' : (fn==='جا' && quad===3) || (fn==='جتا' && quad===2) ? '-' : (fn==='ظا' && quad===3) ? '+' : '+';
-          const signed = (sign==='-')? `-${val}` : `${val}`;
-          return {
-            question: `إذا كان \\(${fn}\\ س = ${signed}\\) و\\(س\\) في الربع \\(${quad}\\)، فما الزاوية المرجعية لـ \\(س\\)؟`,
-            options: [`${deg(A)}°`, `${deg(90-A)}°`, `${deg(180-A)}°`, `${deg(A/2)}°`],
-            correct: `${deg(A)}°`,
-            hint: `الزاوية المرجعية تُساوي الزاوية القياسية للقيمة المطلقة لـ \\(${fn}\\).`,
-            exp: `القيمة المطلقة هي ${val} وهي قيمة ${fn} لـ ${A}°. إذن الزاوية المرجعية ${A}°.`
-          };
-        },
-        // 2) تحويلات نصف/ضعف الزاوية
-        ()=>{
-          const base = pick([30,45,60]);
-          const use = pick(['ضعف','نصف']);
+          // إشارة الدوال حسب الربع (تقريب منطقي)
+          const sign = (fn==='جا'?(quad===1||quad===2):fn==='جتا'?(quad===1||quad===4): (quad===1||quad===3))?'+':'-';
+          const signed = sign==='-'?`-${val}`:`${val}`;
+          qs.push({
+            id:String(qs.length+1),
+            question:`إذا كان \\(${fn}\\,س = ${signed}\\) و\\(س\\) في الربع \\(${['الأول','الثاني','الثالث','الرابع'][quad-1]}\\)، فما الزاوية المرجعية لـ \\(س\\)؟`,
+            options:[`${A}°`, `${90-A}°`, `${A/2}°`, `${180-A}°`],
+            correct_answer:`${A}°`,
+            hint:`الزاوية المرجعية هي الزاوية القياسية لقيمة \\(${fn}\\) المطلقة.`,
+            explanation:`القيمة المطلقة ${val} توافق الزاوية ${A}° ⇒ المرجعية ${A}°.`
+          });
+        } else if(type===1){
+          const base=pick([30,45,60]); const use=pick(['ضعف','نصف']); const fn=pick(['جا','جتا']);
           const tgt = use==='ضعف'? base*2 : base/2;
-          const fn = pick(['جا','جتا']);
+          const ans = fn==='جا'? special[tgt]?.sin : special[tgt]?.cos;
+          if(!ans) continue;
           const form = use==='ضعف'
-            ? (fn==='جا'? '\\جا(٢س)=٢\\جا س\\جتا س' : '\\جتا(٢س)=\\جتا^٢ س-\\جا^² س')
+            ? (fn==='جا'? '\\جا(٢س)=٢\\جا س\\جتا س' : '\\جتا(٢س)=\\جتا^2 س-\\جا^2 س')
             : (fn==='جا'? '\\جا(س/٢)=\\pm\\sqrt{\\dfrac{١-\\جتا س}{٢}}' : '\\جتا(س/٢)=\\pm\\sqrt{\\dfrac{١+\\جتا س}{٢}}');
-          const ans = fn==='جا' ? special[tgt]?.sin : special[tgt]?.cos;
-          if(!ans) return null; // تخطّي حالات غير 30/45/60
-          const wrong = plusMinus( special[base]?.sin || '١', special[base]?.cos || '١');
-          return {
-            question:`استخدم متطابقات ${use} الزاوية: إذا كان \\(س=${deg(base)}°\\)، فأوجد \\(${fn}(${use==='ضعف'?'٢س':'س/٢'})\\).`,
-            options:[ans, wrong[0], wrong[1], '٠'],
-            correct: ans,
-            hint:`استعمل المتطابقة: ${form}.`,
-            exp:`القيمة القياسية لـ ${fn}(${use==='ضعف'?2*base:base/2}°) هي ${ans}.`
-          };
-        },
-        // 3) تحديد الربع من إشارة دالتين
-        ()=>{
-          const s1 = pick(['+','-']), s2 = pick(['+','-']);
+          const wrong = shuffle([special[base].sin, special[base].cos, '٠']).slice(0,3);
+          qs.push({
+            id:String(qs.length+1),
+            question:`استخدم متطابقات ${use} الزاوية: إذا \\(س=${base}°\\)، فأوجد \\(${fn}(${use==='ضعف'?'٢س':'س/٢'})\\).`,
+            options: shuffle([ans, ...wrong]),
+            correct_answer: ans,
+            hint:`المتطابقة: ${form}.`,
+            explanation:`القيمة القياسية لـ ${fn}(${use==='ضعف'?2*base:base/2}°) هي ${ans}.`
+          });
+        } else if(type===2){
+          const s1 = pick(['موجبة','سالبة']), s2=pick(['موجبة','سالبة']);
           const pair = pick([['جا','جتا'], ['جتا','ظا'], ['جا','ظا']]);
-          const quadMap = {
-            '++':1, '+-':4, '-+':2, '--':3
-          };
-          // قواعد الإشارات: sin(+,-)cos(+,-) يكفي لتحديد الربع (عدا ظا قد يلتبس؛ نضبط أزواجًا مناسبة).
-          const quad = quadMap[s1+s2];
-          return {
-            question:`إذا كانت إشارات \\(${pair[0]}\\ س\\) ${s1==='+'?'موجبة':'سالبة'} و\\(${pair[1]}\\ س\\) ${s2==='+'?'موجبة':'سالبة'}، ففي أي ربع يقع \\(س\\)؟`,
+          const map = {'موجبةموجبة':'الأول','سالبةموجبة':'الثاني','سالبةسالبة':'الثالث','موجبةسالبة':'الرابع'};
+          const quad = map[s1+s2] || 'الأول';
+          qs.push({
+            id:String(qs.length+1),
+            question:`إذا كانت إشارتا \\(${pair[0]}\\,س\\) ${s1} و\\(${pair[1]}\\,س\\) ${s2}، ففي أي ربع يقع \\(س\\)؟`,
             options:['الأول','الثاني','الثالث','الرابع'],
-            correct:['الأول','الثاني','الثالث','الرابع'][quad-1],
+            correct_answer: quad,
             hint:'استخدم جدول إشارات الدوال في الأرباع.',
-            exp:`الإشارات (${s1},${s2}) تقود إلى الربع ${['الأول','الثاني','الثالث','الرابع'][quad-1]}.`
-          };
-        },
-        // 4) تبسيط كسور جذرية صعبة بزوايا مرجعية
-        ()=>{
-          const A = pick([30,45,60]);
+            explanation:`الإشارتان (${s1}, ${s2}) تدلان على الربع ${quad}.`
+          });
+        } else {
+          const A=pick([30,45,60]);
           const expr = pick([
             `\\dfrac{١-\\,(\\جا\\ ${A}°)}{\\جتا\\ ${A}°}`,
             `\\dfrac{١+\\,(\\جتا\\ ${A}°)}{\\جا\\ ${A}°}`,
             `\\dfrac{\\جا\\ ${A}°}{١-\\,(\\جتا\\ ${A}°)}`
           ]);
-          // نحسب صحيح باستخدام قيم special
           const s = special[A].sin, c = special[A].cos;
-          const value = (e)=>{
-            if(e.includes('١-\\,(\\جا')) return `\\dfrac{١-${s}}{${c}}`;
-            if(e.includes('١+\\,(\\جتا')) return `\\dfrac{١+${c}}{${s}}`;
-            return `\\dfrac{${s}}{١-${c}}`;
-          };
+          const value = (e)=> e.includes('١-\\,(\\جا') ? `\\dfrac{١-${s}}{${c}}`
+                                 : e.includes('١+\\,(\\جتا') ? `\\dfrac{١+${c}}{${s}}`
+                                 : `\\dfrac{${s}}{١-${c}}`;
           const correct = value(expr);
-          const distract = [
-            value(expr).replace('١+','١-').replace('١-','١+'),
-            value(expr).replace(/\\جا/g,'\\جتا'),
-            value(expr).replace(/\\جتا/g,'\\جا')
-          ];
-          return {
-            question:`بسِّط التعبير: \\(${expr}\\).`,
-            options:[correct, ...distract],
-            correct,
-            hint:'عوّض بقيم الزاوية المرجعية \\(30°/45°/60°\\) ثم بسِّط.',
-            exp:`باستبدال \\(\\جا ${A}°=${s}\\)، \\(\\جتا ${A}°=${c}\\) ثم التبسيط نحصل على ${correct}.`
-          };
+          const distract = shuffle([
+            correct.replace('١+','١-').replace('١-','١+'),
+            correct.replace(/\\جا/g,'\\جتا'),
+            correct.replace(/\\جتا/g,'\\جا')
+          ]).slice(0,3);
+          qs.push({
+            id:String(qs.length+1),
+            question:`بسِّط: \\(${expr}\\).`,
+            options: shuffle([correct, ...distract]),
+            correct_answer: correct,
+            hint:'عوّض بقيم ٣٠°/٤٥°/٦٠° ثم بسِّط.',
+            explanation:`بوضع \\(\\جا ${A}°=${s}\\)، \\(\\جتا ${A}°=${c}\\) نحصل على ${correct}.`
+          });
         }
-      ];
-
-      // توليد 30 سؤالًا من مزيج القوالب
-      while(qs.length<30){
-        const maker = pick(qBanks);
-        const q = maker();
-        if(q) qs.push({
-          id: String(qs.length+1),
-          question: q.question,
-          options: shuffleUnique([q.correct, ...q.options.filter(o=>o!==q.correct)].slice(0,4)),
-          correct_answer: q.correct,
-          hint: q.hint, explanation: q.exp
-        });
       }
       return qs;
     }
 
-    /* ---------------- القسم ٣: التمثيل البياني ---------------- */
+    /*=========================
+      القسم ٣: تمثيلات بيانية (٣٠ سؤالًا مولدًا)
+    =========================*/
     function genP3(){
-      const qs=[];
-      const amps=[1,2,3,4], shifts=[0,30,45,60,90], dVals=[-2,-1,0,1,2], bVals=[0.5,1,2,3,4];
+      const qs=[]; const amps=[1,2,3,4], shifts=[0,30,45,60,90], dVals=[-2,-1,0,1,2], bVals=[0.5,1,2,3,4];
       const fns=['\\جا','\\جتا','\\ظا'];
       while(qs.length<30){
         const fn=pick(fns), a=pick(amps), b=pick(bVals), c=pick(shifts), d=pick(dVals);
         const period = fn==='\\ظا' ? (180/Math.abs(b)) : (360/Math.abs(b));
         const amp = fn==='\\ظا' ? '—' : String(a);
         const q={
-          question:`لدالة \\(y=${a}${fn}( ${b.toString().replace('.','\\,')}x + ${c}° ) ${d? (d>0?'+':'')+d: ''}\\)، ما \\(\\text{الدورة}\\) وما \\(\\text{السعة}\\)؟`,
-          options:[
+          id:String(qs.length+1),
+          question:`لدالة \\(y=${a}${fn}( ${String(b).replace('.','\\,')}x + ${c}° ) ${d? (d>0?'+':'')+d: ''}\\)، ما \\(\\text{الدورة}\\) وما \\(\\text{السعة}\\)؟`,
+          options: shuffle([
             `الدورة = ${period}° ، السعة = ${amp}`,
             `الدورة = ${period/2}° ، السعة = ${amp}`,
             `الدورة = ${period}° ، السعة = ${amp==='—'?'١':String(Number(amp)+1)}`,
             `الدورة = ${period*2}° ، السعة = ${amp}`
-          ],
+          ]),
           correct_answer:`الدورة = ${period}° ، السعة = ${amp}`,
-          hint:`لـ \\(\\sin,\\cos\\): الدورة = \\(\\dfrac{٣٦٠°}{|b|}\\)، السعة = \\(|a|\\). لـ \\(\\tan\\): الدورة = \\(\\dfrac{١٨٠°}{|b|}\\) ولا سعة.`,
+          hint:`لـ \\(\\sin,\\cos\\): \\(\\dfrac{٣٦٠°}{|b|}\\) والسعة \\(|a|\\). ولـ \\(\\tan\\): \\(\\dfrac{١٨٠°}{|b|}\\) ولا سعة.`,
           explanation:`\\(|b|=${Math.abs(b)}\\) ⇒ الدورة = ${period}°. السعة ${amp==='—'?'غير معرّفة لـ \\(\\tan\\)':'= '+amp}.`
         };
-        qs.push({...q, id:String(qs.length+1)});
+        qs.push(q);
       }
       return qs;
     }
 
-    /* ---------------- القسم ٤: المعادلات المثلثية ---------------- */
+    /*=========================
+      القسم ٤: معادلات مثلثية (٣٠ سؤالًا مولدًا)
+    =========================*/
     function genP4(){
-      const qs=[];
-      const basis=[30,45,60];
+      const qs=[]; const basis=[30,45,60];
       while(qs.length<30){
-        const mode=pick(['sin','cos','tan','mix']);
+        const mode = pick(['sin','cos','tan','mix']);
         if(mode==='sin'){
-          const A=pick(basis), mult=pick([1,2,3,4]); // حل لـ sin(kx)=known
-          const rhs = special[A].sin;
-          const qdeg = 360/mult;
-          const question=`حل المعادلة \\(\\جا(${mult}x)=${rhs}\\) على المجال \\(٠°\\le x<${qdeg}°\\).`;
-          const sol = `\\(x=${A/mult}°\\) أو \\(x=${(180-A)/mult}°\\)`;
-          qs.push({id:String(qs.length+1), question,
-            options:[sol, `\\(x=${A}°\\)`, `\\(x=${(180-A)}°\\)`, `\\(x=${A/(mult*2)}°\\)`],
+          const A=pick(basis), K=pick([1,2,3,4]); const rhs=special[A].sin;
+          const max=360/K;
+          const sol = `\\(x=${A/K}°\\) أو \\(x=${(180-A)/K}°\\)`;
+          qs.push({
+            id:String(qs.length+1),
+            question:`حل \\(\\جا(${K}x)=${rhs}\\) على \\(٠°\\le x<${max}°\\).`,
+            options: shuffle([sol, `\\(x=${A}°\\)`, `\\(x=${(180-A)}°\\)`, `\\(x=${A/(K*2)}°\\)`]),
             correct_answer: sol,
-            hint:'حل \\\\sin(Kx)=m ⇒ Kx=α أو Kx=180°−α.',
-            explanation:`لأن \\(\\جا(\\alpha)=${rhs}\\) حيث \\(\\alpha=${A}°\\) ⇒ \\(x=\\alpha/${mult}\\) أو \\((180°-\\alpha)/${mult}\\) على المجال.`
+            hint:'\\(\\sin(Kx)=m\\Rightarrow Kx=\\alpha\\) أو \\(Kx=١٨٠°-\\alpha\\).',
+            explanation:`\\(\\alpha=${A}°\\) ⇒ \\(x=\\alpha/K\\) أو \\((١٨٠°-\\alpha)/K\\).`
           });
         } else if(mode==='cos'){
-          const A=pick(basis), mult=pick([1,2,3,4]);
-          const rhs = special[A].cos;
-          const qdeg = 360/mult;
-          const question=`حل \\(\\جتا(${mult}x)=${rhs}\\) على \\(٠°\\le x<${qdeg}°\\).`;
-          const sol = `\\(x=\\pm\\ ${A/mult}°\\)`;
-          qs.push({id:String(qs.length+1), question,
-            options:[sol, `\\(x=${A}°\\)`, `\\(x=${(360-A)}°\\)`, `\\(x=${(90-A)/mult}°\\)`],
+          const A=pick(basis), K=pick([1,2,3,4]); const rhs=special[A].cos;
+          const max=360/K;
+          const sol = `\\(x=\\pm\\ ${A/K}°\\)`;
+          qs.push({
+            id:String(qs.length+1),
+            question:`حل \\(\\جتا(${K}x)=${rhs}\\) على \\(٠°\\le x<${max}°\\).`,
+            options: shuffle([sol, `\\(x=${A}°\\)`, `\\(x=${(360-A)}°\\)`, `\\(x=${(90-A)/K}°\\)`]),
             correct_answer: sol,
-            hint:'حل \\\\cos(Kx)=m ⇒ Kx=±α.',
-            explanation:`\\(\\alpha=${A}°\\) حيث \\(\\جتا\\alpha=${rhs}\\) ⇒ \\(x=±\\alpha/${mult}\\) داخل المجال.`
+            hint:'\\(\\cos(Kx)=m\\Rightarrow Kx=\\pm\\alpha\\).',
+            explanation:`\\(\\alpha=${A}°\\) ⇒ \\(x=\\pm\\alpha/K\\).`
           });
         } else if(mode==='tan'){
-          const A=pick(basis), mult=pick([1,2,3,4]);
-          const rhs = special[A].tan;
-          const period=180/mult;
-          const question=`حل \\(\\ظا(${mult}x)=${rhs}\\) على \\(٠°\\le x<${period}°\\).`;
-          const sol = `\\(x=${A/mult}°\\)`;
-          qs.push({id:String(qs.length+1), question,
-            options:[sol, `\\(x=${(A+90)/mult}°\\)`, `\\(x=${(90-A)/mult}°\\)`, `\\(x=${(A/2)}°\\)`],
+          const A=pick(basis), K=pick([1,2,3,4]); const rhs=special[A].tan;
+          const max=180/K; const sol = `\\(x=${A/K}°\\)`;
+          qs.push({
+            id:String(qs.length+1),
+            question:`حل \\(\\ظا(${K}x)=${rhs}\\) على \\(٠°\\le x<${max}°\\).`,
+            options: shuffle([sol, `\\(x=${(A+90)/K}°\\)`, `\\(x=${(90-A)/K}°\\)`, `\\(x=${A/2}°\\)`]),
             correct_answer: sol,
-            hint:'حل \\\\tan(Kx)=m ⇒ Kx=α + 180°k.',
-            explanation:`أقرب حل أساسي \\(x=\\alpha/${mult}\\) حيث \\(\\alpha=${A}°\\).`
+            hint:'\\(\\tan(Kx)=m\\Rightarrow Kx=\\alpha+١٨٠°k\\).',
+            explanation:`أقرب حل أساسي \\(x=\\alpha/K\\) حيث \\(\\alpha=${A}°\\).`
           });
         } else {
-          // معادلة بهوية: 2sinxcosx = √3/2 ⇒ sin(2x)=√3/2
-          const mult=2, A=60;
           const question=`إذا كان \\(٢\\جا x\\,\\جتا x=\\dfrac{\\sqrt{٣}}{٢}\\)، فأوجد \\(x\\) على \\(٠°\\le x<٩٠°\\).`;
-          const sol = `\\(x=${A/2}°=٣٠°\\) أو \\(x=${(180-A)/2}°=٦٠°\\)`;
-          qs.push({id:String(qs.length+1), question,
-            options:[sol, '‎\\(x=٤٥°\\)', '‎\\(x=١٥°\\)', '‎\\(x=٧٥°\\)'],
+          const sol = `\\(x=٣٠°\\) أو \\(x=٦٠°\\)`;
+          qs.push({
+            id:String(qs.length+1),
+            question,
+            options: shuffle([sol, '‎\\(x=٤٥°\\)', '‎\\(x=١٥°\\)', '‎\\(x=٧٥°\\)']),
             correct_answer: sol,
             hint:'\\(٢\\جا x\\جتا x=\\جا(٢x)\\).',
-            explanation:'المعادلة تكافئ \\(\\جا(٢x)=\\sqrt{٣}/٢\\) ⇒ \\(٢x=٦٠°\\) أو \\(١٢٠°\\) ⇒ \\(x=٣٠°\\) أو \\(٦٠°\\).'
+            explanation:'\\(\\جا(٢x)=\\sqrt{٣}/٢\\Rightarrow ٢x=٦٠°\\) أو \\(١٢٠°\\Rightarrow x=٣٠°\\) أو \\(٦٠°\\).'
           });
         }
       }
       return qs;
     }
 
-    function fnMap(ar){ return ar==='جا'?'sin':ar==='جتا'?'cos':'tan'; }
-
-    function shuffleUnique(arr){
-      const a=[...new Set(arr)]; for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
-      return a;
-    }
-
     /*=========================
-      مُنشئ بطاقات العرض (مشترك)
+      مُنشئ بطاقة السؤال + ربط السلوك
     =========================*/
     const mk = (q,i)=>`
       <div class="qa" data-id="${q.id}">
@@ -405,7 +390,7 @@
         const sec = document.querySelector(btn.dataset.start);
         const box = sec.querySelector('.qbox');
         const anchorId = box.getAttribute('data-anchor')||'';
-        // تحميل حسب القسم
+        // تحميل الأسئلة عند أول ضغط
         if (sec.id==='sec1' && !state.p1){
           const host = document.getElementById('questions1');
           host.innerHTML = P1.map(mk).join('');
@@ -433,7 +418,7 @@
           wireQA(host, data);
           state.p4=true; window.MathJax && MathJax.typesetPromise([host]);
         }
-        // إظهار والتمرير
+        // إظهار الصندوق والتمرير إليه
         box.style.display='block';
         if (anchorId) location.hash = anchorId;
         const y = box.getBoundingClientRect().top + window.pageYOffset - 12;
