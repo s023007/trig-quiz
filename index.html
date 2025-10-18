@@ -1,57 +1,182 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>اختبار حساب المثلثات</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>اختبار إلكتروني على وحدة الدوال المثلثية</title>
 
-  <!-- تحميل MathJax لعرض الكسور والجذور -->
-  <script id="MathJax-script" async 
-    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
-
+  <!-- 1) تهيئة MathJax قبل التحميل -->
   <script>
     window.MathJax = {
       tex: {
         inlineMath: [['\\(','\\)']],
+        displayMath: [['\\[','\\]']],
+        packages: {'[+]': ['html']},
+        // ماكرو يمنع تفكك الحروف العربية داخل المعادلات
         macros: {
-          جاس: '\\text{جاس}',
-          جتاس: '\\text{جتاس}',
-          ظاس: '\\text{ظاس}'
+          arb: ['\\class{arb}{\\text{#1}}', 1],
+          'جاس': '\\arb{جاس}',
+          'جتاس': '\\arb{جتاس}',
+          'ظاس': '\\arb{ظاس}'
         }
       },
-      chtml: { scale: 1.1 }
+      chtml: { scale: 1.25 }, // تكبير عام للمعادلات
+      options: { skipHtmlTags: ['script','noscript','style','textarea'] }
     };
   </script>
+  <!-- 2) تحميل MathJax -->
+  <script id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+  <!-- خطوط عربية تدعم أرقام هندية -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;600;700&display=swap" rel="stylesheet">
 
   <style>
-    body {
-      font-family: "Noto Sans Arabic", sans-serif;
-      background-color: #0f172a;
-      color: white;
-      margin: 0;
-      padding: 20px;
-      text-align: right;
-      direction: rtl;
+    :root{
+      --bg:#0b132b; --panel:#16213e; --ink:#e6f1ff; --muted:#9fb3c8; --brand:#48c6ff; --accent:#22d3ee; --ok:#34d399; --warn:#fbbf24;
+      --radius:18px;
     }
-    .question-box {
-      max-width: 700px;
-      background: #1e293b;
-      padding: 25px;
-      border-radius: 15px;
-      margin: 40px auto;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    html,body{height:100%}
+    body{
+      margin:0; background:var(--bg); color:var(--ink);
+      font-family:"Noto Naskh Arabic", system-ui, sans-serif;
+      -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+      line-height:1.6; letter-spacing:.1px;
     }
-    h1 {
-      text-align: center;
-      color: #38bdf8;
+    /* لإجبار الأرقام العربية الهندية في النص والرياضيات */
+    body{unicode-bidi:plaintext}
+    .mjx-chtml .arb{direction:rtl; unicode-bidi:isolate; font-weight:700}
+
+    .container{max-width:1100px; margin-inline:auto; padding:24px}
+    header.hero{
+      background:linear-gradient(180deg, #0e1a36 0%, #101b3d 100%);
+      border:1px solid rgba(255,255,255,.06);
+      border-radius:24px; padding:28px; margin:20px 0 28px; text-align:center;
+      box-shadow:0 12px 30px rgba(0,0,0,.25);
     }
+    .hero h1{margin:0 0 8px; font-size:clamp(22px,4.5vw,34px); color:var(--brand)}
+    .hero p{margin:0; color:var(--muted)}
+
+    .grid{display:grid; gap:14px; grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+    .card{
+      background:var(--panel); border:1px solid rgba(255,255,255,.07);
+      border-radius:var(--radius); padding:16px 18px; position:relative; overflow:hidden;
+      transition:.2s transform ease,.2s box-shadow ease;
+    }
+    .card:hover{transform:translateY(-2px); box-shadow:0 10px 22px rgba(0,0,0,.25)}
+    .card h3{margin:8px 0 6px; font-size:18px}
+    .card p{margin:0; color:var(--muted); font-size:14px}
+    .icon{
+      width:34px; height:34px; background:#0b2545; border-radius:12px;
+      display:grid; place-items:center; margin-bottom:8px; box-shadow:inset 0 0 0 1px rgba(255,255,255,.06);
+    }
+    .btn{
+      display:inline-block; margin-top:12px; padding:10px 14px; border-radius:12px;
+      background:var(--accent); color:#062a35; font-weight:700; text-decoration:none; border:none; cursor:pointer;
+    }
+
+    .qbox{
+      margin-top:22px; background:#0e1b3f; border:1px solid rgba(255,255,255,.08);
+      border-radius:var(--radius); padding:18px 18px 12px;
+    }
+    .qbox h4{margin:0 0 10px; color:#a5d8ff}
+
+    details{margin-top:10px}
+    summary{
+      list-style:none; cursor:pointer; padding:10px 12px; border-radius:12px; background:#0d2743; color:#cbe7ff;
+      border:1px solid rgba(255,255,255,.06);
+    }
+    summary::-webkit-details-marker{display:none}
+    .hint{border-left:4px solid var(--warn); padding:10px 12px; background:#102849; margin-top:8px; border-radius:10px}
+    .solve{border-left:4px solid var(--ok); padding:10px 12px; background:#0f2a3f; margin-top:8px; border-radius:10px}
+
+    /* تكبير الكسور والجذور أكثر قليلاً */
+    .mjx-chtml{font-size:115%}
+    .mjx-mfrac{margin-inline:4px}
+    .mjx-root{margin-inline:3px}
   </style>
 </head>
-
 <body>
-  <div class="question-box">
-    <h1>اختبار الزوايا بين ٠° و ٩٠°</h1>
-    <p>إذا كانت \\( \\جاس\\,س = \\dfrac{١}{٢} \\)، فأوجد قيمة \\( \\dfrac{١ - \\جتاس\\,س}{\\ظاس\\,س} \\).</p>
+  <div class="container">
+    <header class="hero">
+      <h1>اختبار إلكتروني على وحدة الدوال المثلثية</h1>
+      <p>أربع فصول: الزوايا بين ٠° و ٩٠° · الزاوية المرجعية · التمثيلات البيانية (\\(\\جاس,\\;\\جتاس,\\;\\ظاس\\)) · المعادلات المثلثية</p>
+    </header>
+
+    <!-- بطاقات الدروس -->
+    <section class="grid" aria-label="دروس الوحدة">
+      <article class="card">
+        <div class="icon" aria-hidden="true">
+          <!-- زاوية -->
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="#48c6ff"><path d="M3 20h18v2H1V2h2v18zm2-2h2V7h2v11h2V11h2v7h2v-5h2v5h2V9h2v9"/></svg>
+        </div>
+        <h3>الزوايا بين ٠° و٩٠°</h3>
+        <p>قيم \\(\\جاس\\) و\\(\\جتاس\\) و\\(\\ظاس\\) للزوايا الخاصة.</p>
+        <a class="btn" href="#p1">ابدأ</a>
+      </article>
+
+      <article class="card">
+        <div class="icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="#a3e635"><path d="M12 2a10 10 0 1 0 10 10A10.011 10.011 0 0 0 12 2zm1 5v5l4 2-.75 1.86L11 13V7z"/></svg></div>
+        <h3>الزاوية المرجعية</h3>
+        <p>تحويل الزوايا العامة لزوايا حادة مكافئة.</p>
+        <a class="btn" href="#p2">ابدأ</a>
+      </article>
+
+      <article class="card">
+        <div class="icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="#f59e0b"><path d="M3 3h2v18H3zm4 10h2v8H7zm4-6h2v14h-2zm4-4h2v18h-2zm4 8h2v10h-2z"/></svg></div>
+        <h3>التمثيلات البيانية</h3>
+        <p>السعة والدورة والمدى لمنحنيات \\(\\جاس,\\;\\جتاس,\\;\\ظاس\\).</p>
+        <a class="btn" href="#p3">ابدأ</a>
+      </article>
+
+      <article class="card">
+        <div class="icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="#34d399"><path d="M5 3h14v2H5zm0 6h14v2H5zm0 6h14v2H5z"/></svg></div>
+        <h3>المعادلات المثلثية</h3>
+        <p>حل معادلات مثلثية دقيقة بدون آلة حاسبة.</p>
+        <a class="btn" href="#p4">ابدأ</a>
+      </article>
+    </section>
+
+    <!-- مثال سؤال الفـصل الأول p1 -->
+    <section id="p1" class="qbox" aria-labelledby="q1h">
+      <h4 id="q1h">سؤال نموذجي — الزوايا بين ٠° و٩٠°</h4>
+      <p>
+        إذا كانت \\(\\جاس\\,س = \\dfrac{١}{٢}\\) مع \\(٠° < س < ٩٠°\\)،
+        فأوجد قيمة \\(\\dfrac{١-\\جتاس\\,س}{\\ظاس\\,س}\\).
+      </p>
+
+      <details>
+        <summary>تلميح</summary>
+        <div class="hint">
+          استخدم دائرة الوحدة حيث النقطة \\((\\جتاس\\,س,\\;\\جاس\\,س)\\).
+          عند \\(\\جاس\\,س=\\dfrac{١}{٢}\\) تكون الزاوية الخاصة \\(٣٠°\\) وقيمتها الدقيقة معروفة.
+        </div>
+      </details>
+
+      <details>
+        <summary>تفسير مفصل</summary>
+        <div class="solve">
+          من دائرة الوحدة: \\(\\جاس\\,س = \\dfrac{١}{٢}\\) ⇒ \\(س = ٣٠°\\) (في الربع الأول).<br/>
+          إذن \\(\\جتاس\\,س = \\dfrac{\\sqrt{٣}}{٢}\\) و\\(\\ظاس\\,س = \\dfrac{\\جاس\\,س}{\\جتاس\\,س}
+          = \\dfrac{\\dfrac{١}{٢}}{\\dfrac{\\sqrt{٣}}{٢}} = \\dfrac{١}{\\sqrt{٣}}\\).<br/><br/>
+          نحسب المقدار:
+          \\[
+            \\dfrac{١-\\جتاس\\,س}{\\ظاس\\,س}
+            = \\dfrac{١-\\dfrac{\\sqrt{٣}}{٢}}{\\dfrac{١}{\\sqrt{٣}}}
+            = \\left(١-\\dfrac{\\sqrt{٣}}{٢}\\right)\\!\\cdot\\!\\sqrt{٣}
+            = \\sqrt{٣}-\\dfrac{٣}{٢}
+            = \\dfrac{٢\\sqrt{٣}-٣}{٢}.
+          \\]
+          وهذه قيمة دقيقة بدون آلة حاسبة.
+        </div>
+      </details>
+    </section>
+
+    <!-- أماكن للفصول الأخرى (نضيف أسئلة لاحقًا بنفس النمط) -->
+    <section id="p2" class="qbox"><h4>الزاوية المرجعية — قريبًا</h4></section>
+    <section id="p3" class="qbox"><h4>التمثيلات البيانية — قريبًا</h4></section>
+    <section id="p4" class="qbox"><h4>المعادلات المثلثية — قريبًا</h4></section>
+
   </div>
 </body>
 </html>
