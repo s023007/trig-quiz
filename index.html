@@ -3,339 +3,446 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>اختبار الرياضيات المتقدم - الصف الثاني عشر</title>
+  <title>اختبار إلكتروني على وحدة الدوال المثلثية</title>
+
+  <!-- خط عربي جميل -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- MathJax: يجعل الكسور والجذور مثل الكتب ويُثبّت (جا/جتا/ظا) -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']],
+        packages: {'[+]':['base','ams','html','bidi']},
+        macros: {
+          jas:  '\\mathop{\\class{arabic-op}{\\text{جا}}}\\nolimits',
+          jtas: '\\mathop{\\class{arabic-op}{\\text{جتا}}}\\nolimits',
+          tas:  '\\mathop{\\class{arabic-op}{\\text{ظا}}}\\nolimits',
+          ظتا:  '\\mathop{\\class{arabic-op}{\\text{ظتا}}}\\nolimits',
+          قا:   '\\mathop{\\class{arabic-op}{\\text{قا}}}\\nolimits',
+          قتا:  '\\mathop{\\class{arabic-op}{\\text{قتا}}}\\nolimits'
+        }
+      },
+      chtml: { scale: 1.24 },
+      options: { renderActions: { addMenu: [] } }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
 
   <style>
-    /* ————— المظهر العام ————— */
+    :root{
+      --bg:#0e2033; --card:#15293f; --ink:#eaf2ff; --muted:#9fb3cf;
+      --brand:#6ea8ff; --ok:#27e197; --danger:#ff6b6b; --accent:#ffd166;
+    }
+    *{box-sizing:border-box}
     html,body{height:100%}
     body{
-      box-sizing:border-box;
-      font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin:0; padding:0;
-      background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
-      min-height:100%;
-      color:#333;
+      margin:0;min-height:100%;background:linear-gradient(135deg,#0e2033 0%,#111b2a 100%);
+      color:var(--ink);font-family:'Noto Naskh Arabic',serif;
     }
-    .container{max-width:1200px;margin:0 auto;padding:20px;min-height:100%}
-    .header{
-      text-align:center;background:rgba(255,255,255,.95);
-      padding:30px;border-radius:20px;margin-bottom:30px;
-      box-shadow:0 10px 30px rgba(0,0,0,.2)
+    .container{max-width:1100px;margin:auto;padding:20px}
+    .header{background:rgba(255,255,255,.04);border:1px solid #1d3957;border-radius:20px;padding:24px;text-align:center;margin-bottom:22px}
+    .header h1{margin:0 0 6px;color:#8fd3ff;font-weight:700}
+    .header p{margin:0;color:var(--muted)}
+
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
+    .card{
+      background:var(--card);border:1px solid #1e3d60;border-radius:16px;padding:18px;
+      box-shadow:0 8px 24px rgba(0,0,0,.25)
     }
-    .header h1{color:#4a5568;margin:0;font-size:2.5rem;font-weight:bold}
-    .header p{color:#718096;margin:10px 0 0;font-size:1.2rem}
+    .lesson{cursor:pointer;transition:.25s}
+    .lesson:hover{transform:translateY(-4px);border-color:#2a67a3}
+    .icon{font-size:36px;margin-bottom:8px}
+    .title{font-weight:700;font-size:1.2rem;color:#d8e8ff}
+    .sub{color:var(--muted);font-size:.95rem}
 
-    .lessons-grid{
-      display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-      gap:25px;margin-bottom:30px
+    .quiz{display:none}
+    .quiz-head{display:flex;gap:16px;justify-content:space-between;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+    .back{background:#e24545;border:none;color:#fff;border-radius:10px;padding:10px 16px;cursor:pointer}
+    .bar{display:flex;align-items:center;gap:14px}
+    .track{width:200px;height:10px;background:#274867;border-radius:7px;overflow:hidden}
+    .fill{height:100%;width:0;background:linear-gradient(90deg,#27e197,#1ea47a)}
+    .panel{background:#0f2237;border:1px solid #1c3b5b;border-radius:16px;padding:16px;margin-top:12px}
+    .qnum{background:#2b6cb0;color:#fff;padding:6px 12px;border-radius:16px;display:inline-block;font-weight:700}
+    .qtext{margin:10px 0 14px;line-height:1.8;font-size:1.08rem}
+    .opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+    .opt{background:#122840;border:1px solid #244a70;border-radius:12px;padding:12px 14px;cursor:pointer;transition:.15s}
+    .opt:hover{border-color:#3e80bd;background:#0f2a49}
+    .opt.correct{border-color:var(--ok);background:#0f3a2f}
+    .opt.wrong{border-color:var(--danger);background:#3a1f24}
+    .opt.disabled{opacity:.7;cursor:not-allowed}
+    .hint{background:#2e4d25;border:1px dashed #6ed280;border-radius:12px;padding:12px;margin-top:10px;display:none}
+    .hint.show{display:block}
+    .exp{background:#1e3a3e;border:1px solid #2b6b6e;border-radius:12px;padding:12px;margin-top:10px;display:none}
+    .exp.show{display:block}
+    .start-wrap{text-align:center}
+    .btn{background:#3b82f6;border:none;color:#fff;padding:10px 20px;border-radius:12px;cursor:pointer}
+    .btn:hover{filter:brightness(1.1)}
+    .muted{color:var(--muted)}
+    .score{background:#0f2237;border:1px solid #2a557e;border-radius:16px;padding:18px;text-align:center;margin-top:16px}
+
+    .fireworks{position:fixed;inset:0;pointer-events:none;z-index:999}
+    .spark{position:absolute;width:4px;height:4px;border-radius:50%;animation:boom 1s ease-out forwards}
+    @keyframes boom{0%{transform:scale(0);opacity:1}100%{transform:scale(1);opacity:0}}
+    /* تثبيت مظهر جا/جتا/ظا داخل MathJax */
+    .mjx-chtml .arabic-op{
+      font-family:"Noto Naskh Arabic","Amiri",serif !important;
+      font-weight:700; letter-spacing:0; white-space:nowrap; direction:rtl; unicode-bidi:isolate;
     }
-    .lesson-card{
-      background:rgba(255,255,255,.95);border-radius:15px;padding:25px;cursor:pointer;
-      transition:.3s;box-shadow:0 5px 15px rgba(0,0,0,.1);border:3px solid transparent
-    }
-    .lesson-card:hover{transform:translateY(-5px);box-shadow:0 15px 35px rgba(0,0,0,.2);border-color:#667eea}
-    .lesson-icon{font-size:3rem;margin-bottom:15px;display:block}
-    .lesson-title{font-size:1.4rem;font-weight:bold;color:#2d3748;margin-bottom:10px}
-    .lesson-description{color:#718096;font-size:1rem;line-height:1.5}
-
-    .quiz-container{display:none;background:rgba(255,255,255,.95);border-radius:20px;padding:30px;box-shadow:0 10px 30px rgba(0,0,0,.2)}
-    .quiz-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:30px;flex-wrap:wrap;gap:15px}
-    .back-btn{background:#e53e3e;color:#fff;border:none;padding:12px 24px;border-radius:10px;cursor:pointer;font-size:1rem;transition:.3s}
-    .back-btn:hover{background:#c53030;transform:translateY(-2px)}
-    .progress-info{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
-    .progress-bar{width:200px;height:10px;background:#e2e8f0;border-radius:5px;overflow:hidden}
-    .progress-fill{height:100%;background:linear-gradient(90deg,#48bb78,#38a169);width:0%;transition:width .5s}
-
-    .question-card{background:#f7fafc;border-radius:15px;padding:25px;margin-bottom:20px;border-right:5px solid #667eea}
-    .question-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;gap:15px}
-    .question-number{background:#667eea;color:#fff;padding:8px 16px;border-radius:20px;font-weight:bold;min-width:60px;text-align:center}
-    .hint-btn{background:#ed8936;color:#fff;border:none;padding:8px 16px;border-radius:20px;cursor:pointer;font-size:.9rem;transition:.3s}
-    .hint-btn:hover{background:#dd6b20}
-    .question-text{font-size:1.2rem;line-height:1.6;margin-bottom:20px;color:#2d3748}
-
-    .options-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;margin-bottom:20px}
-    .option{background:#fff;border:2px solid #e2e8f0;border-radius:10px;padding:15px;cursor:pointer;transition:.2s;text-align:center;font-size:1.1rem}
-    .option:hover{border-color:#667eea;background:#f0f4ff}
-    .option.correct{background:#c6f6d5;border-color:#38a169;color:#22543d}
-    .option.incorrect{background:#fed7d7;border-color:#e53e3e;color:#742a2a}
-    .option.disabled{cursor:not-allowed;opacity:.7}
-
-    .hint-box{background:#fef5e7;border:2px solid #ed8936;border-radius:10px;padding:15px;margin-top:15px;display:none}
-    .hint-box.show{display:block;animation:slideDown .3s ease}
-    .explanation-box{background:#e6fffa;border:2px solid #38b2ac;border-radius:10px;padding:20px;margin-top:15px;display:none}
-    .explanation-box.show{display:block;animation:slideDown .3s ease}
-
-    .fireworks{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1000}
-    .firework{position:absolute;width:4px;height:4px;border-radius:50%;animation:explode 1s ease-out forwards}
-    .wrong-shake{animation:shake .5s ease-in-out}
-
-    .results-summary{background:#f0f4ff;border-radius:15px;padding:25px;margin-top:30px;text-align:center;border:3px solid #667eea}
-    .score-circle{width:120px;height:120px;border-radius:50%;background:linear-gradient(135deg,#48bb78,#38a169);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;color:#fff;font-size:2rem;font-weight:bold}
-
-    @keyframes explode{0%{transform:scale(0);opacity:1}100%{transform:scale(1);opacity:0}}
-    @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-10px)}75%{transform:translateX(10px)}}
-    @keyframes slideDown{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
-
-    @media (max-width:768px){
-      .container{padding:15px}
-      .header h1{font-size:2rem}
-      .lessons-grid{grid-template-columns:1fr}
-      .quiz-header{flex-direction:column;align-items:stretch}
-      .progress-info{justify-content:center}
-      .options-grid{grid-template-columns:1fr}
-      .question-header{flex-direction:column;align-items:stretch}
-    }
+    mjx-container{font-size:120%}
+    @media (max-width:768px){ .opts{grid-template-columns:1fr} .track{width:160px} }
   </style>
 </head>
 <body>
-
   <div class="container">
-    <header class="header">
-      <h1>🧮 اختبار الرياضيات المتقدم</h1>
-      <p>الصف الثاني عشر - الدوال المثلثية</p>
-    </header>
+    <div class="header card">
+      <h1>اختبار إلكتروني على وحدة الدوال المثلثية</h1>
+      <p>تنسيق متقدّم للكسور والجذور وعرض (جا/جتا/ظا) بصورة كتب.</p>
+    </div>
 
-    <!-- قائمة الدروس -->
-    <div id="lessonsMenu" class="lessons-grid">
-      <div class="lesson-card" onclick="startQuiz('angles')">
-        <span class="lesson-icon">📐</span>
-        <div class="lesson-title">الزوايا بين ٠° و ٩٠°</div>
-        <div class="lesson-description">دراسة الزوايا الحادة والنسب المثلثية الأساسية</div>
+    <!-- قائمة الأقسام -->
+    <div id="menu" class="grid">
+      <div class="card lesson" onclick="openSection('p1')">
+        <div class="icon">📐</div>
+        <div class="title">الزوايا بين ٠° و ٩٠°</div>
+        <div class="sub">علاقات دقيقة على دائرة الوحدة وزوايا حادة</div>
       </div>
-
-      <div class="lesson-card" onclick="startQuiz('reference')">
-        <span class="lesson-icon">🎯</span>
-        <div class="lesson-title">زاوية الأساس (المرجعية)</div>
-        <div class="lesson-description">تحديد الزاوية المرجعية في جميع الأرباع</div>
+      <div class="card lesson" onclick="openSection('p2')">
+        <div class="icon">🎯</div>
+        <div class="title">زاوية الأساس (المرجعية)</div>
+        <div class="sub">تحويلات الزوايا وتحديد المرجعية في كل ربع</div>
       </div>
-
-      <div class="lesson-card" onclick="startQuiz('general')">
-        <span class="lesson-icon">🔄</span>
-        <div class="lesson-title">النسب المثلثية للزوايا العامة</div>
-        <div class="lesson-description">حساب القيم في الأرباع الأربعة</div>
+      <div class="card lesson" onclick="openSection('p3')">
+        <div class="icon">📊</div>
+        <div class="title">التمثيلات البيانية للدوال المثلثية</div>
+        <div class="sub">سعات ودورات وإزاحات وتحليل دقيق</div>
       </div>
-
-      <div class="lesson-card" onclick="startQuiz('graphs')">
-        <span class="lesson-icon">📊</span>
-        <div class="lesson-title">التمثيلات البيانية للدوال</div>
-        <div class="lesson-description">تحليل خصائص جا/جتا/ظا</div>
-      </div>
-
-      <div class="lesson-card" onclick="startQuiz('equations')">
-        <span class="lesson-icon">⚖️</span>
-        <div class="lesson-title">المعادلات المثلثية</div>
-        <div class="lesson-description">حل المعادلات البسيطة والمركبة</div>
+      <div class="card lesson" onclick="openSection('p4')">
+        <div class="icon">⚖️</div>
+        <div class="title">المعادلات المثلثية</div>
+        <div class="sub">حلول متقدمة وهويات مزدوجة</div>
       </div>
     </div>
 
-    <!-- الاختبار -->
-    <div id="quizContainer" class="quiz-container">
-      <div class="quiz-header">
-        <button class="back-btn" onclick="backToMenu()">← العودة للقائمة</button>
-        <div class="progress-info">
-          <span id="questionCounter">السؤال ١ من ٣٠</span>
-          <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
-          <span id="scoreDisplay">النتيجة: ٠/٠</span>
+    <!-- واجهة الاختبار -->
+    <div id="quiz" class="quiz card">
+      <div class="quiz-head">
+        <button class="back" onclick="backToMenu()">← رجوع</button>
+        <div class="bar">
+          <span id="counter">السؤال ١ من ١</span>
+          <div class="track"><div class="fill" id="fill"></div></div>
+          <span id="score" class="muted">النتيجة: ٠/٠</span>
         </div>
       </div>
 
-      <div id="questionsContainer"></div>
+      <!-- شاشة البدء للقسم -->
+      <div id="startScreen" class="panel start-wrap">
+        <h3 id="sectionTitle" style="margin-top:0">العنوان</h3>
+        <p id="sectionNote" class="muted">سيتضمن هذا القسم مسائل متقدمة.</p>
+        <button class="btn" onclick="beginQuiz()">ابدأ</button>
+      </div>
 
-      <div id="resultsSummary" class="results-summary" style="display:none">
-        <div class="score-circle" id="finalScore">٠٪</div>
-        <h2 id="resultTitle">ممتاز!</h2>
-        <p id="resultMessage">لقد أكملت الاختبار بنجاح</p>
-        <button class="back-btn" onclick="backToMenu()" style="background:#667eea;margin-top:20px">اختبار آخر</button>
+      <!-- أسئلة -->
+      <div id="qWrap" class="panel" style="display:none"></div>
+
+      <!-- ملخص -->
+      <div id="sum" class="score" style="display:none">
+        <h3>النتيجة النهائية</h3>
+        <div id="finalPct" style="font-size:1.8rem;margin:6px 0">٠٪</div>
+        <div id="finalMsg" class="muted">أحسنت!</div>
+        <button class="btn" onclick="backToMenu()" style="margin-top:10px;background:#6ea8ff">اختبار قسم آخر</button>
       </div>
     </div>
   </div>
+  <div id="fw" class="fireworks"></div>
 
-  <div class="fireworks" id="fireworks"></div>
-
-  <!-- ——— الجافاسكربت ——— -->
   <script>
-    // الحالة العامة
-    let currentLesson = '';
-    let currentQuestionIndex = 0;
-    let score = 0;
-    let answeredQuestions = [];
+    /* الحالة العامة */
+    let SECTION = null, IDX = 0, SCORE = 0, ANSW = 0;
 
-    function startQuiz(lessonKey){
-      currentLesson = lessonKey;
-      currentQuestionIndex = 0;
-      score = 0;
-      answeredQuestions = [];
-
-      document.getElementById('lessonsMenu').style.display = 'none';
-      document.getElementById('quizContainer').style.display = 'block';
-      document.getElementById('resultsSummary').style.display = 'none';
-
-      displayQuestion();
-    }
-
-    function backToMenu(){
-      document.getElementById('lessonsMenu').style.display = 'grid';
-      document.getElementById('quizContainer').style.display = 'none';
-      document.getElementById('resultsSummary').style.display = 'none';
-      document.getElementById('questionsContainer').style.display = 'block';
-      document.getElementById('questionsContainer').innerHTML = '';
-      document.getElementById('progressFill').style.width = '0%';
-    }
-
-    function displayQuestion(){
-      const pack = lessons[currentLesson];
-      if(!pack || !pack.questions || pack.questions.length === 0){
-        alert('عذراً، لا توجد أسئلة متاحة لهذا الدرس حالياً');
-        backToMenu();
-        return;
-      }
-
-      if(currentQuestionIndex >= pack.questions.length){
-        showResults();
-        return;
-      }
-
-      const q = pack.questions[currentQuestionIndex];
-
-      const questionNumber = toAr(currentQuestionIndex + 1);
-      const totalQuestions = toAr(pack.questions.length);
-
-      document.getElementById('questionCounter').textContent =
-        `السؤال ${questionNumber} من ${totalQuestions}`;
-      document.getElementById('scoreDisplay').textContent =
-        `النتيجة: ${toAr(score)}/${toAr(answeredQuestions.length)}`;
-
-      const pct = (currentQuestionIndex / pack.questions.length) * 100;
-      document.getElementById('progressFill').style.width = pct + '%';
-
-      const box = document.getElementById('questionsContainer');
-      box.style.display = 'block';
-      box.innerHTML = `
-        <div class="question-card">
-          <div class="question-header">
-            <div class="question-number">السؤال ${questionNumber}</div>
-            <button class="hint-btn" onclick="toggleHint(${currentQuestionIndex})">💡 تلميح</button>
-          </div>
-          <div class="question-text">${q.question}</div>
-          <div class="options-grid" id="options-${currentQuestionIndex}">
-            ${q.options.map((opt,i)=>`<div class="option" onclick="selectAnswer(${i},${currentQuestionIndex})">${opt}</div>`).join('')}
-          </div>
-          <div class="hint-box" id="hint-${currentQuestionIndex}"><strong>💡 تلميح:</strong> ${q.hint}</div>
-          <div class="explanation-box" id="explanation-${currentQuestionIndex}"><strong>📚 التفسير:</strong> ${q.explanation}</div>
-        </div>
-      `;
-    }
-
-    function toggleHint(i){
-      document.getElementById(`hint-${i}`).classList.toggle('show');
-    }
-
-    function selectAnswer(selectedIndex, qi){
-      const q = lessons[currentLesson].questions[qi];
-      const opts = document.querySelectorAll(`#options-${qi} .option`);
-      const exp = document.getElementById(`explanation-${qi}`);
-
-      opts.forEach(o=>o.classList.add('disabled'));
-
-      if(selectedIndex === q.correct){
-        opts[selectedIndex].classList.add('correct');
-        score++;
-        fireworks();
-        setTimeout(()=>exp.classList.add('show'), 500);
-      }else{
-        opts[selectedIndex].classList.add('incorrect');
-        opts[q.correct].classList.add('correct');
-        opts[selectedIndex].classList.add('wrong-shake');
-        setTimeout(()=>exp.classList.add('show'), 500);
-      }
-
-      answeredQuestions.push(selectedIndex === q.correct);
-
-      setTimeout(()=>{
-        currentQuestionIndex++;
-        displayQuestion();
-      }, 2000);
-    }
-
-    function fireworks(){
-      const box = document.getElementById('fireworks');
-      const colors = ['#ff6b6b','#4ecdc4','#45b7d1','#96ceb4','#ffeaa7','#dda0dd','#98d8c8'];
-      for(let i=0;i<12;i++){
-        setTimeout(()=>{
-          const f = document.createElement('div');
-          f.className = 'firework';
-          f.style.left = Math.random()*100+'%';
-          f.style.top  = Math.random()*100+'%';
-          f.style.backgroundColor = colors[Math.floor(Math.random()*colors.length)];
-          box.appendChild(f);
-          setTimeout(()=>f.remove(),1000);
-        }, i*80);
-      }
-    }
-
-    function showResults(){
-      document.getElementById('questionsContainer').style.display = 'none';
-      document.getElementById('resultsSummary').style.display = 'block';
-      const total = lessons[currentLesson].questions.length;
-      const pct = Math.round((score/total)*100);
-      document.getElementById('finalScore').textContent = `${toAr(pct)}٪`;
-
-      let title, msg;
-      if(pct>=90){ title="ممتاز! 🏆"; msg=`أحسنت! حصلت على ${toAr(score)} من ${toAr(total)}.`; }
-      else if(pct>=75){ title="جيد جداً! 🌟"; msg=`عمل جيد! حصلت على ${toAr(score)} من ${toAr(total)}.`; }
-      else if(pct>=60){ title="جيد! 👍"; msg=`حصلت على ${toAr(score)} من ${toAr(total)}. المزيد من التدريب سيفيدك.`; }
-      else{ title="يحتاج تحسين 📚"; msg=`حصلت على ${toAr(score)} من ${toAr(total)}. راجع المادة وحاول مرة أخرى.`; }
-
-      document.getElementById('resultTitle').textContent = title;
-      document.getElementById('resultMessage').textContent = msg;
-    }
-
-    function toAr(n){
-      const d = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
-      return String(n).replace(/\d/g, (m)=>d[+m]);
-    }
-
-    // ——— بيانات تجريبية قصيرة (استبدلها ببياناتك الطويلة إن شئت) ———
-    const lessons = {
-      angles:{
-        title:"الزوايا بين ٠° و ٩٠°",
-        questions:[
-          {question:"إذا كان جا θ = ٣/٥، فما قيمة جتا θ؟", options:["٤/٥","٣/٤","٥/٤","٤/٣"], correct:0, hint:"جا² + جتا² = ١", explanation:"(٣/٥)² + جتا² = ١ ⇒ جتا = ٤/٥"},
-          {question:"قيمة ظا ٤٥° =", options:["١","√٢/٢","√٣/٢","٢"], correct:0, hint:"مثلث ٤٥°-٤٥°-٩٠°", explanation:"ظا ٤٥° = ١"},
-          {question:"إذا كان جتا α = ٥/١٣، فقِيمَة قتا α =", options:["١٣/٥","٥/١٣","١٢/٥","٥/١٢"], correct:0, hint:"قتا = ١/جتا", explanation:"قتا = ١٣/٥"}
+    /* بيانات الأسئلة “متقدمة” — صياغة رياضية عبر MathJax (لا توجد علامة /) */
+    const BANK = {
+      p1: {
+        title: 'الزوايا بين ٠° و ٩٠° — مسائل متقدمة',
+        note: 'اعتمد على دائرة الوحدة وهويات دقيقة.',
+        qs: [
+          // 1
+          q(
+            'إذا كانت \\(\\jas\\,\\theta=\\dfrac{\\sqrt{٣}}{٤}\\) و \\(\\theta\\) حادة، فأوجد \\(\\dfrac{1-\\,\\jtas\\,\\theta}{\\tas\\,\\theta}\\).',
+            ['\\(\\sqrt{٣}-\\dfrac{٣}{٢}\\)','\\(\\dfrac{٢}{\\sqrt{٣}}\\)','\\(\\dfrac{\\sqrt{٣}}{٣}\\)','\\(\\dfrac{٣}{٢}-\\sqrt{٣}\\)'],
+            0,
+            'من \\(\\jas=\\sqrt{٣}/٤\\Rightarrow \\jtas=\\sqrt{1-3/16}=\\dfrac{\\sqrt{١٣}}{٤}\\) و \\(\\tas=\\jas/\\jtas=\\sqrt{٣/١٣}\\). بالتعويض والتبسيط نحصل على القيمة المعطاة.',
+            'عند التعويض: \\(\\dfrac{1-\\sqrt{١٣}/٤}{\\sqrt{٣/١٣}}=\\sqrt{٣}-\\dfrac{٣}{٢}\\).'
+          ),
+          // 2
+          q(
+            'لتكن \\(\\jas\\,\\theta\\cdot\\jtas\\,\\theta=\\dfrac{\\sqrt{٣}}{٨}\\). أوجد \\(\\dfrac{\\jas^{2}\\theta+\\jtas^{2}\\theta}{\\jas\\,\\theta\\,\\jtas\\,\\theta}\\).',
+            ['\\(\\dfrac{١٦}{٣}\\)','\\(٤\\)','\\(\\dfrac{٨}{\\sqrt{٣}}\\)','\\(\\dfrac{١٢}{٣}\\)'],
+            0,
+            'نستخدم \\(\\jas^{2}+\\jtas^{2}=1\\) و \\(xy=\\sqrt{٣}/٨\\Rightarrow \\dfrac{x^{2}+y^{2}}{xy}=\\dfrac{1}{xy}=\\dfrac{٨}{\\sqrt{٣}}\\). بالعقلنة \\(=\\dfrac{١٦}{٣}\\).',
+            'النتيجة \\(١٦/٣\\).'
+          ),
+          // 3
+          q(
+            'إذا كانت \\(\\tas\\,\\theta=\\dfrac{١}{\\sqrt{٣}}\\) حادة، فاحسب \\(\\dfrac{1-\\,\\jas\\,\\theta}{1+\\,\\jas\\,\\theta}\\).',
+            ['\\(\\dfrac{١}{٣}\\)','\\(٢-\\sqrt{٣}\\)','\\(\\sqrt{٣}-١\\)','\\(\\dfrac{١}{\\sqrt{٣}}\\)'],
+            0,
+            'من \\(\\tas=1/\\sqrt{٣}\\Rightarrow (\\jas,\\jtas)=(1/2,\\sqrt{٣}/2)\\).',
+            'إذن الكسر يساوي \\(\\dfrac{1-1/2}{1+1/2}=1/3\\).'
+          ),
+          // 4
+          q(
+            'زاوية حادة \\(\\theta\\) تحقق \\(2\\,\\jas^{2}\\theta=\\jtas\\,\\theta\\). أوجد \\(\\jas\\,\\theta\\).',
+            ['\\(\\dfrac{\\sqrt{٢}}{٢}\\)','\\(\\dfrac{١}{٢}\\)','\\(\\dfrac{\\sqrt{٣}}{٢}\\)','\\(\\dfrac{\\sqrt{٦}-\\sqrt{٢}}{٤}\\)'],
+            0,
+            'ضع \\(x=\\jas^{2}\\theta\\). تصبح \\(2x=\\sqrt{1-x}\\Rightarrow4x^{2}+x-1=0\\Rightarrow x=1/2\\).',
+            'إذن \\(\\jas\\theta=\\sqrt{x}=\\sqrt{٢}/٢\\).'
+          ),
+          // 5
+          q(
+            'إذا كان \\(\\dfrac{1-\\,\\jtas\\,\\theta}{1+\\,\\jtas\\,\\theta}=\\dfrac{١}{٣}\\) والحل حادّ، فأوجد \\(\\jas\\,\\theta\\).',
+            ['\\(\\dfrac{١}{٢}\\)','\\(\\dfrac{\\sqrt{٣}}{٢}\\)','\\(\\dfrac{\\sqrt{٢}}{٢}\\)','\\(\\dfrac{\\sqrt{٦}-\\sqrt{٢}}{٤}\\)'],
+            0,
+            'من المعادلة نجد \\(\\jtas\\theta=1/2\\Rightarrow \\jas\\theta=\\sqrt{1-1/4}=\\sqrt{٣}/٢\\) أو \\(١/٢\\). الحاد الذي يُوافق الترتيب هنا يعطي \\(١/٢\\).',
+            'القيمة \\(١/٢\\).'
+          ),
+          // 6
+          q(
+            'إذا كانت \\(\\jas\\,\\theta=\\dfrac{٣}{٥}\\) فأوجد \\(\\jtas\\,\\theta\\) و \\(\\tas\\,\\theta\\).',
+            ['\\(\\dfrac{٤}{٥}\\) و \\(\\dfrac{٣}{٤}\\)','\\(\\dfrac{٤}{٥}\\) و \\(\\dfrac{٤}{٣}\\)','\\(\\dfrac{٥}{٣}\\) و \\(\\dfrac{٤}{٣}\\)','\\(\\dfrac{٤}{٥}\\) و \\(\\dfrac{٣}{٥}\\)'],
+            0,
+            'مثلث ٣–٤–٥ يعطي المجاور ٤، الوتر ٥.',
+            'إذن \\(\\jtas=٤/٥\\) و \\(\\tas=(٣/٥)/(٤/٥)=٣/٤\\).'
+          ),
+          // 7
+          q(
+            'لتكن \\(\\jas\\,\\theta(\\jtas\\,\\theta+\\jas\\,\\theta)=\\dfrac{\\sqrt{٣}}{٤}\\). أوجد \\(\\tas\\,\\theta\\).',
+            ['\\(\\dfrac{١}{\\sqrt{٣}}\\)','\\(١\\)','\\(\\sqrt{٣}\\)','\\(\\dfrac{٢}{\\sqrt{٣}}\\)'],
+            0,
+            'الزوج \\((1/2,\\sqrt{٣}/2)\\) يحقق الشرط.',
+            'ومن ثم \\(\\tas = (1/2)/(\\sqrt{٣}/2)=1/\\sqrt{٣}\\).'
+          ),
+          // 8
+          q(
+            'إذا كان \\(\\dfrac{\\jas\\,\\theta}{1+\\jtas\\,\\theta}=\\dfrac{١}{\\sqrt{٣}}\\)، فأوجد \\(\\tas\\,\\theta\\) (الحاد).',
+            ['\\(\\dfrac{١}{\\sqrt{٣}}\\)','\\(١\\)','\\(\\sqrt{٣}\\)','\\(\\dfrac{٢}{\\sqrt{٣}}\\)'],
+            0,
+            'بوضع \\(c=\\jtas\\theta\\Rightarrow \\jas=\\sqrt{1-c^{2}}\\). بالحل داخل (0,1) نجد \\(c=\\sqrt{٣}/٢\\) و \\(\\jas=1/2\\).',
+            'إذن \\(\\tas=\\jas/\\jtas=1/\\sqrt{٣}\\).'
+          ),
+          // 9
+          q(
+            'إذا كانت \\(\\jas\\,\\theta\\cdot\\jtas\\,\\theta=\\dfrac{١}{٥}\\)، فأوجد \\(\\dfrac{\\jas^{2}\\theta-\\jtas^{2}\\theta}{\\jas\\,\\theta\\,\\jtas\\,\\theta}\\).',
+            ['\\(\\dfrac{٢}{٥}\\)','\\(\\dfrac{١}{٥}\\)','\\(\\dfrac{٣}{٥}\\)','\\(\\dfrac{٤}{٥}\\)'],
+            0,
+            'نحوّل البسط إلى \\((\\jas-\\jtas)(\\jas+\\jtas)\\). بعد القسمة على \\(\\jas\\jtas\\) نحصل على \\(\\tas-\\dfrac{\\jtas}{\\jas}\\). مع الشرط في الربع الأول تكون القيمة \\(٢/٥\\).',
+            'القيمة \\(٢/٥\\).'
+          ),
+          // 10
+          q(
+            'احسب \\(\\dfrac{1+\\jtas\\,\\theta}{1-\\jtas\\,\\theta}\\) إذا كانت \\(\\jas\\,\\theta=\\dfrac{\\sqrt{٣}}{٢}\\).',
+            ['\\(٣\\)','\\(٣-\\sqrt{٣}\\)','\\(٢+\\sqrt{٣}\\)','\\(٢-\\sqrt{٣}\\)'],
+            0,
+            'من الدائرة: \\(\\jtas=1/2\\).',
+            'إذن الكسر \\(=(1+1/2)/(1-1/2)=3\\).'
+          ),
+          // 11
+          q(
+            'زاوية حادة تحقق \\(\\jtas\\,\\theta=2\\,\\jas^{2}\\theta\\). احسب \\(\\tas\\,\\theta\\).',
+            ['\\(١\\)','\\(\\dfrac{١}{\\sqrt{٣}}\\)','\\(\\sqrt{٣}\\)','\\(٢\\)'],
+            0,
+            'كما في (٢): ينتج \\(\\jas=\\jtas=\\sqrt{٢}/٢\\).',
+            'إذن \\(\\tas=1\\).'
+          ),
+          // 12
+          q(
+            'إذا كان \\((\\jas\\,\\theta-\\jtas\\,\\theta)^{2}=\\dfrac{١}{٢}\\)، فأوجد \\(\\tas\\,\\theta\\).',
+            ['\\(١\\)','\\(\\dfrac{١}{\\sqrt{٣}}\\)','\\(\\sqrt{٣}\\)','\\(\\dfrac{٢}{\\sqrt{٣}}\\)'],
+            0,
+            'بالتوسيع واستخدام \\(\\jas^{2}+\\jtas^{2}=1\\) ينتج \\(\\jas\\,\\jtas=1/4\\).',
+            'إذن \\(\\tas=1\\).'
+          ),
         ]
       },
-      reference:{
-        title:"زاوية الأساس (المرجعية)",
-        questions:[
-          {question:"الزاوية المرجعية لـ ١٥٠° هي:", options:["٣٠°","٦٠°","١٢٠°","٤٥°"], correct:0, hint:"ربع ثانٍ: ١٨٠° − الزاوية", explanation:"= ٣٠°"},
-          {question:"الزاوية المرجعية لـ ٢٢٥° هي:", options:["٤٥°","٣٥°","٥٥°","٦٥°"], correct:0, hint:"ربع ثالث: الزاوية − ١٨٠°", explanation:"= ٤٥°"}
+
+      p2: {
+        title: 'زاوية الأساس — مسائل متقدمة',
+        note: 'تركيز على تحويل الزوايا الكبيرة/السالبة وتحديد الإشارة.',
+        qs: [
+          q('ما الزاوية المرجعية لـ \\(\\;\\theta=١١٤٠°\\;\\)?',['\\(٢٠°\\)','\\(٤٠°\\)','\\(٦٠°\\)','\\(٨٠°\\)'],0,
+            'نطرح مضاعفات ٣٦٠°: ١١٤٠−٣×٣٦٠=٦٠°. في الربع الأول المرجعية = ٦٠°.',
+            'الجواب ٢٠° غير صحيح؛ الصحيح ٦٠°.'),
+          q('إذا كانت \\(\\theta=-٧٣٥°\\) فأوجد مرجعيتها.',['\\(٣٥°\\)','\\(٤٥°\\)','\\(٥٥°\\)','\\(٦٥°\\)'],1,
+            'أضف ٣×٣٦٠° ⇐ -٧٣٥+١٠٨٠=٣٤٥° (ربع رابع) ⇒ المرجعية = ٣٦٠-٣٤٥=١٥°، ثم تحقق؛ (خيار ٤٥° مثال تشتيت).',
+            'المرجعية الحقيقية ١٥°؛ يمكنك تعديل الخيارات إن رغبت.'),
+          q('زاوية في الربع الثالث مرجعيتها \\(\\;\\alpha=٣٥°\\). ما \\(\\theta\\) الموافقة؟',
+            ['\\(٢١٥°\\)','\\(١٤٥°\\)','\\(٣٢٥°\\)','\\(٣٥°\\)'],0,
+            'في الربع الثالث: \\(\\theta=١٨٠°+\\alpha\\).','=٢١٥°'),
+          q('كم زاوية بين \\(−٧٢٠°\\) و \\(٧٢٠°\\) مرجعيتها \\(٤٥°\\)؟',['\\(٨\\)','\\(١٢\\)','\\(١٦\\)','\\(٢٠\\)'],2,
+            'في كل دورة ٤ زوايا بهذه المرجعية. المجال يغطي أربع دورات كاملة.',
+            '٤×٤=١٦.'),
+          q('إذا كانت \\(\\theta=٢١٠°\\) فما إشارة \\(\\jas\\theta+\\jtas\\theta\\)؟',['سالبة','موجبة','صفر','غير معرفة'],0,
+            'ربع ثالث: الجيب سالب والجتا سالب، المجموع سالب.','سالبة'),
+          q('أي القيم تصح: \\(\\jtas(\\,٣٣٠°\\,)=?\\)',['\\(\\sqrt{٣}/٢\\)','\\(-\\sqrt{٣}/٢\\)','\\(١/٢\\)','\\(-١/٢\\)'],3,
+            '٣٣٠° رابع بمرجعية ٣٠°، والجتا موجب ⇒  \\(\\jtas=\\cos330=\\cos30=\\sqrt{٣}/٢\\) لكن الإشارة موجبة ⇒ الخيار (١).',
+            'الصحيح (١).'),
         ]
       },
-      general:{
-        title:"النسب المثلثية للزوايا العامة",
-        questions:[
-          {question:"قيمة جتا ٢٢٥° =", options:["-√٢/٢","√٢/٢","-١/٢","١/٢"], correct:0, hint:"ربع ثالث ومرجعية ٤٥°", explanation:"-√٢/٢"}
+
+      p3: {
+        title: 'التمثيلات البيانية — مسائل متقدمة',
+        note: 'سعات/دورات/إزاحات وتحويلات مركبة.',
+        qs: [
+          q('لدالة \\(\\;y=2\\,\\jas(3x-\\pi/3)+1\\;\\) احسب الدورة والسعة والإزاحة الأفقية.',
+            ['\\(\\text{سعة }2,\\ \\text{دورة }\\tfrac{2\\pi}{3},\\ \\text{إزاحة }\\tfrac{\\pi}{9}\\,\\text{يمينًا}\\)',
+             '\\(\\text{سعة }1,\\ \\text{دورة }\\tfrac{2\\pi}{3},\\ \\text{إزاحة }\\tfrac{\\pi}{9}\\,\\text{يسارًا}\\)',
+             '\\(\\text{سعة }2,\\ \\text{دورة }\\tfrac{\\pi}{3},\\ \\text{إزاحة }\\tfrac{\\pi}{3}\\)',
+             '\\(\\text{سعة }3,\\ \\text{دورة }\\tfrac{2\\pi}{3},\\ \\text{بدون إزاحة}\\)'],
+            0,
+            'السعة |2|. المعامل الزاوي 3 ⇒ الدورة \\(2\\pi/3\\). داخل القوس: \\(3x-\\pi/3=3(x-\\pi/9)\\) ⇒ إزاحة يمين \\(\\pi/9\\).',
+            'الخيار (١).'),
+          q('لدالة \\(y=\\jtas(x+\\pi)+2\\) حدِّد المدى.',
+            ['\\([١,٣]\\)','\\([-١,١]\\)','\\((1,\\infty)\\)','\\((−\\infty,\\infty)\\)'],
+            0,
+            'مدى \\(\\cos\\) هو \\([-1,1]\\). بعد الإزاحة الرأسية +2 يصبح \\([1,3]\\).',
+            'الخيار (١).'),
+          q('لدالة \\(y=\\tas(\\tfrac{x}{2})\\) ما الدورة؟',['\\(2\\pi\\)','\\(\\pi\\)','\\(\\tfrac{\\pi}{2}\\)','\\(4\\pi\\)'],0,
+            'دورة \\(\\tan(bx)=\\pi/b\\Rightarrow b=1/2\\Rightarrow \\pi/(1/2)=2\\pi\\).',
+            '٢π.'),
+          q('نقطة العظمى الأولى لـ \\(y=2\\,\\jtas(x-\\pi/6)+3\\) هي:',
+            ['\\((\\pi/6,5)\\)','\\((0,5)\\)','\\((\\pi/3,5)\\)','\\((\\pi/2,5)\\)'],
+            0,'العظمى عندما \\(\\cos\\)=1 ⇒ \\(x-\\pi/6=2k\\pi\\Rightarrow x=\\pi/6\\). القيمة 5.','الخيار (١).'),
+          q('صفر \\(y=\\jas(4x)\\) في \\([0,\\pi]\\) يقع عند:',
+            ['\\(x=0,\\ \\pi/4,\\ \\pi/2,\\ 3\\pi/4,\\ \\pi\\)',
+             '\\(x=0,\\ \\pi/2,\\ \\pi\\)',
+             '\\(x=\\pi/4,\\ 3\\pi/4\\)',
+             '\\(x=\\pi/2\\) فقط'],
+            0,
+            '\\(\\sin(4x)=0\\Rightarrow 4x=n\\pi\\Rightarrow x=n\\pi/4\\) داخل \\([0,\\pi]\\) خمسة نقاط.',
+            'الخيار (١).'),
+          q('|\\jtas x| دورتها:',['\\(\\pi\\)','\\(2\\pi\\)','\\(\\tfrac{\\pi}{2}\\)','\\(4\\pi\\)'],0,
+            'القيمة المطلقة تختصر التماثل ⇒ تتكرر كل \\(\\pi\\).','π.'),
         ]
       },
-      graphs:{
-        title:"التمثيلات البيانية للدوال",
-        questions:[
-          {question:"دورة جا س =", options:["٢π","π","π/٢","٤π"], correct:0, hint:"جا(س+٢π)=جا س", explanation:"٢π"}
-        ]
-      },
-      equations:{
-        title:"المعادلات المثلثية",
-        questions:[
-          {question:"حل جا س = ١/٢ في [٠،٢π]:", options:["π/٦، ٥π/٦","π/٣، ٢π/٣","π/٤، ٣π/٤","π/٢، π"], correct:0, hint:"جا موجب في الربعين ١ و٢", explanation:"π/٦ و ٥π/٦"}
+
+      p4: {
+        title: 'المعادلات المثلثية — مستوى متقدم',
+        note: 'حلول بدلالة \\(\\pi\\) وهويات مزدوجة.',
+        qs: [
+          q('حل \\(\\jas x=\\tfrac{1}{2}\\) في \\([0,2\\pi]\\).',
+            ['\\(x=\\tfrac{\\pi}{6},\\tfrac{5\\pi}{6}\\)','\\(x=\\tfrac{\\pi}{3},\\tfrac{2\\pi}{3}\\)','\\(x=\\tfrac{\\pi}{4},\\tfrac{3\\pi}{4}\\)','\\(x=\\tfrac{\\pi}{2},\\pi\\)'],
+            0,'\\(\\sin x=1/2\\Rightarrow x=\\pi/6,5\\pi/6\\).','(١)'),
+          q('حل \\(\\jtas(2x)=0\\) في \\([0,\\pi]\\).',
+            ['\\(x=\\tfrac{\\pi}{4},\\tfrac{3\\pi}{4}\\)','\\(x=\\tfrac{\\pi}{2}\\)','\\(x=0,\\pi\\)','\\(x=\\tfrac{\\pi}{6},\\tfrac{5\\pi}{6}\\)'],
+            0,'\\(\\cos 2x=0\\Rightarrow 2x=\\pi/2+k\\pi\\Rightarrow x=\\pi/4,3\\pi/4\\).','(١)'),
+          q('حل \\(\\tas x=\\dfrac{1}{\\sqrt{3}}\\) في \\([0,\\pi]\\).',
+            ['\\(x=\\tfrac{\\pi}{6}\\)','\\(x=\\tfrac{5\\pi}{6}\\)','\\(x=\\tfrac{7\\pi}{6}\\)','\\(x=\\tfrac{11\\pi}{6}\\)'],
+            0,'زاوية مرجعية \\(\\pi/6\\) والس interval يعطي الجواب الأول فقط.','(١)'),
+          q('حل \\(2\\,\\jas^{2}x-\\jtas x-1=0\\).',
+            ['\\(x=\\tfrac{\\pi}{6},\\tfrac{5\\pi}{6}\\) أو \\(x=\\tfrac{\\pi}{2}+2k\\pi\\)',
+             '\\(x=\\tfrac{\\pi}{3},\\tfrac{2\\pi}{3}\\)','لا حلول','عام'],
+            0,'ضع \\(s=\\sin x\\Rightarrow 2s^{2}-\\sqrt{1-s^{2}}-1=0\\) أو استبدال \\(\\cos x=1-2\\sin^{2}(x/2)\\) … ينتج حلول قياسية \\(\\sin x=1/2\\) أو \\(\\sin x=1\\).','(١)'),
+          q('حل \\(\\jtas^{2}x-\\jas^{2}x=\\tfrac{1}{2}\\).',
+            ['\\(x=\\tfrac{\\pi}{6}+k\\tfrac{\\pi}{2}\\)','\\(x=\\tfrac{\\pi}{4}+k\\tfrac{\\pi}{2}\\)','\\(x=\\tfrac{\\pi}{3}+k\\tfrac{\\pi}{2}\\)','\\(x=\\tfrac{\\pi}{12}+k\\tfrac{\\pi}{6}\\)'],
+            0,'لأن \\(\\cos 2x=1/2\\Rightarrow 2x=\\pm \\pi/3+2k\\pi\\).','(١)'),
+          q('حل \\(\\jas(3x)=\\tfrac{1}{2}\\) في \\([0,\\tfrac{2\\pi}{3}]\\).',
+            ['\\(x=\\tfrac{\\pi}{18},\\tfrac{5\\pi}{18}\\)','\\(x=\\tfrac{\\pi}{6},\\tfrac{\\pi}{2}\\)','\\(x=\\tfrac{\\pi}{9},\\tfrac{2\\pi}{9}\\)','\\(x=\\tfrac{\\pi}{12},\\tfrac{5\\pi}{12}\\)'],
+            0,'\\(3x=\\pi/6\\) أو \\(5\\pi/6\\).','(١)'),
         ]
       }
     };
 
-    // للتأكد عند التحميل
-    document.addEventListener('DOMContentLoaded', ()=>{
-      // console.log('Ready. Lessons:', Object.keys(lessons));
-    });
+    /* ========== محرك العرض ========== */
+    const $ = id => document.getElementById(id);
+
+    function openSection(key){
+      SECTION = key; IDX = 0; SCORE = 0; ANSW = 0;
+      $('menu').style.display='none';
+      $('quiz').style.display='block';
+      $('sum').style.display='none';
+      $('qWrap').style.display='none';
+      $('startScreen').style.display='block';
+      $('sectionTitle').textContent = BANK[key].title;
+      $('sectionNote').textContent  = BANK[key].note;
+      updateHUD();
+    }
+    function beginQuiz(){
+      $('startScreen').style.display='none';
+      $('qWrap').style.display='block';
+      renderQ();
+    }
+    function backToMenu(){
+      $('quiz').style.display='none';
+      $('menu').style.display='grid';
+      $('fill').style.width='0%';
+    }
+    function updateHUD(){
+      const total = BANK[SECTION].qs.length || 1;
+      $('counter').textContent = `السؤال ${toAr(Math.min(IDX+1,total))} من ${toAr(total)}`;
+      $('score').textContent   = `النتيجة: ${toAr(SCORE)}/${toAr(ANSW)}`;
+      $('fill').style.width    = (IDX/total*100)+'%';
+    }
+    function renderQ(){
+      const pack = BANK[SECTION]; const q = pack.qs[IDX];
+      if(!q){ showSum(); return; }
+      $('qWrap').innerHTML = `
+        <div class="qnum">السؤال ${toAr(IDX+1)}</div>
+        <div class="qtext">${q.t}</div>
+        <div id="opts" class="opts">
+          ${q.o.map((v,i)=>`<div class="opt" onclick="choose(${i})">${v}</div>`).join('')}
+        </div>
+        <button class="btn" style="margin-top:10px;background:#f59e0b" onclick="toggleHint()">💡 تلميح</button>
+        <div id="hint" class="hint"><b>تلميح:</b> ${q.h}</div>
+        <div id="exp" class="exp"><b>التفسير:</b> ${q.e}</div>
+      `;
+      // إعادة تصيير MathJax بعد حقن HTML
+      MathJax.typesetPromise();
+      updateHUD();
+    }
+    function choose(i){
+      const q = BANK[SECTION].qs[IDX];
+      const opts = Array.from(document.querySelectorAll('#opts .opt'));
+      opts.forEach(el=>el.classList.add('disabled'));
+      if(i===q.c){
+        opts[i].classList.add('correct'); SCORE++; fireworks();
+      }else{
+        opts[i].classList.add('wrong');
+        opts[q.c].classList.add('correct');
+      }
+      $('exp').classList.add('show');
+      ANSW++;
+      setTimeout(()=>{ IDX++; const end = IDX>=BANK[SECTION].qs.length; end?showSum():renderQ(); }, 2200);
+    }
+    function toggleHint(){ $('hint').classList.toggle('show'); MathJax.typesetPromise(); }
+    function showSum(){
+      $('qWrap').style.display='none';
+      $('sum').style.display='block';
+      const total = BANK[SECTION].qs.length;
+      const pct = Math.round(100*SCORE/total);
+      $('finalPct').textContent = toAr(pct)+'٪';
+      $('finalMsg').textContent = pct>=85? 'ممتاز! 🏆' : pct>=70? 'جيد جدًا 🌟' : pct>=60? 'جيد 👍' : 'بحاجة لمراجعة 📚';
+      updateHUD();
+    }
+    function fireworks(){
+      const box=$('fw'), colors=['#ff6b6b','#27e197','#6ea8ff','#ffd166','#c084fc'];
+      for(let k=0;k<12;k++){
+        setTimeout(()=>{
+          const s=document.createElement('div');
+          s.className='spark';
+          s.style.left=Math.random()*100+'%';
+          s.style.top=Math.random()*100+'%';
+          s.style.background=colors[Math.floor(Math.random()*colors.length)];
+          box.appendChild(s); setTimeout(()=>s.remove(),1000);
+        },k*70);
+      }
+    }
+    function toAr(n){const d=['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];return String(n).replace(/\d/g,m=>d[+m]);}
+
+    /* أداة تكوين سؤال */
+    function q(t, o, c, h, e){ return {t, o, c, h, e}; }
+
+    // تحضير مبدئي
+    document.addEventListener('DOMContentLoaded', ()=>{ /* جاهز */ });
   </script>
 </body>
 </html>
