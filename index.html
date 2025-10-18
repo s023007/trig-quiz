@@ -8,19 +8,31 @@
   <!-- خط عربي واضح -->
   <link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;600;700&display=swap" rel="stylesheet">
 
-  <!-- MathJax لعرض الكسور/الجذور بدقة -->
-  <script>
-    window.MathJax = {
-      tex: {
-        inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']],
-        packages: {'[+]': ['base','ams']},
-        macros: { جا:["\\operatorname{جا}"], جتا:["\\operatorname{جتا}"], ظا:["\\operatorname{ظا}"] }
-      },
-      chtml: { scale: 1.28 },
-      options: { renderActions: { addMenu: [] } }
-    };
-  </script>
-  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  <!-- MathJax: إصلاح العربية داخل الكسور والجذور -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['\\(','\\)']],
+      displayMath: [['\\[','\\]']],
+      packages: {'[+]': ['base','ams','html','bidi']},
+      // ماكروهات تُخرج "جاس/جتاس/ظاس" كعامل عربي متماسك (mtext) مع تباعد العوامل
+      macros: {
+        jas:  '\\mathop{\\class{arabic-op}{\\text{جاس}}}\\nolimits',
+        jtas: '\\mathop{\\class{arabic-op}{\\text{جتاس}}}\\nolimits',
+        tas:  '\\mathop{\\class{arabic-op}{\\text{ظاس}}}\\nolimits',
+
+        // دعم مباشر لو كتبتَ في الأسئلة \جا أو \جتا أو \ظا
+        "جا":  '\\mathop{\\class{arabic-op}{\\text{جا}}}\\nolimits',
+        "جتا": '\\mathop{\\class{arabic-op}{\\text{جتا}}}\\nolimits',
+        "ظا":  '\\mathop{\\class{arabic-op}{\\text{ظا}}}\\nolimits'
+      }
+    },
+    chtml: { scale: 1.28 },
+    options: { renderActions: { addMenu: [] } }
+  };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
 
   <style>
     :root{
