@@ -1,448 +1,523 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>اختبار إلكتروني على وحدة الدوال المثلثية</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>مراجعة الاختبار القصير الأول للصف الحادي عشر (متقدم)</title>
 
   <!-- خط عربي جميل -->
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;600;800&display=swap" rel="stylesheet">
 
-  <!-- MathJax: يجعل الكسور والجذور مثل الكتب ويُثبّت (جا/جتا/ظا) -->
+  <!-- MathJax لعرض الرياضيات بشكل كتابي (كسور، جذور، أسس) -->
   <script>
     window.MathJax = {
       tex: {
-        inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']],
-        packages: {'[+]':['base','ams','html','bidi']},
-        macros: {
-          jas:  '\\mathop{\\class{arabic-op}{\\text{جا}}}\\nolimits',
-          jtas: '\\mathop{\\class{arabic-op}{\\text{جتا}}}\\nolimits',
-          tas:  '\\mathop{\\class{arabic-op}{\\text{ظا}}}\\nolimits',
-          ظتا:  '\\mathop{\\class{arabic-op}{\\text{ظتا}}}\\nolimits',
-          قا:   '\\mathop{\\class{arabic-op}{\\text{قا}}}\\nolimits',
-          قتا:  '\\mathop{\\class{arabic-op}{\\text{قتا}}}\\nolimits'
-        }
+        inlineMath: [['\\(','\\)'], ['$', '$']],
+        displayMath: [['\\[','\\]']],
+        processEscapes: true
       },
-      chtml: { scale: 1.24 },
-      options: { renderActions: { addMenu: [] } }
+      svg: { fontCache: 'global' }
     };
   </script>
-  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 
   <style>
     :root{
-      --bg:#0e2033; --card:#15293f; --ink:#eaf2ff; --muted:#9fb3cf;
-      --brand:#6ea8ff; --ok:#27e197; --danger:#ff6b6b; --accent:#ffd166;
+      --bg:#0e1320;
+      --card:#121a2b;
+      --ink:#e8eefc;
+      --muted:#b9c3dd;
+      --brand:#4f7df2;
+      --ok:#21c57b;
+      --bad:#ff6b6b;
+      --hint:#f7b500;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
-      margin:0;min-height:100%;background:linear-gradient(135deg,#0e2033 0%,#111b2a 100%);
-      color:var(--ink);font-family:'Noto Naskh Arabic',serif;
+      margin:0;
+      font-family:"Noto Sans Arabic",system-ui,-apple-system,Segoe UI,Roboto,Arial;
+      background: radial-gradient(1200px 800px at 90% -10%, #1b2440 0%, var(--bg) 60%) fixed;
+      color:var(--ink);
+      line-height:1.6;
     }
-    .container{max-width:1100px;margin:auto;padding:20px}
-    .header{background:rgba(255,255,255,.04);border:1px solid #1d3957;border-radius:20px;padding:24px;text-align:center;margin-bottom:22px}
-    .header h1{margin:0 0 6px;color:#8fd3ff;font-weight:700}
-    .header p{margin:0;color:var(--muted)}
 
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
+    .wrap{max-width:980px;margin:32px auto;padding:16px}
+    header{
+      display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:space-between;margin-bottom:18px
+    }
+    .title{
+      font-weight:800;font-size:clamp(18px,3vw,26px);
+      letter-spacing:.2px
+    }
+    .topic-badges{display:flex;flex-wrap:wrap;gap:8px}
+    .badge{
+      background:linear-gradient(180deg,#1b2a4d,#15213a);
+      color:var(--muted);
+      border:1px solid #273859;
+      border-radius:999px;
+      padding:.25rem .6rem;
+      font-size:13px
+    }
+
+    .progress{
+      height:10px;border-radius:999px;background:#1a2440;border:1px solid #29365a;overflow:hidden;margin:10px 0 18px
+    }
+    .bar{height:100%;background:linear-gradient(90deg,#5a8bff,#7aa1ff);width:0%}
+
     .card{
-      background:var(--card);border:1px solid #1e3d60;border-radius:16px;padding:18px;
-      box-shadow:0 8px 24px rgba(0,0,0,.25)
+      background:linear-gradient(180deg,#131c30,#0e1526);
+      border:1px solid #253457;
+      border-radius:20px;
+      box-shadow:0 12px 30px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.04);
+      padding:18px 16px;
     }
-    .lesson{cursor:pointer;transition:.25s}
-    .lesson:hover{transform:translateY(-4px);border-color:#2a67a3}
-    .icon{font-size:36px;margin-bottom:8px}
-    .title{font-weight:700;font-size:1.2rem;color:#d8e8ff}
-    .sub{color:var(--muted);font-size:.95rem}
 
-    .quiz{display:none}
-    .quiz-head{display:flex;gap:16px;justify-content:space-between;align-items:center;flex-wrap:wrap;margin-bottom:14px}
-    .back{background:#e24545;border:none;color:#fff;border-radius:10px;padding:10px 16px;cursor:pointer}
-    .bar{display:flex;align-items:center;gap:14px}
-    .track{width:200px;height:10px;background:#274867;border-radius:7px;overflow:hidden}
-    .fill{height:100%;width:0;background:linear-gradient(90deg,#27e197,#1ea47a)}
-    .panel{background:#0f2237;border:1px solid #1c3b5b;border-radius:16px;padding:16px;margin-top:12px}
-    .qnum{background:#2b6cb0;color:#fff;padding:6px 12px;border-radius:16px;display:inline-block;font-weight:700}
-    .qtext{margin:10px 0 14px;line-height:1.8;font-size:1.08rem}
-    .opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
-    .opt{background:#122840;border:1px solid #244a70;border-radius:12px;padding:12px 14px;cursor:pointer;transition:.15s}
-    .opt:hover{border-color:#3e80bd;background:#0f2a49}
-    .opt.correct{border-color:var(--ok);background:#0f3a2f}
-    .opt.wrong{border-color:var(--danger);background:#3a1f24}
-    .opt.disabled{opacity:.7;cursor:not-allowed}
-    .hint{background:#2e4d25;border:1px dashed #6ed280;border-radius:12px;padding:12px;margin-top:10px;display:none}
-    .hint.show{display:block}
-    .exp{background:#1e3a3e;border:1px solid #2b6b6e;border-radius:12px;padding:12px;margin-top:10px;display:none}
-    .exp.show{display:block}
-    .start-wrap{text-align:center}
-    .btn{background:#3b82f6;border:none;color:#fff;padding:10px 20px;border-radius:12px;cursor:pointer}
-    .btn:hover{filter:brightness(1.1)}
-    .muted{color:var(--muted)}
-    .score{background:#0f2237;border:1px solid #2a557e;border-radius:16px;padding:18px;text-align:center;margin-top:16px}
-
-    .fireworks{position:fixed;inset:0;pointer-events:none;z-index:999}
-    .spark{position:absolute;width:4px;height:4px;border-radius:50%;animation:boom 1s ease-out forwards}
-    @keyframes boom{0%{transform:scale(0);opacity:1}100%{transform:scale(1);opacity:0}}
-    /* تثبيت مظهر جا/جتا/ظا داخل MathJax */
-    .mjx-chtml .arabic-op{
-      font-family:"Noto Naskh Arabic","Amiri",serif !important;
-      font-weight:700; letter-spacing:0; white-space:nowrap; direction:rtl; unicode-bidi:isolate;
+    .q-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+    .q-num{
+      background:linear-gradient(180deg,#24385f,#1a2a4b);
+      border:1px solid #2b3e67;color:#dbe6ff;
+      width:38px;height:38px;display:grid;place-items:center;border-radius:12px;font-weight:700
     }
-    mjx-container{font-size:120%}
-    @media (max-width:768px){ .opts{grid-template-columns:1fr} .track{width:160px} }
+    .q-text{font-size:18px;font-weight:600}
+
+    .icons{display:flex;gap:8px;margin-inline-start:auto}
+    button.icon{
+      display:inline-flex;align-items:center;gap:6px;
+      background:#121a2b;border:1px solid #2a3a5f;color:#d7e2ff;
+      padding:6px 10px;border-radius:10px;font-size:14px;cursor:pointer
+    }
+    button.icon:hover{border-color:#4160a8}
+    .hint-panel,.exp-panel{
+      display:none;margin-top:10px;border-radius:12px;padding:10px 12px;border:1px solid #2a3a5f;background:#0f1729;color:#d9e4ff
+    }
+    .hint-panel{border-right:4px solid var(--hint)}
+    .exp-panel{border-right:4px solid #6aa5ff}
+
+    .choices{display:grid;gap:10px;margin-top:12px}
+    .choice{
+      display:flex;gap:10px;align-items:flex-start;
+      background:#0f1729;border:1px solid #233258;border-radius:14px;padding:10px 12px;cursor:pointer;
+    }
+    .choice input{margin-top:3px;accent-color:var(--brand)}
+    .choice.correct{border-color:rgba(33,197,123,.6);box-shadow:0 0 0 2px rgba(33,197,123,.15) inset}
+    .choice.wrong{border-color:rgba(255,107,107,.7);box-shadow:0 0 0 2px rgba(255,107,107,.12) inset}
+
+    .status{
+      margin-top:10px;font-weight:700
+    }
+    .status .ok{color:var(--ok)}
+    .status .bad{color:var(--bad)}
+
+    .actions{
+      display:flex;gap:10px;justify-content:space-between;margin-top:16px;flex-wrap:wrap
+    }
+    .btn{
+      background:linear-gradient(180deg,#2a3d69,#223559);
+      color:#e9f0ff;border:1px solid #35518c;
+      padding:10px 14px;border-radius:12px;cursor:pointer;font-weight:700;min-width:120px;text-align:center
+    }
+    .btn.secondary{background:#121a2b;border-color:#2a3a5f;color:#cfe0ff}
+    .btn:disabled{opacity:.45;cursor:not-allowed}
+
+    .footer{
+      margin-top:18px;color:var(--muted);font-size:13px;text-align:center
+    }
+
+    /* نتيجة النهاية */
+    .result{
+      text-align:center;padding:28px 16px
+    }
+    .score{
+      font-size:44px;font-weight:800;margin:8px 0;color:#eaf1ff
+    }
+    .score small{font-size:16px;color:var(--muted);font-weight:600}
+    .review{margin-top:18px;text-align:right}
+    .review details{
+      background:#0f1729;border:1px solid #233258;border-radius:14px;margin:10px 0;padding:10px 12px
+    }
+    .review summary{cursor:pointer;font-weight:700}
+    .green{color:var(--ok)} .red{color:var(--bad)}
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="header card">
-      <h1>اختبار إلكتروني على وحدة الدوال المثلثية</h1>
-      <p>تنسيق متقدّم للكسور والجذور وعرض (جا/جتا/ظا) بصورة كتب.</p>
-    </div>
+  <div class="wrap">
+    <header>
+      <div class="title">مراجعة الاختبار القصير الأول للصف الحادي عشر (متقدم)</div>
+      <div class="topic-badges" id="topicBadges"></div>
+    </header>
 
-    <!-- قائمة الأقسام -->
-    <div id="menu" class="grid">
-      <div class="card lesson" onclick="openSection('p1')">
-        <div class="icon">📐</div>
-        <div class="title">الزوايا بين ٠° و ٩٠°</div>
-        <div class="sub">علاقات دقيقة على دائرة الوحدة وزوايا حادة</div>
-      </div>
-      <div class="card lesson" onclick="openSection('p2')">
-        <div class="icon">🎯</div>
-        <div class="title">زاوية الأساس (المرجعية)</div>
-        <div class="sub">تحويلات الزوايا وتحديد المرجعية في كل ربع</div>
-      </div>
-      <div class="card lesson" onclick="openSection('p3')">
-        <div class="icon">📊</div>
-        <div class="title">التمثيلات البيانية للدوال المثلثية</div>
-        <div class="sub">سعات ودورات وإزاحات وتحليل دقيق</div>
-      </div>
-      <div class="card lesson" onclick="openSection('p4')">
-        <div class="icon">⚖️</div>
-        <div class="title">المعادلات المثلثية</div>
-        <div class="sub">حلول متقدمة وهويات مزدوجة</div>
+    <div class="progress"><div class="bar" id="bar"></div></div>
+
+    <div class="card" id="card" aria-live="polite"></div>
+
+    <div class="actions">
+      <button class="btn secondary" id="prevBtn">السابق</button>
+      <div style="display:flex;gap:10px">
+        <button class="btn secondary" id="retryBtn" style="display:none">إعادة المحاولة</button>
+        <button class="btn" id="nextBtn">التالي</button>
+        <button class="btn" id="finishBtn">إنهاء الاختبار</button>
       </div>
     </div>
 
-    <!-- واجهة الاختبار -->
-    <div id="quiz" class="quiz card">
-      <div class="quiz-head">
-        <button class="back" onclick="backToMenu()">← رجوع</button>
-        <div class="bar">
-          <span id="counter">السؤال ١ من ١</span>
-          <div class="track"><div class="fill" id="fill"></div></div>
-          <span id="score" class="muted">النتيجة: ٠/٠</span>
-        </div>
-      </div>
-
-      <!-- شاشة البدء للقسم -->
-      <div id="startScreen" class="panel start-wrap">
-        <h3 id="sectionTitle" style="margin-top:0">العنوان</h3>
-        <p id="sectionNote" class="muted">سيتضمن هذا القسم مسائل متقدمة.</p>
-        <button class="btn" onclick="beginQuiz()">ابدأ</button>
-      </div>
-
-      <!-- أسئلة -->
-      <div id="qWrap" class="panel" style="display:none"></div>
-
-      <!-- ملخص -->
-      <div id="sum" class="score" style="display:none">
-        <h3>النتيجة النهائية</h3>
-        <div id="finalPct" style="font-size:1.8rem;margin:6px 0">٠٪</div>
-        <div id="finalMsg" class="muted">أحسنت!</div>
-        <button class="btn" onclick="backToMenu()" style="margin-top:10px;background:#6ea8ff">اختبار قسم آخر</button>
-      </div>
-    </div>
+    <div class="footer">يدعم RTL و MathJax • يحتوي على تلميح 💡 وتفسير 📘 لكل سؤال</div>
   </div>
-  <div id="fw" class="fireworks"></div>
 
-  <script>
-    /* الحالة العامة */
-    let SECTION = null, IDX = 0, SCORE = 0, ANSW = 0;
+<script>
+/* ========== بيانات الاختبار ========== */
+const QUIZ = {
+  quiz_title: "مراجعة الاختبار القصير الأول للصف الحادي عشر (متقدم)",
+  rtl: true,
+  topics: ["إكمال المربع","حل المعادلات الأكثر تعقيدًا","المتباينات التربيعية","تعريف الدالة والدالة المركبة","مجال ومدى الدوال"],
+  shuffle_questions: true,
+  show_explanations_after: "answer",
+  questions: [
+/* ==== 30 سؤال (نفس المحتوى المنسّق كما طلبت) ==== */
+{id:"Q1",type:"mcq",skill:"إكمال المربع",
+question:"اكتب \\(س² − 10س + 35\\) في الصورة \\((س − أ)² + ب\\). اختر القيم الصحيحة لـ\\(أ, ب\\).",
+choices:["أ = 5 ، ب = 10","أ = 10 ، ب = 35","أ = −5 ، ب = 10","أ = 5 ، ب = −10"],
+answer_index:0,
+hint:"أكمل مربع \\(س² − 10س\\): أضف واطرح \\(25\\).",
+explanation:"\\(س² − 10س = (س−5)² − 25\\) ⇒ \\(س² − 10س + 35 = (س−5)² + 10\\) فـ\\(أ=5, ب=10\\)."},
+{id:"Q2",type:"mcq",skill:"إكمال المربع",
+question:"لتكن \\(د(س)=س² − 3س − 4\\). اكتبها في الصورة \\((س − ل)² + ك\\) ثم اختر \\(ل, ك\\).",
+choices:["ل = \\(\\dfrac{3}{2}\\) ، ك = \\(−\\dfrac{25}{4}\\)","ل = 3 ، ك = −4","ل = \\(\\dfrac{3}{2}\\) ، ك = \\(+\\dfrac{25}{4}\\)","ل = −\\(\\dfrac{3}{2}\\) ، ك = \\(−\\dfrac{25}{4}\\)"],
+answer_index:0,
+hint:"أكمل مربع \\(س²−3س\\) بإضافة وطرح \\(\\dfrac{9}{4}\\).",
+explanation:"\\(س²−3س=(س−\\dfrac{3}{2})²−\\dfrac{9}{4}\\) لذا \\(د(س)=(س−\\dfrac{3}{2})²−\\dfrac{25}{4}\\)."},
+{id:"Q3",type:"mcq",skill:"متباينة تربيعية",
+question:"حل المتباينة \\(س² − 9س + 18 < 0\\).",
+choices:["س < 3 أو س > 6","3 < س < 6","س ≥ 6","س ≤ 3"],
+answer_index:1,
+hint:"حلِّل: \\(س² − 9س + 18=(س−3)(س−6)\\).",
+explanation:"الإشارة سالبة بين الجذرين: \\(3<س<6\\)."},
+{id:"Q4",type:"mcq",skill:"متباينة من تحليل",
+question:"حل المتباينة \\((س−2)(س+1) ≤ 0\\).",
+choices:["−1 ≤ س ≤ 2","س ≤ −1 أو س ≥ 2","−1 < س < 2","س ≥ −1 أو س ≤ 2"],
+answer_index:0,
+hint:"حاصل الضرب غير موجب بين الجذرين مع تضمينهما.",
+explanation:"الجذران \\(−1,2\\) ⇒ \\([-1,2]\\)."},
+{id:"Q5",type:"mcq",skill:"مجال ومدى (مقيد)",
+question:"لدالة تربيعية رأسها عند \\((0,−12)\\) ومجالها \\(−2 ≤ س ≤ 6\\)، وقيمة الدالة عند الطرفين \\(4\\). ما مداها؟",
+choices:["−12 ≤ د(س) ≤ 4","4 ≤ د(س) ≤ 12","−4 ≤ د(س) ≤ 12","د(س) ≥ −12"],
+answer_index:0,
+hint:"الصغرى عند الرأس، والكبرى عند الأطراف.",
+explanation:"المدى هو \\([−12,4]\\)."},
+{id:"Q6",type:"mcq",skill:"مدى/مجال من رأس القطع",
+question:"للدالة \\(ص=(س−3)² − 8\\) ما قيمة الصغرى والمدى؟",
+choices:["الصغرى −8 والمدى \\(ص ≥ −8\\)","الصغرى 8 والمدى \\(ص ≤ 8\\)","الصغرى −8 والمدى \\(ص ≤ −8\\)","الصغرى 8 والمدى \\(ص ≥ 8\\)"],
+answer_index:0,
+hint:"شكل رأسية لأعلى: القيمة عند الرأس هي الصغرى.",
+explanation:"الرأس \\((3,−8)\\) ⇒ المدى \\([−8,∞)\\)."},
+{id:"Q7",type:"mcq",skill:"إكمال المربع",
+question:"ظلِّل الصيغة المكافئة لـ \\(س² − 6س + 1\\):",
+choices:["1 + (س−3)²","8 − (س−3)²","(س−3)² − 8","9 − (س−3)²"],
+answer_index:2,
+hint:"أكمل مربع \\(س²−6س\\) بإضافة وطرح \\(9\\).",
+explanation:"\\(س²−6س+1=(س−3)²−9+1=(س−3)²−8\\)."},
+{id:"Q8",type:"mcq",skill:"مطابقة معاملات",
+question:"إذا \\(س² − 6س + ك = (س−3)² + ب\\) فاختر قيمة \\(ك\\) الصحيحة.",
+choices:["ك = 9","ك = −9","ك = 10","ك = −10"],
+answer_index:0,
+hint:"\\((س−3)²=س²−6س+9\\).",
+explanation:"بالمقارنة يلزم \\(ك=9\\) و\\(ب=0\\)."},
+{id:"Q9",type:"mcq",skill:"إكمال المربع – معلمة",
+question:"جد \\(أ\\) بحيث \\(س² − 6س + 1 = (س − أ)² − 8\\).",
+choices:["أ = −3","أ = 3","أ = 6","أ = −6"],
+answer_index:1,
+hint:"طابق معامل \\(س\\) في الطرفين.",
+explanation:"\\((س−أ)²−8=س²−2أ س+أ²−8\\) ⇒ ‎\\(−2أ=−6\\Rightarrow أ=3\\)."},
+{id:"Q10",type:"mcq",skill:"معادلة جذرية",
+question:"حل المعادلة \\(س − 2√{س} = 10\\).",
+choices:["س = 12 + 2√{11}","س = 25","س = 9","س = 15"],
+answer_index:0,
+hint:"ضع \\(√{س}=ن\\) ⇒ \\(ن² − 2ن − 10 = 0\\).",
+explanation:"الحل \\(ن=1+√{11}\\) ⇒ \\(س=12+2√{11}\\)."},
+{id:"Q11",type:"mcq",skill:"متباينات تربيعية",
+question:"ظلِّل حل المتباينة \\(س(س−3) ≥ 0\\).",
+choices:["س ≤ 0 ، س ≥ 3","−3 ≤ س ≤ 0","س > −3","0 ≤ س ≤ 3"],
+answer_index:0,
+hint:"الإشارة موجبة خارج الجذرين.",
+explanation:"الجذران 0 و3 ⇒ \\((−∞,0] \\cup [3,∞)\\)."},
+{id:"Q12",type:"mcq",skill:"إكمال المربع",
+question:"اكتب \\(ص = س² − 2س\\) في الصورة \\(ص=(س+أ)² + ل\\).",
+choices:["أ = −1 ، ل = −1","أ = +1 ، ل = −1","أ = −1 ، ل = +1","أ = +1 ، ل = +1"],
+answer_index:0,
+hint:"أكمل مربع \\(س²−2س\\) بإضافة وطرح \\(1\\).",
+explanation:"\\(س²−2س=(س−1)²−1=(س+(−1))²+(−1)\\)."},
+{id:"Q13",type:"mcq",skill:"مطابقة معاملات",
+question:"إذا \\(ص=س²−6س+ك=(س−3)²\\) فاختر قيمة \\(ك\\).",
+choices:["ك = −9","ك = 0","ك = 6","ك = 9"],
+answer_index:3,
+hint:"طوِّر \\((س−3)²\\).",
+explanation:"\\((س−3)²=س²−6س+9\\) ⇒ \\(ك=9\\)."},
+{id:"Q14",type:"mcq",skill:"إكمال المربع مع معامل",
+question:"اكتب \\(5س²+20س+55\\) في الصورة \\(أ(س+ب)²+ج\\).",
+choices:["أ=5 ، ب=2 ، ج=35","أ=5 ، ب=−2 ، ج=35","أ=1 ، ب=10 ، ج=55","أ=5 ، ب=2 ، ج= −35"],
+answer_index:0,
+hint:"اسحب 5 عاملًا ثم أكمل المربع.",
+explanation:"\\(5[(س+2)²−4]+55=5(س+2)²+35\\)."},
+{id:"Q15",type:"mcq",skill:"إكمال المربع",
+question:"العبارة \\(4س²+20س+5\\) في صورة مربع كامل هي \\((2س+5)²+ج\\). ظلِّل \\(ج\\).",
+choices:["10","20","−20","−10"],
+answer_index:2,
+hint:"طوّر \\((2س+5)²\\) ثم قارِن.",
+explanation:"\\((2س+5)²=4س²+20س+25\\) وللوصول إلى \\(+5\\) نطرح 20 ⇒ \\(ج=−20\\)."},
+{id:"Q16",type:"mcq",skill:"إكمال المربع مع عامل",
+question:"\\(2س²−12س+3\\) في صورة مربع كامل هي \\(2(س−3)²+ج\\). ما \\(ج\\)؟",
+choices:["15","36","−36","−15"],
+answer_index:3,
+hint:"أكمل داخل القوس ثم وزّع 2.",
+explanation:"\\(2[(س−3)²−9]+3=2(س−3)²−15\\) ⇒ \\(ج=−15\\)."},
+{id:"Q17",type:"mcq",skill:"معادلة جذرية",
+question:"حل \\(س − 4√{س} − 12 = 0\\).",
+choices:["س = 36","س = 4","س = −4","س = −36"],
+answer_index:0,
+hint:"ضع \\(√{س}=ن\\) ⇒ \\(ن²−4ن−12=0\\).",
+explanation:"\\(ن=6\\) أو \\(−2\\) ونأخذ الموجب ⇒ \\(س=36\\)."},
+{id:"Q18",type:"mcq",skill:"تحويلات تكعيبية",
+question:"أوجد جميع الحلول الحقيقية للمعادلة \\(س⁶ − 7س³ − 8 = 0\\).",
+choices:["س = 2 فقط","س = −1 فقط","س = 2 أو س = −1","لا حلول حقيقية"],
+answer_index:2,
+hint:"ضع \\(ت=س³\\) لتحصل على \\(ت² − 7ت − 8 = 0\\).",
+explanation:"\\((ت−8)(ت+1)=0\\) ⇒ \\(س=2\\) أو \\(س=−1\\)."},
+{id:"Q19",type:"mcq",skill:"تحليل رباعي",
+question:"حل \\(س⁴ + 2س² − 15 = 0\\) في \\(\\mathbb{R}\\).",
+choices:["س = ±√{3}","س = ±3","س = ±5","لا حلول حقيقية"],
+answer_index:0,
+hint:"ضع \\(ع=س²\\) ثم حل \\(ع²+2ع−15=0\\).",
+explanation:"\\((ع+5)(ع−3)=0\\) ⇒ \\(س²=3\\) أو \\(س²=−5\\) ⇒ \\(±√{3}\\)."},
+{id:"Q20",type:"mcq",skill:"متباينة تكعيبية",
+question:"حل المتباينة \\(س³ − 10س + 24 ≥ 0\\).",
+choices:["س ≥ −4","س ≤ −4","س ≥ 4","−4 < س < 4"],
+answer_index:0,
+hint:"حلّل: \\(س³−10س+24=(س+4)(س²−4س+6)\\).",
+explanation:"الجزء التربيعي موجب دائمًا ⇒ التغيّر عند \\(−4\\) ⇒ الحل \\(س≥−4\\)."},
+{id:"Q21B",type:"mcq",skill:"تركيب دوال",
+question:"لتكن \\(د(س)=2س+3\\) و \\(هـ(س)=\\dfrac{12}{1−س}\\) مع \\(س≠1\\). أوجد \\((هـ∘د)(س)\\).",
+choices:["\\(\\dfrac{12}{1−(2س+3)}=\\dfrac{−6}{س+1}\\)","\\(\\dfrac{12}{1−2س}+3\\)","\\(\\dfrac{12}{1−س}+3\\)","\\(\\dfrac{12}{1−(2س−3)}\\)"],
+answer_index:0,
+hint:"عوِّض \\(2س+3\\) مكان \\(س\\) في \\(هـ\\).",
+explanation:"\\((هـ∘د)(س)=\\dfrac{12}{1−(2س+3)}=\\dfrac{−6}{س+1}\\)."},
+{id:"Q22",type:"mcq",skill:"تركيب دوال",
+question:"إذا كان \\(هـ(س)=1−2س\\) و\\(د(س)=س³\\)، فأوجد \\((د∘هـ)(1)\\).",
+choices:["1","\\(\\dfrac{1}{2}\\)","−1","−\\(\\dfrac{1}{2}\\)"],
+answer_index:2,
+hint:"احسب \\(هـ(1)\\) ثم كبّر الأس.",
+explanation:"\\(هـ(1)=−1\\) ⇒ \\((د∘هـ)(1)=(−1)³=−1\\)."},
+{id:"Q23",type:"mcq",skill:"تركيب دوال من تعريفات",
+question:"لتكن \\(هـ(س)=س²\\) و\\(د(س)=2س\\). احسب \\(د(هـ(2))\\).",
+choices:["2","4","8","16"],answer_index:2,
+hint:"ابدأ بـ \\(هـ(2)=2²\\).",
+explanation:"\\(هـ(2)=4\\) ثم \\(د(4)=8\\)."},
+{id:"Q24B",type:"mcq",skill:"مجال/مدى مع تقييد",
+question:"لتكن \\(د(س)=س²−4\\). إذا كان المدى \\(−4 ≤ د(س) ≤ 5\\) فحدِّد المجال \\([أ, ب]\\).",
+choices:["أ = −3 ، ب = 3","أ = −5 ، ب = 5","أ = −1 ، ب = 1","أ = 0 ، ب = 3"],
+answer_index:0,
+hint:"حل \\(س²−4=5\\).",
+explanation:"\\(س²=9\\Rightarrow س=±3\\) ⇒ \\([−3,3]\\)."},
+{id:"Q25B",type:"mcq",skill:"مدى من تمثيل عام",
+question:"لدالة أدنى قيمة لها \\(−10\\) وتمتد لأعلى بلا حد، ما مداها؟",
+choices:["\\(−10 ≤ د(س) ≤ 9\\)","\\(0 ≤ د(س) ≤ 9\\)","\\(2 ≤ د(س) ≤ 9\\)","\\(د(س) ≥ −10\\)"],
+answer_index:3,
+hint:"السهم الصاعد يعني لا حد أعلى.",
+explanation:"المدى \\([−10,∞)\\)."},
+{id:"Q26",type:"mcq",skill:"مجال ومدى مربعية مقيدة",
+question:"إذا كانت \\(د(س)=4س²−2\\) ومجالها \\(−2 ≤ س ≤ 3\\)، فأي البدائل يعبّر عن المدى؟",
+choices:["\\(−2 ≤ د(س) ≤ 34\\)","\\(−2 ≤ د(س) ≤ 14\\)","\\(0 ≤ د(س) ≤ 34\\)","\\(−14 ≤ د(س) ≤ 34\\)"],
+answer_index:0,
+hint:"أقل قيمة عند \\(س=0\\).",
+explanation:"\\(د(0)=−2\\), \\(د(−2)=14\\), \\(د(3)=34\\) ⇒ \\([−2,34]\\)."},
+{id:"Q27",type:"mcq",skill:"تمثيل علاقات",
+question:"أي العلاقات التالية واحد إلى متعدِّد بالنسبة لـ\\(س→ص\\)؟",
+choices:["\\(ص=س+4\\)","\\(ص=س²+4\\)","\\(ص=س³+4\\)","\\(س=ص²+4\\)"],
+answer_index:3,
+hint:"نبحث عن علاقة تعطي لقيمة س الواحدة قيمتين لـ ص.",
+explanation:"\\(س=ص²+4\\Rightarrow ص=±√{س−4}\\) ⇒ ليست دالة من س إلى ص."},
+{id:"Q28",type:"mcq",skill:"تركيب دوال (نتيجة نظيفة)",
+question:"إذا كان \\(د(س)=√{س+3} − 2\\) و\\(هـ(س)=س²+6\\). أوجد \\((د∘هـ)(4)\\).",
+choices:["1","2","3","4"],
+answer_index:2,
+hint:"احسب \\(هـ(4)\\) ثم عوِّض في \\(د\\).",
+explanation:"\\(هـ(4)=22\\Rightarrow د(22)=√{25}−2=3\\)."},
+{id:"Q29",type:"mcq",skill:"تركيب دوال مع جذر",
+question:"لتكن \\(هـ(س)=√{س}\\) و\\(ل(س)=س+5\\). أي تعبير يمثل \\((هـ∘ل)(س)\\)؟",
+choices:["√{س}+5","√{س+5}","(√{س})+5","س+√{5}"],
+answer_index:1,
+hint:"عوِّض \\(س+5\\) داخل الجذر.",
+explanation:"\\((هـ∘ل)(س)=هـ(س+5)=√{س+5}\\)."},
+{id:"Q30",type:"mcq",skill:"تحديد قيمة تركيب",
+question:"إذا كان \\(هـ(س)=س²\\) و\\(د(س)=2س\\)، فأوجد \\((هـ∘د)(2)\\).",
+choices:["2","4","8","16"],
+answer_index:3,
+hint:"\\(د(2)=4\\) ثم \\(هـ(4)=16\\).",
+explanation:"الناتج \\(16\\)."}
+]};
 
-    /* بيانات الأسئلة “متقدمة” — صياغة رياضية عبر MathJax (لا توجد علامة /) */
-    const BANK = {
-      p1: {
-        title: 'الزوايا بين ٠° و ٩٠° — مسائل متقدمة',
-        note: 'اعتمد على دائرة الوحدة وهويات دقيقة.',
-        qs: [
-          // 1
-          q(
-            'إذا كانت \\(\\jas\\,\\theta=\\dfrac{\\sqrt{٣}}{٤}\\) و \\(\\theta\\) حادة، فأوجد \\(\\dfrac{1-\\,\\jtas\\,\\theta}{\\tas\\,\\theta}\\).',
-            ['\\(\\sqrt{٣}-\\dfrac{٣}{٢}\\)','\\(\\dfrac{٢}{\\sqrt{٣}}\\)','\\(\\dfrac{\\sqrt{٣}}{٣}\\)','\\(\\dfrac{٣}{٢}-\\sqrt{٣}\\)'],
-            0,
-            'من \\(\\jas=\\sqrt{٣}/٤\\Rightarrow \\jtas=\\sqrt{1-3/16}=\\dfrac{\\sqrt{١٣}}{٤}\\) و \\(\\tas=\\jas/\\jtas=\\sqrt{٣/١٣}\\). بالتعويض والتبسيط نحصل على القيمة المعطاة.',
-            'عند التعويض: \\(\\dfrac{1-\\sqrt{١٣}/٤}{\\sqrt{٣/١٣}}=\\sqrt{٣}-\\dfrac{٣}{٢}\\).'
-          ),
-          // 2
-          q(
-            'لتكن \\(\\jas\\,\\theta\\cdot\\jtas\\,\\theta=\\dfrac{\\sqrt{٣}}{٨}\\). أوجد \\(\\dfrac{\\jas^{2}\\theta+\\jtas^{2}\\theta}{\\jas\\,\\theta\\,\\jtas\\,\\theta}\\).',
-            ['\\(\\dfrac{١٦}{٣}\\)','\\(٤\\)','\\(\\dfrac{٨}{\\sqrt{٣}}\\)','\\(\\dfrac{١٢}{٣}\\)'],
-            0,
-            'نستخدم \\(\\jas^{2}+\\jtas^{2}=1\\) و \\(xy=\\sqrt{٣}/٨\\Rightarrow \\dfrac{x^{2}+y^{2}}{xy}=\\dfrac{1}{xy}=\\dfrac{٨}{\\sqrt{٣}}\\). بالعقلنة \\(=\\dfrac{١٦}{٣}\\).',
-            'النتيجة \\(١٦/٣\\).'
-          ),
-          // 3
-          q(
-            'إذا كانت \\(\\tas\\,\\theta=\\dfrac{١}{\\sqrt{٣}}\\) حادة، فاحسب \\(\\dfrac{1-\\,\\jas\\,\\theta}{1+\\,\\jas\\,\\theta}\\).',
-            ['\\(\\dfrac{١}{٣}\\)','\\(٢-\\sqrt{٣}\\)','\\(\\sqrt{٣}-١\\)','\\(\\dfrac{١}{\\sqrt{٣}}\\)'],
-            0,
-            'من \\(\\tas=1/\\sqrt{٣}\\Rightarrow (\\jas,\\jtas)=(1/2,\\sqrt{٣}/2)\\).',
-            'إذن الكسر يساوي \\(\\dfrac{1-1/2}{1+1/2}=1/3\\).'
-          ),
-          // 4
-          q(
-            'زاوية حادة \\(\\theta\\) تحقق \\(2\\,\\jas^{2}\\theta=\\jtas\\,\\theta\\). أوجد \\(\\jas\\,\\theta\\).',
-            ['\\(\\dfrac{\\sqrt{٢}}{٢}\\)','\\(\\dfrac{١}{٢}\\)','\\(\\dfrac{\\sqrt{٣}}{٢}\\)','\\(\\dfrac{\\sqrt{٦}-\\sqrt{٢}}{٤}\\)'],
-            0,
-            'ضع \\(x=\\jas^{2}\\theta\\). تصبح \\(2x=\\sqrt{1-x}\\Rightarrow4x^{2}+x-1=0\\Rightarrow x=1/2\\).',
-            'إذن \\(\\jas\\theta=\\sqrt{x}=\\sqrt{٢}/٢\\).'
-          ),
-          // 5
-          q(
-            'إذا كان \\(\\dfrac{1-\\,\\jtas\\,\\theta}{1+\\,\\jtas\\,\\theta}=\\dfrac{١}{٣}\\) والحل حادّ، فأوجد \\(\\jas\\,\\theta\\).',
-            ['\\(\\dfrac{١}{٢}\\)','\\(\\dfrac{\\sqrt{٣}}{٢}\\)','\\(\\dfrac{\\sqrt{٢}}{٢}\\)','\\(\\dfrac{\\sqrt{٦}-\\sqrt{٢}}{٤}\\)'],
-            0,
-            'من المعادلة نجد \\(\\jtas\\theta=1/2\\Rightarrow \\jas\\theta=\\sqrt{1-1/4}=\\sqrt{٣}/٢\\) أو \\(١/٢\\). الحاد الذي يُوافق الترتيب هنا يعطي \\(١/٢\\).',
-            'القيمة \\(١/٢\\).'
-          ),
-          // 6
-          q(
-            'إذا كانت \\(\\jas\\,\\theta=\\dfrac{٣}{٥}\\) فأوجد \\(\\jtas\\,\\theta\\) و \\(\\tas\\,\\theta\\).',
-            ['\\(\\dfrac{٤}{٥}\\) و \\(\\dfrac{٣}{٤}\\)','\\(\\dfrac{٤}{٥}\\) و \\(\\dfrac{٤}{٣}\\)','\\(\\dfrac{٥}{٣}\\) و \\(\\dfrac{٤}{٣}\\)','\\(\\dfrac{٤}{٥}\\) و \\(\\dfrac{٣}{٥}\\)'],
-            0,
-            'مثلث ٣–٤–٥ يعطي المجاور ٤، الوتر ٥.',
-            'إذن \\(\\jtas=٤/٥\\) و \\(\\tas=(٣/٥)/(٤/٥)=٣/٤\\).'
-          ),
-          // 7
-          q(
-            'لتكن \\(\\jas\\,\\theta(\\jtas\\,\\theta+\\jas\\,\\theta)=\\dfrac{\\sqrt{٣}}{٤}\\). أوجد \\(\\tas\\,\\theta\\).',
-            ['\\(\\dfrac{١}{\\sqrt{٣}}\\)','\\(١\\)','\\(\\sqrt{٣}\\)','\\(\\dfrac{٢}{\\sqrt{٣}}\\)'],
-            0,
-            'الزوج \\((1/2,\\sqrt{٣}/2)\\) يحقق الشرط.',
-            'ومن ثم \\(\\tas = (1/2)/(\\sqrt{٣}/2)=1/\\sqrt{٣}\\).'
-          ),
-          // 8
-          q(
-            'إذا كان \\(\\dfrac{\\jas\\,\\theta}{1+\\jtas\\,\\theta}=\\dfrac{١}{\\sqrt{٣}}\\)، فأوجد \\(\\tas\\,\\theta\\) (الحاد).',
-            ['\\(\\dfrac{١}{\\sqrt{٣}}\\)','\\(١\\)','\\(\\sqrt{٣}\\)','\\(\\dfrac{٢}{\\sqrt{٣}}\\)'],
-            0,
-            'بوضع \\(c=\\jtas\\theta\\Rightarrow \\jas=\\sqrt{1-c^{2}}\\). بالحل داخل (0,1) نجد \\(c=\\sqrt{٣}/٢\\) و \\(\\jas=1/2\\).',
-            'إذن \\(\\tas=\\jas/\\jtas=1/\\sqrt{٣}\\).'
-          ),
-          // 9
-          q(
-            'إذا كانت \\(\\jas\\,\\theta\\cdot\\jtas\\,\\theta=\\dfrac{١}{٥}\\)، فأوجد \\(\\dfrac{\\jas^{2}\\theta-\\jtas^{2}\\theta}{\\jas\\,\\theta\\,\\jtas\\,\\theta}\\).',
-            ['\\(\\dfrac{٢}{٥}\\)','\\(\\dfrac{١}{٥}\\)','\\(\\dfrac{٣}{٥}\\)','\\(\\dfrac{٤}{٥}\\)'],
-            0,
-            'نحوّل البسط إلى \\((\\jas-\\jtas)(\\jas+\\jtas)\\). بعد القسمة على \\(\\jas\\jtas\\) نحصل على \\(\\tas-\\dfrac{\\jtas}{\\jas}\\). مع الشرط في الربع الأول تكون القيمة \\(٢/٥\\).',
-            'القيمة \\(٢/٥\\).'
-          ),
-          // 10
-          q(
-            'احسب \\(\\dfrac{1+\\jtas\\,\\theta}{1-\\jtas\\,\\theta}\\) إذا كانت \\(\\jas\\,\\theta=\\dfrac{\\sqrt{٣}}{٢}\\).',
-            ['\\(٣\\)','\\(٣-\\sqrt{٣}\\)','\\(٢+\\sqrt{٣}\\)','\\(٢-\\sqrt{٣}\\)'],
-            0,
-            'من الدائرة: \\(\\jtas=1/2\\).',
-            'إذن الكسر \\(=(1+1/2)/(1-1/2)=3\\).'
-          ),
-          // 11
-          q(
-            'زاوية حادة تحقق \\(\\jtas\\,\\theta=2\\,\\jas^{2}\\theta\\). احسب \\(\\tas\\,\\theta\\).',
-            ['\\(١\\)','\\(\\dfrac{١}{\\sqrt{٣}}\\)','\\(\\sqrt{٣}\\)','\\(٢\\)'],
-            0,
-            'كما في (٢): ينتج \\(\\jas=\\jtas=\\sqrt{٢}/٢\\).',
-            'إذن \\(\\tas=1\\).'
-          ),
-          // 12
-          q(
-            'إذا كان \\((\\jas\\,\\theta-\\jtas\\,\\theta)^{2}=\\dfrac{١}{٢}\\)، فأوجد \\(\\tas\\,\\theta\\).',
-            ['\\(١\\)','\\(\\dfrac{١}{\\sqrt{٣}}\\)','\\(\\sqrt{٣}\\)','\\(\\dfrac{٢}{\\sqrt{٣}}\\)'],
-            0,
-            'بالتوسيع واستخدام \\(\\jas^{2}+\\jtas^{2}=1\\) ينتج \\(\\jas\\,\\jtas=1/4\\).',
-            'إذن \\(\\tas=1\\).'
-          ),
-        ]
-      },
+/* ========== منطق التطبيق ========== */
+function shuffle(arr){return arr.map(v=>[Math.random(),v]).sort((a,b)=>a[0]-b[0]).map(x=>x[1]);}
+const state = {
+  idx:0,
+  order: QUIZ.shuffle_questions ? shuffle([...QUIZ.questions.keys()]) : [...QUIZ.questions.keys()],
+  answers: Array(QUIZ.questions.length).fill(null),
+  correctness: Array(QUIZ.questions.length).fill(false)
+};
 
-      p2: {
-        title: 'زاوية الأساس — مسائل متقدمة',
-        note: 'تركيز على تحويل الزوايا الكبيرة/السالبة وتحديد الإشارة.',
-        qs: [
-          q('ما الزاوية المرجعية لـ \\(\\;\\theta=١١٤٠°\\;\\)?',['\\(٢٠°\\)','\\(٤٠°\\)','\\(٦٠°\\)','\\(٨٠°\\)'],0,
-            'نطرح مضاعفات ٣٦٠°: ١١٤٠−٣×٣٦٠=٦٠°. في الربع الأول المرجعية = ٦٠°.',
-            'الجواب ٢٠° غير صحيح؛ الصحيح ٦٠°.'),
-          q('إذا كانت \\(\\theta=-٧٣٥°\\) فأوجد مرجعيتها.',['\\(٣٥°\\)','\\(٤٥°\\)','\\(٥٥°\\)','\\(٦٥°\\)'],1,
-            'أضف ٣×٣٦٠° ⇐ -٧٣٥+١٠٨٠=٣٤٥° (ربع رابع) ⇒ المرجعية = ٣٦٠-٣٤٥=١٥°، ثم تحقق؛ (خيار ٤٥° مثال تشتيت).',
-            'المرجعية الحقيقية ١٥°؛ يمكنك تعديل الخيارات إن رغبت.'),
-          q('زاوية في الربع الثالث مرجعيتها \\(\\;\\alpha=٣٥°\\). ما \\(\\theta\\) الموافقة؟',
-            ['\\(٢١٥°\\)','\\(١٤٥°\\)','\\(٣٢٥°\\)','\\(٣٥°\\)'],0,
-            'في الربع الثالث: \\(\\theta=١٨٠°+\\alpha\\).','=٢١٥°'),
-          q('كم زاوية بين \\(−٧٢٠°\\) و \\(٧٢٠°\\) مرجعيتها \\(٤٥°\\)؟',['\\(٨\\)','\\(١٢\\)','\\(١٦\\)','\\(٢٠\\)'],2,
-            'في كل دورة ٤ زوايا بهذه المرجعية. المجال يغطي أربع دورات كاملة.',
-            '٤×٤=١٦.'),
-          q('إذا كانت \\(\\theta=٢١٠°\\) فما إشارة \\(\\jas\\theta+\\jtas\\theta\\)؟',['سالبة','موجبة','صفر','غير معرفة'],0,
-            'ربع ثالث: الجيب سالب والجتا سالب، المجموع سالب.','سالبة'),
-          q('أي القيم تصح: \\(\\jtas(\\,٣٣٠°\\,)=?\\)',['\\(\\sqrt{٣}/٢\\)','\\(-\\sqrt{٣}/٢\\)','\\(١/٢\\)','\\(-١/٢\\)'],3,
-            '٣٣٠° رابع بمرجعية ٣٠°، والجتا موجب ⇒  \\(\\jtas=\\cos330=\\cos30=\\sqrt{٣}/٢\\) لكن الإشارة موجبة ⇒ الخيار (١).',
-            'الصحيح (١).'),
-        ]
-      },
+const el = {
+  card: document.getElementById('card'),
+  bar: document.getElementById('bar'),
+  prev: document.getElementById('prevBtn'),
+  next: document.getElementById('nextBtn'),
+  finish: document.getElementById('finishBtn'),
+  retry: document.getElementById('retryBtn'),
+  topicBadges: document.getElementById('topicBadges')
+};
 
-      p3: {
-        title: 'التمثيلات البيانية — مسائل متقدمة',
-        note: 'سعات/دورات/إزاحات وتحويلات مركبة.',
-        qs: [
-          q('لدالة \\(\\;y=2\\,\\jas(3x-\\pi/3)+1\\;\\) احسب الدورة والسعة والإزاحة الأفقية.',
-            ['\\(\\text{سعة }2,\\ \\text{دورة }\\tfrac{2\\pi}{3},\\ \\text{إزاحة }\\tfrac{\\pi}{9}\\,\\text{يمينًا}\\)',
-             '\\(\\text{سعة }1,\\ \\text{دورة }\\tfrac{2\\pi}{3},\\ \\text{إزاحة }\\tfrac{\\pi}{9}\\,\\text{يسارًا}\\)',
-             '\\(\\text{سعة }2,\\ \\text{دورة }\\tfrac{\\pi}{3},\\ \\text{إزاحة }\\tfrac{\\pi}{3}\\)',
-             '\\(\\text{سعة }3,\\ \\text{دورة }\\tfrac{2\\pi}{3},\\ \\text{بدون إزاحة}\\)'],
-            0,
-            'السعة |2|. المعامل الزاوي 3 ⇒ الدورة \\(2\\pi/3\\). داخل القوس: \\(3x-\\pi/3=3(x-\\pi/9)\\) ⇒ إزاحة يمين \\(\\pi/9\\).',
-            'الخيار (١).'),
-          q('لدالة \\(y=\\jtas(x+\\pi)+2\\) حدِّد المدى.',
-            ['\\([١,٣]\\)','\\([-١,١]\\)','\\((1,\\infty)\\)','\\((−\\infty,\\infty)\\)'],
-            0,
-            'مدى \\(\\cos\\) هو \\([-1,1]\\). بعد الإزاحة الرأسية +2 يصبح \\([1,3]\\).',
-            'الخيار (١).'),
-          q('لدالة \\(y=\\tas(\\tfrac{x}{2})\\) ما الدورة؟',['\\(2\\pi\\)','\\(\\pi\\)','\\(\\tfrac{\\pi}{2}\\)','\\(4\\pi\\)'],0,
-            'دورة \\(\\tan(bx)=\\pi/b\\Rightarrow b=1/2\\Rightarrow \\pi/(1/2)=2\\pi\\).',
-            '٢π.'),
-          q('نقطة العظمى الأولى لـ \\(y=2\\,\\jtas(x-\\pi/6)+3\\) هي:',
-            ['\\((\\pi/6,5)\\)','\\((0,5)\\)','\\((\\pi/3,5)\\)','\\((\\pi/2,5)\\)'],
-            0,'العظمى عندما \\(\\cos\\)=1 ⇒ \\(x-\\pi/6=2k\\pi\\Rightarrow x=\\pi/6\\). القيمة 5.','الخيار (١).'),
-          q('صفر \\(y=\\jas(4x)\\) في \\([0,\\pi]\\) يقع عند:',
-            ['\\(x=0,\\ \\pi/4,\\ \\pi/2,\\ 3\\pi/4,\\ \\pi\\)',
-             '\\(x=0,\\ \\pi/2,\\ \\pi\\)',
-             '\\(x=\\pi/4,\\ 3\\pi/4\\)',
-             '\\(x=\\pi/2\\) فقط'],
-            0,
-            '\\(\\sin(4x)=0\\Rightarrow 4x=n\\pi\\Rightarrow x=n\\pi/4\\) داخل \\([0,\\pi]\\) خمسة نقاط.',
-            'الخيار (١).'),
-          q('|\\jtas x| دورتها:',['\\(\\pi\\)','\\(2\\pi\\)','\\(\\tfrac{\\pi}{2}\\)','\\(4\\pi\\)'],0,
-            'القيمة المطلقة تختصر التماثل ⇒ تتكرر كل \\(\\pi\\).','π.'),
-        ]
-      },
+QUIZ.topics.forEach(t=>{
+  const b=document.createElement('span'); b.className='badge'; b.textContent=t; el.topicBadges.appendChild(b);
+});
 
-      p4: {
-        title: 'المعادلات المثلثية — مستوى متقدم',
-        note: 'حلول بدلالة \\(\\pi\\) وهويات مزدوجة.',
-        qs: [
-          q('حل \\(\\jas x=\\tfrac{1}{2}\\) في \\([0,2\\pi]\\).',
-            ['\\(x=\\tfrac{\\pi}{6},\\tfrac{5\\pi}{6}\\)','\\(x=\\tfrac{\\pi}{3},\\tfrac{2\\pi}{3}\\)','\\(x=\\tfrac{\\pi}{4},\\tfrac{3\\pi}{4}\\)','\\(x=\\tfrac{\\pi}{2},\\pi\\)'],
-            0,'\\(\\sin x=1/2\\Rightarrow x=\\pi/6,5\\pi/6\\).','(١)'),
-          q('حل \\(\\jtas(2x)=0\\) في \\([0,\\pi]\\).',
-            ['\\(x=\\tfrac{\\pi}{4},\\tfrac{3\\pi}{4}\\)','\\(x=\\tfrac{\\pi}{2}\\)','\\(x=0,\\pi\\)','\\(x=\\tfrac{\\pi}{6},\\tfrac{5\\pi}{6}\\)'],
-            0,'\\(\\cos 2x=0\\Rightarrow 2x=\\pi/2+k\\pi\\Rightarrow x=\\pi/4,3\\pi/4\\).','(١)'),
-          q('حل \\(\\tas x=\\dfrac{1}{\\sqrt{3}}\\) في \\([0,\\pi]\\).',
-            ['\\(x=\\tfrac{\\pi}{6}\\)','\\(x=\\tfrac{5\\pi}{6}\\)','\\(x=\\tfrac{7\\pi}{6}\\)','\\(x=\\tfrac{11\\pi}{6}\\)'],
-            0,'زاوية مرجعية \\(\\pi/6\\) والس interval يعطي الجواب الأول فقط.','(١)'),
-          q('حل \\(2\\,\\jas^{2}x-\\jtas x-1=0\\).',
-            ['\\(x=\\tfrac{\\pi}{6},\\tfrac{5\\pi}{6}\\) أو \\(x=\\tfrac{\\pi}{2}+2k\\pi\\)',
-             '\\(x=\\tfrac{\\pi}{3},\\tfrac{2\\pi}{3}\\)','لا حلول','عام'],
-            0,'ضع \\(s=\\sin x\\Rightarrow 2s^{2}-\\sqrt{1-s^{2}}-1=0\\) أو استبدال \\(\\cos x=1-2\\sin^{2}(x/2)\\) … ينتج حلول قياسية \\(\\sin x=1/2\\) أو \\(\\sin x=1\\).','(١)'),
-          q('حل \\(\\jtas^{2}x-\\jas^{2}x=\\tfrac{1}{2}\\).',
-            ['\\(x=\\tfrac{\\pi}{6}+k\\tfrac{\\pi}{2}\\)','\\(x=\\tfrac{\\pi}{4}+k\\tfrac{\\pi}{2}\\)','\\(x=\\tfrac{\\pi}{3}+k\\tfrac{\\pi}{2}\\)','\\(x=\\tfrac{\\pi}{12}+k\\tfrac{\\pi}{6}\\)'],
-            0,'لأن \\(\\cos 2x=1/2\\Rightarrow 2x=\\pm \\pi/3+2k\\pi\\).','(١)'),
-          q('حل \\(\\jas(3x)=\\tfrac{1}{2}\\) في \\([0,\\tfrac{2\\pi}{3}]\\).',
-            ['\\(x=\\tfrac{\\pi}{18},\\tfrac{5\\pi}{18}\\)','\\(x=\\tfrac{\\pi}{6},\\tfrac{\\pi}{2}\\)','\\(x=\\tfrac{\\pi}{9},\\tfrac{2\\pi}{9}\\)','\\(x=\\tfrac{\\pi}{12},\\tfrac{5\\pi}{12}\\)'],
-            0,'\\(3x=\\pi/6\\) أو \\(5\\pi/6\\).','(١)'),
-        ]
+function render(){
+  const qi = state.order[state.idx];
+  const q = QUIZ.questions[qi];
+
+  el.bar.style.width = `${(state.idx)/ (QUIZ.questions.length) * 100}%`;
+
+  el.card.innerHTML = `
+    <div class="q-head">
+      <div class="q-num">${state.idx+1}/${QUIZ.questions.length}</div>
+      <div class="q-text">${q.question}</div>
+      <div class="icons">
+        <button class="icon" id="hintBtn">💡 تلميح</button>
+        <button class="icon" id="expBtn">📘 تفسير</button>
+      </div>
+    </div>
+
+    <div class="hint-panel" id="hintPanel">${q.hint || "لا يوجد تلميح."}</div>
+    <div class="exp-panel" id="expPanel">${q.explanation || "—"}</div>
+
+    <div class="choices" id="choices">
+      ${q.choices.map((c,i)=>`
+        <label class="choice ${ state.answers[qi]!=null ? (i===q.answer_index ? 'correct' : (i===state.answers[qi]?'wrong':'')) : ''}">
+          <input type="radio" name="c" value="${i}" ${state.answers[qi]==i?'checked':''} ${state.answers[qi]!=null?'disabled':''}/>
+          <div class="c-text">${c}</div>
+        </label>
+      `).join('')}
+    </div>
+
+    <div class="status" id="status"></div>
+  `;
+
+  // تفعيل MathJax
+  if (window.MathJax && window.MathJax.typesetPromise) MathJax.typesetPromise();
+
+  // الأزرار المساعدة
+  document.getElementById('hintBtn').onclick = ()=> {
+    const p = document.getElementById('hintPanel');
+    p.style.display = p.style.display==='block' ? 'none' : 'block';
+  };
+  document.getElementById('expBtn').onclick = ()=> {
+    const p = document.getElementById('expPanel');
+    p.style.display = p.style.display==='block' ? 'none' : 'block';
+  };
+
+  // خيارات
+  [...el.card.querySelectorAll('input[name="c"]')].forEach(inp=>{
+    inp.addEventListener('change',()=>{
+      const chosen = Number(inp.value);
+      state.answers[qi]=chosen;
+      const correct = (chosen===q.answer_index);
+      state.correctness[qi]=correct;
+
+      // تلوين
+      const labels = [...el.card.querySelectorAll('.choice')];
+      labels.forEach((lab,i)=>{
+        if(i===q.answer_index) lab.classList.add('correct');
+        if(i===chosen && i!==q.answer_index) lab.classList.add('wrong');
+        lab.querySelector('input').disabled=true;
+      });
+
+      // رسالة
+      const st = document.getElementById('status');
+      st.innerHTML = correct ? `<span class="ok">✓ إجابة صحيحة</span>` :
+        `<span class="bad">✗ إجابة غير صحيحة</span>`;
+
+      // إظهار التفسير مباشرة بعد الإجابة إن رغبت
+      if(QUIZ.show_explanations_after==="answer"){
+        const exp = document.getElementById('expPanel'); exp.style.display='block';
       }
-    };
+    });
+  });
 
-    /* ========== محرك العرض ========== */
-    const $ = id => document.getElementById(id);
+  // أزرار التنقّل
+  el.prev.disabled = state.idx===0;
+  el.next.disabled = state.idx>=QUIZ.questions.length-1;
+}
 
-    function openSection(key){
-      SECTION = key; IDX = 0; SCORE = 0; ANSW = 0;
-      $('menu').style.display='none';
-      $('quiz').style.display='block';
-      $('sum').style.display='none';
-      $('qWrap').style.display='none';
-      $('startScreen').style.display='block';
-      $('sectionTitle').textContent = BANK[key].title;
-      $('sectionNote').textContent  = BANK[key].note;
-      updateHUD();
-    }
-    function beginQuiz(){
-      $('startScreen').style.display='none';
-      $('qWrap').style.display='block';
-      renderQ();
-    }
-    function backToMenu(){
-      $('quiz').style.display='none';
-      $('menu').style.display='grid';
-      $('fill').style.width='0%';
-    }
-    function updateHUD(){
-      const total = BANK[SECTION].qs.length || 1;
-      $('counter').textContent = `السؤال ${toAr(Math.min(IDX+1,total))} من ${toAr(total)}`;
-      $('score').textContent   = `النتيجة: ${toAr(SCORE)}/${toAr(ANSW)}`;
-      $('fill').style.width    = (IDX/total*100)+'%';
-    }
-    function renderQ(){
-      const pack = BANK[SECTION]; const q = pack.qs[IDX];
-      if(!q){ showSum(); return; }
-      $('qWrap').innerHTML = `
-        <div class="qnum">السؤال ${toAr(IDX+1)}</div>
-        <div class="qtext">${q.t}</div>
-        <div id="opts" class="opts">
-          ${q.o.map((v,i)=>`<div class="opt" onclick="choose(${i})">${v}</div>`).join('')}
-        </div>
-        <button class="btn" style="margin-top:10px;background:#f59e0b" onclick="toggleHint()">💡 تلميح</button>
-        <div id="hint" class="hint"><b>تلميح:</b> ${q.h}</div>
-        <div id="exp" class="exp"><b>التفسير:</b> ${q.e}</div>
-      `;
-      // إعادة تصيير MathJax بعد حقن HTML
-      MathJax.typesetPromise();
-      updateHUD();
-    }
-    function choose(i){
-      const q = BANK[SECTION].qs[IDX];
-      const opts = Array.from(document.querySelectorAll('#opts .opt'));
-      opts.forEach(el=>el.classList.add('disabled'));
-      if(i===q.c){
-        opts[i].classList.add('correct'); SCORE++; fireworks();
-      }else{
-        opts[i].classList.add('wrong');
-        opts[q.c].classList.add('correct');
-      }
-      $('exp').classList.add('show');
-      ANSW++;
-      setTimeout(()=>{ IDX++; const end = IDX>=BANK[SECTION].qs.length; end?showSum():renderQ(); }, 2200);
-    }
-    function toggleHint(){ $('hint').classList.toggle('show'); MathJax.typesetPromise(); }
-    function showSum(){
-      $('qWrap').style.display='none';
-      $('sum').style.display='block';
-      const total = BANK[SECTION].qs.length;
-      const pct = Math.round(100*SCORE/total);
-      $('finalPct').textContent = toAr(pct)+'٪';
-      $('finalMsg').textContent = pct>=85? 'ممتاز! 🏆' : pct>=70? 'جيد جدًا 🌟' : pct>=60? 'جيد 👍' : 'بحاجة لمراجعة 📚';
-      updateHUD();
-    }
-    function fireworks(){
-      const box=$('fw'), colors=['#ff6b6b','#27e197','#6ea8ff','#ffd166','#c084fc'];
-      for(let k=0;k<12;k++){
-        setTimeout(()=>{
-          const s=document.createElement('div');
-          s.className='spark';
-          s.style.left=Math.random()*100+'%';
-          s.style.top=Math.random()*100+'%';
-          s.style.background=colors[Math.floor(Math.random()*colors.length)];
-          box.appendChild(s); setTimeout(()=>s.remove(),1000);
-        },k*70);
-      }
-    }
-    function toAr(n){const d=['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];return String(n).replace(/\d/g,m=>d[+m]);}
+function showResult(){
+  const total = QUIZ.questions.length;
+  const correct = state.correctness.filter(Boolean).length;
+  const percent = Math.round(correct/total*100);
 
-    /* أداة تكوين سؤال */
-    function q(t, o, c, h, e){ return {t, o, c, h, e}; }
+  el.bar.style.width = "100%";
+  el.card.innerHTML = `
+    <div class="result">
+      <div style="font-size:22px;font-weight:700">انتهى الاختبار</div>
+      <div class="score">${percent}% <small>(صحيح: ${correct} من ${total})</small></div>
+      <div>
+        <button class="btn" id="againBtn">إعادة المحاولة</button>
+      </div>
+      <div class="review">
+        <h3>مراجعة الإجابات</h3>
+        ${
+          state.order.map((qi,i)=>{
+            const q = QUIZ.questions[qi];
+            const you = state.answers[qi];
+            const ok = (you===q.answer_index);
+            return `
+              <details>
+                <summary>${i+1}. ${ok?'<span class="green">✓</span>':'<span class="red">✗</span>'} ${q.question}</summary>
+                <div style="margin-top:8px">
+                  <div><strong>إجابتك:</strong> ${you!=null? q.choices[you] : '—'}</div>
+                  <div><strong>الصحيحة:</strong> ${q.choices[q.answer_index]}</div>
+                  <div style="margin-top:8px"><strong>التفسير:</strong> ${q.explanation || ''}</div>
+                </div>
+              </details>
+            `;
+          }).join('')
+        }
+      </div>
+    </div>
+  `;
+  if (window.MathJax && window.MathJax.typesetPromise) MathJax.typesetPromise();
 
-    // تحضير مبدئي
-    document.addEventListener('DOMContentLoaded', ()=>{ /* جاهز */ });
-  </script>
+  const again = document.getElementById('againBtn');
+  again.onclick = ()=> resetQuiz();
+  el.prev.disabled = true;
+  el.next.style.display = "none";
+  el.finish.style.display = "none";
+  el.retry.style.display = "inline-block";
+  el.retry.onclick = ()=> resetQuiz();
+}
+
+function resetQuiz(){
+  state.idx=0;
+  state.order = QUIZ.shuffle_questions ? shuffle([...QUIZ.questions.keys()]) : [...QUIZ.questions.keys()];
+  state.answers = Array(QUIZ.questions.length).fill(null);
+  state.correctness = Array(QUIZ.questions.length).fill(false);
+  el.next.style.display = "inline-block";
+  el.finish.style.display = "inline-block";
+  el.retry.style.display = "none";
+  render();
+}
+
+// أزرار عامّة
+el.prev.onclick = ()=>{ if(state.idx>0){ state.idx--; render(); } };
+el.next.onclick = ()=>{ if(state.idx<QUIZ.questions.length-1){ state.idx++; render(); } };
+el.finish.onclick = ()=> showResult();
+
+// بداية
+render();
+</script>
 </body>
 </html>
