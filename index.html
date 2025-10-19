@@ -1,523 +1,322 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>مراجعة الاختبار القصير الأول للصف الحادي عشر (متقدم)</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>مراجعة الاختبار القصير الأول | الصف 11 متقدم</title>
 
-  <!-- خط عربي جميل -->
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;600;800&display=swap" rel="stylesheet">
+<!-- خط عربي مناسب -->
+<link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;600;700&display=swap" rel="stylesheet">
 
-  <!-- MathJax لعرض الرياضيات بشكل كتابي (كسور، جذور، أسس) -->
-  <script>
-    window.MathJax = {
-      tex: {
-        inlineMath: [['\\(','\\)'], ['$', '$']],
-        displayMath: [['\\[','\\]']],
-        processEscapes: true
-      },
-      svg: { fontCache: 'global' }
-    };
-  </script>
-  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<!-- MathJax لعرض الكسور/الجذور/الأسس بشكل كتابي -->
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(','\\)'], ['$', '$']], displayMath: [['\\[','\\]']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 
-  <style>
-    :root{
-      --bg:#0e1320;
-      --card:#121a2b;
-      --ink:#e8eefc;
-      --muted:#b9c3dd;
-      --brand:#4f7df2;
-      --ok:#21c57b;
-      --bad:#ff6b6b;
-      --hint:#f7b500;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      font-family:"Noto Sans Arabic",system-ui,-apple-system,Segoe UI,Roboto,Arial;
-      background: radial-gradient(1200px 800px at 90% -10%, #1b2440 0%, var(--bg) 60%) fixed;
-      color:var(--ink);
-      line-height:1.6;
-    }
-
-    .wrap{max-width:980px;margin:32px auto;padding:16px}
-    header{
-      display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:space-between;margin-bottom:18px
-    }
-    .title{
-      font-weight:800;font-size:clamp(18px,3vw,26px);
-      letter-spacing:.2px
-    }
-    .topic-badges{display:flex;flex-wrap:wrap;gap:8px}
-    .badge{
-      background:linear-gradient(180deg,#1b2a4d,#15213a);
-      color:var(--muted);
-      border:1px solid #273859;
-      border-radius:999px;
-      padding:.25rem .6rem;
-      font-size:13px
-    }
-
-    .progress{
-      height:10px;border-radius:999px;background:#1a2440;border:1px solid #29365a;overflow:hidden;margin:10px 0 18px
-    }
-    .bar{height:100%;background:linear-gradient(90deg,#5a8bff,#7aa1ff);width:0%}
-
-    .card{
-      background:linear-gradient(180deg,#131c30,#0e1526);
-      border:1px solid #253457;
-      border-radius:20px;
-      box-shadow:0 12px 30px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.04);
-      padding:18px 16px;
-    }
-
-    .q-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
-    .q-num{
-      background:linear-gradient(180deg,#24385f,#1a2a4b);
-      border:1px solid #2b3e67;color:#dbe6ff;
-      width:38px;height:38px;display:grid;place-items:center;border-radius:12px;font-weight:700
-    }
-    .q-text{font-size:18px;font-weight:600}
-
-    .icons{display:flex;gap:8px;margin-inline-start:auto}
-    button.icon{
-      display:inline-flex;align-items:center;gap:6px;
-      background:#121a2b;border:1px solid #2a3a5f;color:#d7e2ff;
-      padding:6px 10px;border-radius:10px;font-size:14px;cursor:pointer
-    }
-    button.icon:hover{border-color:#4160a8}
-    .hint-panel,.exp-panel{
-      display:none;margin-top:10px;border-radius:12px;padding:10px 12px;border:1px solid #2a3a5f;background:#0f1729;color:#d9e4ff
-    }
-    .hint-panel{border-right:4px solid var(--hint)}
-    .exp-panel{border-right:4px solid #6aa5ff}
-
-    .choices{display:grid;gap:10px;margin-top:12px}
-    .choice{
-      display:flex;gap:10px;align-items:flex-start;
-      background:#0f1729;border:1px solid #233258;border-radius:14px;padding:10px 12px;cursor:pointer;
-    }
-    .choice input{margin-top:3px;accent-color:var(--brand)}
-    .choice.correct{border-color:rgba(33,197,123,.6);box-shadow:0 0 0 2px rgba(33,197,123,.15) inset}
-    .choice.wrong{border-color:rgba(255,107,107,.7);box-shadow:0 0 0 2px rgba(255,107,107,.12) inset}
-
-    .status{
-      margin-top:10px;font-weight:700
-    }
-    .status .ok{color:var(--ok)}
-    .status .bad{color:var(--bad)}
-
-    .actions{
-      display:flex;gap:10px;justify-content:space-between;margin-top:16px;flex-wrap:wrap
-    }
-    .btn{
-      background:linear-gradient(180deg,#2a3d69,#223559);
-      color:#e9f0ff;border:1px solid #35518c;
-      padding:10px 14px;border-radius:12px;cursor:pointer;font-weight:700;min-width:120px;text-align:center
-    }
-    .btn.secondary{background:#121a2b;border-color:#2a3a5f;color:#cfe0ff}
-    .btn:disabled{opacity:.45;cursor:not-allowed}
-
-    .footer{
-      margin-top:18px;color:var(--muted);font-size:13px;text-align:center
-    }
-
-    /* نتيجة النهاية */
-    .result{
-      text-align:center;padding:28px 16px
-    }
-    .score{
-      font-size:44px;font-weight:800;margin:8px 0;color:#eaf1ff
-    }
-    .score small{font-size:16px;color:var(--muted);font-weight:600}
-    .review{margin-top:18px;text-align:right}
-    .review details{
-      background:#0f1729;border:1px solid #233258;border-radius:14px;margin:10px 0;padding:10px 12px
-    }
-    .review summary{cursor:pointer;font-weight:700}
-    .green{color:var(--ok)} .red{color:var(--bad)}
-  </style>
+<style>
+  :root{
+    --bg:#f8fafc; --ink:#0f172a; --muted:#475569;
+    --card:#ffffff; --line:#e2e8f0; --brand:#2563eb;
+    --ok:#16a34a; --bad:#dc2626; --hint:#d97706;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Naskh Arabic", serif;line-height:1.75}
+  .wrap{max-width:980px;margin:24px auto;padding:0 12px}
+  header{margin-bottom:14px}
+  h1{margin:.2rem 0 .6rem;font-size:clamp(20px,3vw,28px)}
+  .sub{color:var(--muted);font-size:14px}
+  .grid{display:grid;gap:14px}
+  .card{
+    background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 14px 10px;
+  }
+  .qhead{display:flex;gap:10px;align-items:center;margin-bottom:8px}
+  .qnum{min-width:40px;height:40px;display:grid;place-items:center;border-radius:10px;background:#eef2ff;color:#1e293b;font-weight:700}
+  .qtext{font-weight:700}
+  .meta{color:var(--muted);font-size:13px;margin-top:4px}
+  .choices{margin-top:10px;display:grid;gap:8px}
+  .choice{
+    display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:#fafafa;cursor:pointer
+  }
+  .choice input{margin-top:5px;accent-color:var(--brand)}
+  .choice.correct{border-color:#86efac;background:#f0fdf4}
+  .choice.wrong{border-color:#fecaca;background:#fff1f2}
+  .tools{display:flex;gap:8px;margin-top:8px}
+  .btn-sm{
+    background:#f8fafc;border:1px solid var(--line);color:#1e293b;border-radius:8px;padding:6px 10px;cursor:pointer;font-size:13px
+  }
+  .panel{display:none;margin-top:8px;border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:#f9fafb}
+  .panel.hint{border-right:4px solid var(--hint)}
+  .panel.exp{border-right:4px solid var(--brand)}
+  .controls{position:sticky;bottom:0;z-index:5;background:rgba(248,250,252,.9);backdrop-filter:saturate(1.2) blur(4px);
+    border-top:1px solid var(--line);padding:10px 0;margin-top:14px}
+  .actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between}
+  .btn{
+    background:var(--brand);color:#fff;border:none;border-radius:10px;padding:10px 14px;cursor:pointer;font-weight:700;min-width:160px
+  }
+  .btn.sec{background:#e2e8f0;color:#0f172a}
+  .score{font-weight:700}
+  .note{color:var(--muted);font-size:13px;margin-top:6px}
+</style>
 </head>
 <body>
-  <div class="wrap">
-    <header>
-      <div class="title">مراجعة الاختبار القصير الأول للصف الحادي عشر (متقدم)</div>
-      <div class="topic-badges" id="topicBadges"></div>
-    </header>
+<div class="wrap">
+  <header>
+    <h1>مراجعة الاختبار القصير الأول للصف الحادي عشر (متقدم)</h1>
+    <div class="sub">الدروس: إكمال المربع • حل المعادلات الأكثر تعقيدًا • المتباينات التربيعية • تعريف الدالة والدالة المركبة • مجال ومدى الدوال</div>
+  </header>
 
-    <div class="progress"><div class="bar" id="bar"></div></div>
+  <div id="questions" class="grid"></div>
 
-    <div class="card" id="card" aria-live="polite"></div>
-
+  <div class="controls">
     <div class="actions">
-      <button class="btn secondary" id="prevBtn">السابق</button>
-      <div style="display:flex;gap:10px">
-        <button class="btn secondary" id="retryBtn" style="display:none">إعادة المحاولة</button>
-        <button class="btn" id="nextBtn">التالي</button>
-        <button class="btn" id="finishBtn">إنهاء الاختبار</button>
+      <div>
+        <button class="btn" id="gradeBtn">تصحيح جميع الإجابات</button>
+        <button class="btn sec" id="toggleSolBtn">إظهار/إخفاء الحلول</button>
       </div>
+      <div class="score" id="scoreBox">لم يتم التصحيح بعد.</div>
     </div>
-
-    <div class="footer">يدعم RTL و MathJax • يحتوي على تلميح 💡 وتفسير 📘 لكل سؤال</div>
+    <div class="note">اختر إجابة لكل سؤال ثم اضغط «تصحيح». يمكنك عرض «التلميح» أو «التفسير» لكل سؤال في أي وقت.</div>
   </div>
+</div>
 
 <script>
-/* ========== بيانات الاختبار ========== */
-const QUIZ = {
-  quiz_title: "مراجعة الاختبار القصير الأول للصف الحادي عشر (متقدم)",
-  rtl: true,
-  topics: ["إكمال المربع","حل المعادلات الأكثر تعقيدًا","المتباينات التربيعية","تعريف الدالة والدالة المركبة","مجال ومدى الدوال"],
-  shuffle_questions: true,
-  show_explanations_after: "answer",
-  questions: [
-/* ==== 30 سؤال (نفس المحتوى المنسّق كما طلبت) ==== */
-{id:"Q1",type:"mcq",skill:"إكمال المربع",
-question:"اكتب \\(س² − 10س + 35\\) في الصورة \\((س − أ)² + ب\\). اختر القيم الصحيحة لـ\\(أ, ب\\).",
-choices:["أ = 5 ، ب = 10","أ = 10 ، ب = 35","أ = −5 ، ب = 10","أ = 5 ، ب = −10"],
-answer_index:0,
-hint:"أكمل مربع \\(س² − 10س\\): أضف واطرح \\(25\\).",
-explanation:"\\(س² − 10س = (س−5)² − 25\\) ⇒ \\(س² − 10س + 35 = (س−5)² + 10\\) فـ\\(أ=5, ب=10\\)."},
-{id:"Q2",type:"mcq",skill:"إكمال المربع",
-question:"لتكن \\(د(س)=س² − 3س − 4\\). اكتبها في الصورة \\((س − ل)² + ك\\) ثم اختر \\(ل, ك\\).",
-choices:["ل = \\(\\dfrac{3}{2}\\) ، ك = \\(−\\dfrac{25}{4}\\)","ل = 3 ، ك = −4","ل = \\(\\dfrac{3}{2}\\) ، ك = \\(+\\dfrac{25}{4}\\)","ل = −\\(\\dfrac{3}{2}\\) ، ك = \\(−\\dfrac{25}{4}\\)"],
-answer_index:0,
-hint:"أكمل مربع \\(س²−3س\\) بإضافة وطرح \\(\\dfrac{9}{4}\\).",
-explanation:"\\(س²−3س=(س−\\dfrac{3}{2})²−\\dfrac{9}{4}\\) لذا \\(د(س)=(س−\\dfrac{3}{2})²−\\dfrac{25}{4}\\)."},
-{id:"Q3",type:"mcq",skill:"متباينة تربيعية",
-question:"حل المتباينة \\(س² − 9س + 18 < 0\\).",
-choices:["س < 3 أو س > 6","3 < س < 6","س ≥ 6","س ≤ 3"],
-answer_index:1,
-hint:"حلِّل: \\(س² − 9س + 18=(س−3)(س−6)\\).",
-explanation:"الإشارة سالبة بين الجذرين: \\(3<س<6\\)."},
-{id:"Q4",type:"mcq",skill:"متباينة من تحليل",
-question:"حل المتباينة \\((س−2)(س+1) ≤ 0\\).",
-choices:["−1 ≤ س ≤ 2","س ≤ −1 أو س ≥ 2","−1 < س < 2","س ≥ −1 أو س ≤ 2"],
-answer_index:0,
-hint:"حاصل الضرب غير موجب بين الجذرين مع تضمينهما.",
-explanation:"الجذران \\(−1,2\\) ⇒ \\([-1,2]\\)."},
-{id:"Q5",type:"mcq",skill:"مجال ومدى (مقيد)",
-question:"لدالة تربيعية رأسها عند \\((0,−12)\\) ومجالها \\(−2 ≤ س ≤ 6\\)، وقيمة الدالة عند الطرفين \\(4\\). ما مداها؟",
-choices:["−12 ≤ د(س) ≤ 4","4 ≤ د(س) ≤ 12","−4 ≤ د(س) ≤ 12","د(س) ≥ −12"],
-answer_index:0,
-hint:"الصغرى عند الرأس، والكبرى عند الأطراف.",
-explanation:"المدى هو \\([−12,4]\\)."},
-{id:"Q6",type:"mcq",skill:"مدى/مجال من رأس القطع",
-question:"للدالة \\(ص=(س−3)² − 8\\) ما قيمة الصغرى والمدى؟",
-choices:["الصغرى −8 والمدى \\(ص ≥ −8\\)","الصغرى 8 والمدى \\(ص ≤ 8\\)","الصغرى −8 والمدى \\(ص ≤ −8\\)","الصغرى 8 والمدى \\(ص ≥ 8\\)"],
-answer_index:0,
-hint:"شكل رأسية لأعلى: القيمة عند الرأس هي الصغرى.",
-explanation:"الرأس \\((3,−8)\\) ⇒ المدى \\([−8,∞)\\)."},
-{id:"Q7",type:"mcq",skill:"إكمال المربع",
-question:"ظلِّل الصيغة المكافئة لـ \\(س² − 6س + 1\\):",
-choices:["1 + (س−3)²","8 − (س−3)²","(س−3)² − 8","9 − (س−3)²"],
-answer_index:2,
-hint:"أكمل مربع \\(س²−6س\\) بإضافة وطرح \\(9\\).",
-explanation:"\\(س²−6س+1=(س−3)²−9+1=(س−3)²−8\\)."},
-{id:"Q8",type:"mcq",skill:"مطابقة معاملات",
-question:"إذا \\(س² − 6س + ك = (س−3)² + ب\\) فاختر قيمة \\(ك\\) الصحيحة.",
-choices:["ك = 9","ك = −9","ك = 10","ك = −10"],
-answer_index:0,
-hint:"\\((س−3)²=س²−6س+9\\).",
-explanation:"بالمقارنة يلزم \\(ك=9\\) و\\(ب=0\\)."},
-{id:"Q9",type:"mcq",skill:"إكمال المربع – معلمة",
-question:"جد \\(أ\\) بحيث \\(س² − 6س + 1 = (س − أ)² − 8\\).",
-choices:["أ = −3","أ = 3","أ = 6","أ = −6"],
-answer_index:1,
-hint:"طابق معامل \\(س\\) في الطرفين.",
-explanation:"\\((س−أ)²−8=س²−2أ س+أ²−8\\) ⇒ ‎\\(−2أ=−6\\Rightarrow أ=3\\)."},
-{id:"Q10",type:"mcq",skill:"معادلة جذرية",
-question:"حل المعادلة \\(س − 2√{س} = 10\\).",
-choices:["س = 12 + 2√{11}","س = 25","س = 9","س = 15"],
-answer_index:0,
-hint:"ضع \\(√{س}=ن\\) ⇒ \\(ن² − 2ن − 10 = 0\\).",
-explanation:"الحل \\(ن=1+√{11}\\) ⇒ \\(س=12+2√{11}\\)."},
-{id:"Q11",type:"mcq",skill:"متباينات تربيعية",
-question:"ظلِّل حل المتباينة \\(س(س−3) ≥ 0\\).",
-choices:["س ≤ 0 ، س ≥ 3","−3 ≤ س ≤ 0","س > −3","0 ≤ س ≤ 3"],
-answer_index:0,
-hint:"الإشارة موجبة خارج الجذرين.",
-explanation:"الجذران 0 و3 ⇒ \\((−∞,0] \\cup [3,∞)\\)."},
-{id:"Q12",type:"mcq",skill:"إكمال المربع",
-question:"اكتب \\(ص = س² − 2س\\) في الصورة \\(ص=(س+أ)² + ل\\).",
-choices:["أ = −1 ، ل = −1","أ = +1 ، ل = −1","أ = −1 ، ل = +1","أ = +1 ، ل = +1"],
-answer_index:0,
-hint:"أكمل مربع \\(س²−2س\\) بإضافة وطرح \\(1\\).",
-explanation:"\\(س²−2س=(س−1)²−1=(س+(−1))²+(−1)\\)."},
-{id:"Q13",type:"mcq",skill:"مطابقة معاملات",
-question:"إذا \\(ص=س²−6س+ك=(س−3)²\\) فاختر قيمة \\(ك\\).",
-choices:["ك = −9","ك = 0","ك = 6","ك = 9"],
-answer_index:3,
-hint:"طوِّر \\((س−3)²\\).",
-explanation:"\\((س−3)²=س²−6س+9\\) ⇒ \\(ك=9\\)."},
-{id:"Q14",type:"mcq",skill:"إكمال المربع مع معامل",
-question:"اكتب \\(5س²+20س+55\\) في الصورة \\(أ(س+ب)²+ج\\).",
-choices:["أ=5 ، ب=2 ، ج=35","أ=5 ، ب=−2 ، ج=35","أ=1 ، ب=10 ، ج=55","أ=5 ، ب=2 ، ج= −35"],
-answer_index:0,
-hint:"اسحب 5 عاملًا ثم أكمل المربع.",
-explanation:"\\(5[(س+2)²−4]+55=5(س+2)²+35\\)."},
-{id:"Q15",type:"mcq",skill:"إكمال المربع",
-question:"العبارة \\(4س²+20س+5\\) في صورة مربع كامل هي \\((2س+5)²+ج\\). ظلِّل \\(ج\\).",
-choices:["10","20","−20","−10"],
-answer_index:2,
-hint:"طوّر \\((2س+5)²\\) ثم قارِن.",
-explanation:"\\((2س+5)²=4س²+20س+25\\) وللوصول إلى \\(+5\\) نطرح 20 ⇒ \\(ج=−20\\)."},
-{id:"Q16",type:"mcq",skill:"إكمال المربع مع عامل",
-question:"\\(2س²−12س+3\\) في صورة مربع كامل هي \\(2(س−3)²+ج\\). ما \\(ج\\)؟",
-choices:["15","36","−36","−15"],
-answer_index:3,
-hint:"أكمل داخل القوس ثم وزّع 2.",
-explanation:"\\(2[(س−3)²−9]+3=2(س−3)²−15\\) ⇒ \\(ج=−15\\)."},
-{id:"Q17",type:"mcq",skill:"معادلة جذرية",
-question:"حل \\(س − 4√{س} − 12 = 0\\).",
-choices:["س = 36","س = 4","س = −4","س = −36"],
-answer_index:0,
-hint:"ضع \\(√{س}=ن\\) ⇒ \\(ن²−4ن−12=0\\).",
-explanation:"\\(ن=6\\) أو \\(−2\\) ونأخذ الموجب ⇒ \\(س=36\\)."},
-{id:"Q18",type:"mcq",skill:"تحويلات تكعيبية",
-question:"أوجد جميع الحلول الحقيقية للمعادلة \\(س⁶ − 7س³ − 8 = 0\\).",
-choices:["س = 2 فقط","س = −1 فقط","س = 2 أو س = −1","لا حلول حقيقية"],
-answer_index:2,
-hint:"ضع \\(ت=س³\\) لتحصل على \\(ت² − 7ت − 8 = 0\\).",
-explanation:"\\((ت−8)(ت+1)=0\\) ⇒ \\(س=2\\) أو \\(س=−1\\)."},
-{id:"Q19",type:"mcq",skill:"تحليل رباعي",
-question:"حل \\(س⁴ + 2س² − 15 = 0\\) في \\(\\mathbb{R}\\).",
-choices:["س = ±√{3}","س = ±3","س = ±5","لا حلول حقيقية"],
-answer_index:0,
-hint:"ضع \\(ع=س²\\) ثم حل \\(ع²+2ع−15=0\\).",
-explanation:"\\((ع+5)(ع−3)=0\\) ⇒ \\(س²=3\\) أو \\(س²=−5\\) ⇒ \\(±√{3}\\)."},
-{id:"Q20",type:"mcq",skill:"متباينة تكعيبية",
-question:"حل المتباينة \\(س³ − 10س + 24 ≥ 0\\).",
-choices:["س ≥ −4","س ≤ −4","س ≥ 4","−4 < س < 4"],
-answer_index:0,
-hint:"حلّل: \\(س³−10س+24=(س+4)(س²−4س+6)\\).",
-explanation:"الجزء التربيعي موجب دائمًا ⇒ التغيّر عند \\(−4\\) ⇒ الحل \\(س≥−4\\)."},
-{id:"Q21B",type:"mcq",skill:"تركيب دوال",
-question:"لتكن \\(د(س)=2س+3\\) و \\(هـ(س)=\\dfrac{12}{1−س}\\) مع \\(س≠1\\). أوجد \\((هـ∘د)(س)\\).",
-choices:["\\(\\dfrac{12}{1−(2س+3)}=\\dfrac{−6}{س+1}\\)","\\(\\dfrac{12}{1−2س}+3\\)","\\(\\dfrac{12}{1−س}+3\\)","\\(\\dfrac{12}{1−(2س−3)}\\)"],
-answer_index:0,
-hint:"عوِّض \\(2س+3\\) مكان \\(س\\) في \\(هـ\\).",
-explanation:"\\((هـ∘د)(س)=\\dfrac{12}{1−(2س+3)}=\\dfrac{−6}{س+1}\\)."},
-{id:"Q22",type:"mcq",skill:"تركيب دوال",
-question:"إذا كان \\(هـ(س)=1−2س\\) و\\(د(س)=س³\\)، فأوجد \\((د∘هـ)(1)\\).",
-choices:["1","\\(\\dfrac{1}{2}\\)","−1","−\\(\\dfrac{1}{2}\\)"],
-answer_index:2,
-hint:"احسب \\(هـ(1)\\) ثم كبّر الأس.",
-explanation:"\\(هـ(1)=−1\\) ⇒ \\((د∘هـ)(1)=(−1)³=−1\\)."},
-{id:"Q23",type:"mcq",skill:"تركيب دوال من تعريفات",
-question:"لتكن \\(هـ(س)=س²\\) و\\(د(س)=2س\\). احسب \\(د(هـ(2))\\).",
-choices:["2","4","8","16"],answer_index:2,
-hint:"ابدأ بـ \\(هـ(2)=2²\\).",
-explanation:"\\(هـ(2)=4\\) ثم \\(د(4)=8\\)."},
-{id:"Q24B",type:"mcq",skill:"مجال/مدى مع تقييد",
-question:"لتكن \\(د(س)=س²−4\\). إذا كان المدى \\(−4 ≤ د(س) ≤ 5\\) فحدِّد المجال \\([أ, ب]\\).",
-choices:["أ = −3 ، ب = 3","أ = −5 ، ب = 5","أ = −1 ، ب = 1","أ = 0 ، ب = 3"],
-answer_index:0,
-hint:"حل \\(س²−4=5\\).",
-explanation:"\\(س²=9\\Rightarrow س=±3\\) ⇒ \\([−3,3]\\)."},
-{id:"Q25B",type:"mcq",skill:"مدى من تمثيل عام",
-question:"لدالة أدنى قيمة لها \\(−10\\) وتمتد لأعلى بلا حد، ما مداها؟",
-choices:["\\(−10 ≤ د(س) ≤ 9\\)","\\(0 ≤ د(س) ≤ 9\\)","\\(2 ≤ د(س) ≤ 9\\)","\\(د(س) ≥ −10\\)"],
-answer_index:3,
-hint:"السهم الصاعد يعني لا حد أعلى.",
-explanation:"المدى \\([−10,∞)\\)."},
-{id:"Q26",type:"mcq",skill:"مجال ومدى مربعية مقيدة",
-question:"إذا كانت \\(د(س)=4س²−2\\) ومجالها \\(−2 ≤ س ≤ 3\\)، فأي البدائل يعبّر عن المدى؟",
-choices:["\\(−2 ≤ د(س) ≤ 34\\)","\\(−2 ≤ د(س) ≤ 14\\)","\\(0 ≤ د(س) ≤ 34\\)","\\(−14 ≤ د(س) ≤ 34\\)"],
-answer_index:0,
-hint:"أقل قيمة عند \\(س=0\\).",
-explanation:"\\(د(0)=−2\\), \\(د(−2)=14\\), \\(د(3)=34\\) ⇒ \\([−2,34]\\)."},
-{id:"Q27",type:"mcq",skill:"تمثيل علاقات",
-question:"أي العلاقات التالية واحد إلى متعدِّد بالنسبة لـ\\(س→ص\\)؟",
-choices:["\\(ص=س+4\\)","\\(ص=س²+4\\)","\\(ص=س³+4\\)","\\(س=ص²+4\\)"],
-answer_index:3,
-hint:"نبحث عن علاقة تعطي لقيمة س الواحدة قيمتين لـ ص.",
-explanation:"\\(س=ص²+4\\Rightarrow ص=±√{س−4}\\) ⇒ ليست دالة من س إلى ص."},
-{id:"Q28",type:"mcq",skill:"تركيب دوال (نتيجة نظيفة)",
-question:"إذا كان \\(د(س)=√{س+3} − 2\\) و\\(هـ(س)=س²+6\\). أوجد \\((د∘هـ)(4)\\).",
-choices:["1","2","3","4"],
-answer_index:2,
-hint:"احسب \\(هـ(4)\\) ثم عوِّض في \\(د\\).",
-explanation:"\\(هـ(4)=22\\Rightarrow د(22)=√{25}−2=3\\)."},
-{id:"Q29",type:"mcq",skill:"تركيب دوال مع جذر",
-question:"لتكن \\(هـ(س)=√{س}\\) و\\(ل(س)=س+5\\). أي تعبير يمثل \\((هـ∘ل)(س)\\)؟",
-choices:["√{س}+5","√{س+5}","(√{س})+5","س+√{5}"],
-answer_index:1,
-hint:"عوِّض \\(س+5\\) داخل الجذر.",
-explanation:"\\((هـ∘ل)(س)=هـ(س+5)=√{س+5}\\)."},
-{id:"Q30",type:"mcq",skill:"تحديد قيمة تركيب",
-question:"إذا كان \\(هـ(س)=س²\\) و\\(د(س)=2س\\)، فأوجد \\((هـ∘د)(2)\\).",
-choices:["2","4","8","16"],
-answer_index:3,
-hint:"\\(د(2)=4\\) ثم \\(هـ(4)=16\\).",
-explanation:"الناتج \\(16\\)."}
-]};
+/* ————— بيانات الأسئلة (محسّنة الصياغة) ————— */
+const QUESTIONS = [
+  {q:"اكتب \\(س² − 10س + 35\\) في الصورة \\((س − أ)² + ب\\). حدِّد \\(أ\\) و\\(ب\\).",
+   choices:["أ = 5 ، ب = 10","أ = 10 ، ب = 35","أ = −5 ، ب = 10","أ = 5 ، ب = −10"], ans:0,
+   hint:"أكمل مربع \\(س² − 10س\\) بإضافة وطرح \\(25\\).",
+   exp:"\\(س² − 10س = (س−5)² − 25\\) ⇒ \\(س² − 10س + 35 = (س−5)² + 10\\)."
+  },
+  {q:"لتكن \\(د(س)=س² − 3س − 4\\). اكتبها في الصورة \\((س − ل)² + ك\\).",
+   choices:["ل = \\(\\dfrac{3}{2}\\) ، ك = \\(−\\dfrac{25}{4}\\)","ل = 3 ، ك = −4","ل = \\(\\dfrac{3}{2}\\) ، ك = \\(+\\dfrac{25}{4}\\)","ل = −\\(\\dfrac{3}{2}\\) ، ك = \\(−\\dfrac{25}{4}\\)"], ans:0,
+   hint:"أكمل مربع \\(س²−3س\\) بإضافة وطرح \\(\\dfrac{9}{4}\\).",
+   exp:"\\(د(س)=(س−\\dfrac{3}{2})²−\\dfrac{25}{4}\\)."
+  },
+  {q:"حل المتباينة \\(س² − 9س + 18 < 0\\).",
+   choices:["س < 3 أو س > 6","3 < س < 6","س ≥ 6","س ≤ 3"], ans:1,
+   hint:"حلِّل: \\((س−3)(س−6)\\).",
+   exp:"الإشارة سالبة بين الجذرين ⇒ \\(3<س<6\\)."
+  },
+  {q:"حل المتباينة \\((س−2)(س+1) ≤ 0\\).",
+   choices:["−1 ≤ س ≤ 2","س ≤ −1 أو س ≥ 2","−1 < س < 2","س ≥ −1 أو س ≤ 2"], ans:0,
+   hint:"الضرب غير موجب بين الجذرين مع تضمينهما.",
+   exp:"\\([-1,2]\\)."
+  },
+  {q:"لدالة تربيعية رأسها \\((0,−12)\\) ومجالها \\(−2 ≤ س ≤ 6\\)، وكانت \\(د(−2)=د(6)=4\\). ما المدى؟",
+   choices:["−12 ≤ د(س) ≤ 4","4 ≤ د(س) ≤ 12","−4 ≤ د(س) ≤ 12","د(س) ≥ −12"], ans:0,
+   hint:"الصغرى عند الرأس، والكبرى عند الطرفين.",
+   exp:"المدى \\([−12,4]\\)."
+  },
+  {q:"للدالة \\(ص=(س−3)² − 8\\) حدِّد القيمة الصغرى والمدى.",
+   choices:["الصغرى −8 والمدى \\(ص ≥ −8\\)","الصغرى 8 والمدى \\(ص ≤ 8\\)","الصغرى −8 والمدى \\(ص ≤ −8\\)","الصغرى 8 والمدى \\(ص ≥ 8\\)"], ans:0,
+   hint:"قطع مكافئ لأعلى، الصغرى عند الرأس.",
+   exp:"الرأس \\((3,−8)\\) ⇒ \\(ص≥−8\\)."
+  },
+  {q:"أي صورة مكافئة لعبارة \\(س² − 6س + 1\\)؟",
+   choices:["\\(1 + (س−3)²\\)","\\(8 − (س−3)²\\)","\\((س−3)² − 8\\)","\\(9 − (س−3)²\\)"], ans:2,
+   hint:"أضف واطرح \\(9\\).",
+   exp:"\\(س²−6س+1=(س−3)²−8\\)."
+  },
+  {q:"إذا \\(س² − 6س + ك = (س−3)² + ب\\)، فكم \\(ك\\)؟",
+   choices:["9","−9","10","−10"], ans:0,
+   hint:"\\((س−3)²=س²−6س+9\\).",
+   exp:"بالمقارنة \\(ك=9\\)."
+  },
+  {q:"أوجد \\(أ\\) بحيث \\(س² − 6س + 1 = (س − أ)² − 8\\).",
+   choices:["−3","3","6","−6"], ans:1,
+   hint:"طابق معامل \\(س\\).",
+   exp:"\\(−2أ=−6\\Rightarrow أ=3\\)."
+  },
+  {q:"حل المعادلة \\(س − 2\\sqrt{س} = 10\\).",
+   choices:["\\(12 + 2\\sqrt{11}\\)","25","9","15"], ans:0,
+   hint:"ضع \\(\\sqrt{س}=ن\\).",
+   exp:"\\(ن²−2ن−10=0\\Rightarrow ن=1+\\sqrt{11}\\) ⇒ \\(س=12+2\\sqrt{11}\\)."
+  },
+  {q:"ظلِّل حل المتباينة \\(س(س−3) ≥ 0\\).",
+   choices:["س ≤ 0 ، س ≥ 3","−3 ≤ س ≤ 0","س > −3","0 ≤ س ≤ 3"], ans:0,
+   hint:"موجب خارج الجذرين.",
+   exp:"\\((−\\infty,0] \\cup [3,\\infty)\\)."
+  },
+  {q:"اكتب \\(ص = س² − 2س\\) في الصورة \\(ص=(س+أ)² + ل\\).",
+   choices:["أ = −1 ، ل = −1","أ = +1 ، ل = −1","أ = −1 ، ل = +1","أ = +1 ، ل = +1"], ans:0,
+   hint:"أكمل مربع \\(س²−2س\\).",
+   exp:"\\(س²−2س=(س−1)²−1=(س+(−1))²+(−1)\\)."
+  },
+  {q:"إذا \\(ص=س²−6س+ك=(س−3)²\\) فما \\(ك\\)؟",
+   choices:["−9","0","6","9"], ans:3,
+   hint:"طوِّر \\((س−3)²\\).",
+   exp:"\\(ك=9\\)."
+  },
+  {q:"اكتب \\(5س²+20س+55\\) في الصورة \\(أ(س+ب)²+ج\\).",
+   choices:["أ=5 ، ب=2 ، ج=35","أ=5 ، ب=−2 ، ج=35","أ=1 ، ب=10 ، ج=55","أ=5 ، ب=2 ، ج= −35"], ans:0,
+   hint:"اسحب 5 ثم أكمل المربع.",
+   exp:"\\(5(س+2)²+35\\)."
+  },
+  {q:"\\(4س²+20س+5\\) في صورة مربع كامل هي \\((2س+5)²+ج\\). احسب \\(ج\\).",
+   choices:["10","20","−20","−10"], ans:2,
+   hint:"قارن مع \\((2س+5)²=4س²+20س+25\\).",
+   exp:"نطرح 20 ⇒ \\(ج=−20\\)."
+  },
+  {q:"حوِّل \\(2س²−12س+3\\) إلى \\(2(س−3)²+ج\\). ما \\(ج\\)؟",
+   choices:["15","36","−36","−15"], ans:3,
+   hint:"أكمل داخل القوس ثم وزّع 2.",
+   exp:"\\(2[(س−3)²−9]+3=2(س−3)²−15\\)."
+  },
+  {q:"حل \\(س − 4\\sqrt{س} − 12 = 0\\).",
+   choices:["36","4","−4","−36"], ans:0,
+   hint:"ضع \\(\\sqrt{س}=ن\\).",
+   exp:"\\(ن=6\\Rightarrow س=36\\)."
+  },
+  {q:"أوجد جميع الحلول الحقيقية للمعادلة \\(س⁶ − 7س³ − 8 = 0\\).",
+   choices:["س = 2 فقط","س = −1 فقط","س = 2 أو س = −1","لا حلول حقيقية"], ans:2,
+   hint:"ضع \\(ت=س³\\).",
+   exp:"\\((ت−8)(ت+1)=0\\Rightarrow س=2\\ أو \\ س=−1\\)."
+  },
+  {q:"حل \\(س⁴ + 2س² − 15 = 0\\).",
+   choices:["\\(س = ±\\sqrt{3}\\)","\\(س = ±3\\)","\\(س = ±5\\)","لا حلول حقيقية"], ans:0,
+   hint:"ضع \\(ع=س²\\).",
+   exp:"\\((ع+5)(ع−3)=0\\Rightarrow س²=3\\ أو \\ س²=−5\\ ⇒ الحقيقي \\(±\\sqrt{3}\\)."
+  },
+  {q:"حل المتباينة \\(س³ − 10س + 24 ≥ 0\\).",
+   choices:["س ≥ −4","س ≤ −4","س ≥ 4","−4 < س < 4"], ans:0,
+   hint:"\\(س³−10س+24=(س+4)(س²−4س+6)\\).",
+   exp:"التربيعي موجب دائمًا ⇒ التغيّر عند \\(−4\\) ⇒ الحل \\(س≥−4\\)."
+  },
+  {q:"لتكن \\(د(س)=2س+3\\) و \\(هـ(س)=\\dfrac{12}{1−س}\\) (حيث \\(س≠1\\)). أوجد \\((هـ∘د)(س)\\).",
+   choices:["\\(\\dfrac{12}{1−(2س+3)}=\\dfrac{−6}{س+1}\\)","\\(\\dfrac{12}{1−2س}+3\\)","\\(\\dfrac{12}{1−س}+3\\)","\\(\\dfrac{12}{1−(2س−3)}\\)"], ans:0,
+   hint:"عوِّض \\(2س+3\\) مكان \\(س\\) داخل \\(هـ\\).",
+   exp:"\\((هـ∘د)(س)=\\dfrac{12}{1−(2س+3)}=\\dfrac{−6}{س+1}\\)."
+  },
+  {q:"إذا كان \\(هـ(س)=1−2س\\) و\\(د(س)=س³\\)، فأوجد \\((د∘هـ)(1)\\).",
+   choices:["1","\\(\\dfrac{1}{2}\\)","−1","−\\(\\dfrac{1}{2}\\)"], ans:2,
+   hint:"احسب \\(هـ(1)\\) ثم كبّر الأس.",
+   exp:"\\(هـ(1)=−1\\Rightarrow (د∘هـ)(1)=(−1)³=−1\\)."
+  },
+  {q:"لتكن \\(هـ(س)=س²\\) و\\(د(س)=2س\\). احسب \\(د(هـ(2))\\).",
+   choices:["2","4","8","16"], ans:2,
+   hint:"\\(هـ(2)=4\\) ثم \\(د(4)=8\\).",
+   exp:"القيمة النهائية 8."
+  },
+  {q:"لتكن \\(د(س)=س²−4\\). إذا كان المدى \\(−4 ≤ د(س) ≤ 5\\)، فما المجال \\([أ,ب]\\)؟",
+   choices:["أ = −3 ، ب = 3","أ = −5 ، ب = 5","أ = −1 ، ب = 1","أ = 0 ، ب = 3"], ans:0,
+   hint:"حل \\(س²−4=5\\) لطرفي المجال.",
+   exp:"\\(س²=9 ⇒ س=±3\\) ⇒ المجال \\([−3,3]\\)."
+  },
+  {q:"لدالة أدنى قيمة \\(−10\\) وتمتد لأعلى بلا حد. ما مداها؟",
+   choices:["\\(−10 ≤ د(س) ≤ 9\\)","\\(0 ≤ د(س) ≤ 9\\)","\\(2 ≤ د(س) ≤ 9\\)","\\(د(س) ≥ −10\\)"], ans:3,
+   hint:"السهم صعودًا يعني لا حد أعلى.",
+   exp:"المدى \\([−10,\\infty)\\)."
+  },
+  {q:"إذا كانت \\(د(س)=4س²−2\\) ومجالها \\(−2 ≤ س ≤ 3\\)، فأيٌّ مما يلي يعبّر عن المدى؟",
+   choices:["\\(−2 ≤ د(س) ≤ 34\\)","\\(−2 ≤ د(س) ≤ 14\\)","\\(0 ≤ د(س) ≤ 34\\)","\\(−14 ≤ د(س) ≤ 34\\)"], ans:0,
+   hint:"أقل قيمة عند \\(س=0\\).",
+   exp:"\\([−2,34]\\)."
+  },
+  {q:"أي العلاقات التالية **واحد إلى متعدد** بالنسبة لـ\\(س→ص\\)؟",
+   choices:["\\(ص=س+4\\)","\\(ص=س²+4\\)","\\(ص=س³+4\\)","\\(س=ص²+4\\)"], ans:3,
+   hint:"ابحث عن علاقة تعطي لقيمة \\(س\\) الواحدة قيمتين لـ\\(ص\\).",
+   exp:"\\(س=ص²+4\\Rightarrow ص=±\\sqrt{س−4}\\) ⇒ ليست دالة من \\(س\\) إلى \\(ص\\)."
+  },
+  {q:"إذا كان \\(د(س)=\\sqrt{س+3} − 2\\) و\\(هـ(س)=س²+6\\). أوجد \\((د∘هـ)(4)\\).",
+   choices:["1","2","3","4"], ans:2,
+   hint:"احسب \\(هـ(4)\\) ثم عوِّض في \\(د\\).",
+   exp:"\\(هـ(4)=22\\Rightarrow د(22)=\\sqrt{25}−2=3\\)."
+  },
+  {q:"لتكن \\(هـ(س)=\\sqrt{س}\\) و\\(ل(س)=س+5\\). أي تعبير يمثل \\((هـ∘ل)(س)\\)؟",
+   choices:["\\(\\sqrt{س}+5\\)","\\(\\sqrt{س+5}\\)","\\((\\sqrt{س})+5\\)","\\(س+\\sqrt{5}\\)"], ans:1,
+   hint:"عوِّض \\(س+5\\) داخل الجذر.",
+   exp:"\\((هـ∘ل)(س)=\\sqrt{س+5}\\)."
+  },
+  {q:"إذا كان \\(هـ(س)=س²\\) و\\(د(س)=2س\\)، فأوجد \\((هـ∘د)(2)\\).",
+   choices:["2","4","8","16"], ans:3,
+   hint:"\\(د(2)=4\\) ثم \\(هـ(4)=16\\).",
+   exp:"القيمة 16."
+  }
+];
 
-/* ========== منطق التطبيق ========== */
-function shuffle(arr){return arr.map(v=>[Math.random(),v]).sort((a,b)=>a[0]-b[0]).map(x=>x[1]);}
-const state = {
-  idx:0,
-  order: QUIZ.shuffle_questions ? shuffle([...QUIZ.questions.keys()]) : [...QUIZ.questions.keys()],
-  answers: Array(QUIZ.questions.length).fill(null),
-  correctness: Array(QUIZ.questions.length).fill(false)
-};
+/* ————— توليد الصفحة ————— */
+const container = document.getElementById('questions');
 
-const el = {
-  card: document.getElementById('card'),
-  bar: document.getElementById('bar'),
-  prev: document.getElementById('prevBtn'),
-  next: document.getElementById('nextBtn'),
-  finish: document.getElementById('finishBtn'),
-  retry: document.getElementById('retryBtn'),
-  topicBadges: document.getElementById('topicBadges')
-};
+function makeChoiceLetter(i){ return ['أ','ب','ج','د'][i] || String(i+1); }
 
-QUIZ.topics.forEach(t=>{
-  const b=document.createElement('span'); b.className='badge'; b.textContent=t; el.topicBadges.appendChild(b);
-});
+QUESTIONS.forEach((Q, idx) => {
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.dataset.index = idx;
 
-function render(){
-  const qi = state.order[state.idx];
-  const q = QUIZ.questions[qi];
-
-  el.bar.style.width = `${(state.idx)/ (QUIZ.questions.length) * 100}%`;
-
-  el.card.innerHTML = `
-    <div class="q-head">
-      <div class="q-num">${state.idx+1}/${QUIZ.questions.length}</div>
-      <div class="q-text">${q.question}</div>
-      <div class="icons">
-        <button class="icon" id="hintBtn">💡 تلميح</button>
-        <button class="icon" id="expBtn">📘 تفسير</button>
-      </div>
+  card.innerHTML = `
+    <div class="qhead">
+      <div class="qnum">${idx+1}</div>
+      <div class="qtext">${Q.q}</div>
     </div>
+    <div class="meta">اختر الإجابة الصحيحة (اختيار من متعدد).</div>
 
-    <div class="hint-panel" id="hintPanel">${q.hint || "لا يوجد تلميح."}</div>
-    <div class="exp-panel" id="expPanel">${q.explanation || "—"}</div>
-
-    <div class="choices" id="choices">
-      ${q.choices.map((c,i)=>`
-        <label class="choice ${ state.answers[qi]!=null ? (i===q.answer_index ? 'correct' : (i===state.answers[qi]?'wrong':'')) : ''}">
-          <input type="radio" name="c" value="${i}" ${state.answers[qi]==i?'checked':''} ${state.answers[qi]!=null?'disabled':''}/>
-          <div class="c-text">${c}</div>
+    <div class="choices">
+      ${Q.choices.map((c,i)=>`
+        <label class="choice">
+          <input type="radio" name="q${idx}" value="${i}">
+          <div><strong>${makeChoiceLetter(i)})</strong> <span class="ct">${c}</span></div>
         </label>
       `).join('')}
     </div>
 
-    <div class="status" id="status"></div>
-  `;
-
-  // تفعيل MathJax
-  if (window.MathJax && window.MathJax.typesetPromise) MathJax.typesetPromise();
-
-  // الأزرار المساعدة
-  document.getElementById('hintBtn').onclick = ()=> {
-    const p = document.getElementById('hintPanel');
-    p.style.display = p.style.display==='block' ? 'none' : 'block';
-  };
-  document.getElementById('expBtn').onclick = ()=> {
-    const p = document.getElementById('expPanel');
-    p.style.display = p.style.display==='block' ? 'none' : 'block';
-  };
-
-  // خيارات
-  [...el.card.querySelectorAll('input[name="c"]')].forEach(inp=>{
-    inp.addEventListener('change',()=>{
-      const chosen = Number(inp.value);
-      state.answers[qi]=chosen;
-      const correct = (chosen===q.answer_index);
-      state.correctness[qi]=correct;
-
-      // تلوين
-      const labels = [...el.card.querySelectorAll('.choice')];
-      labels.forEach((lab,i)=>{
-        if(i===q.answer_index) lab.classList.add('correct');
-        if(i===chosen && i!==q.answer_index) lab.classList.add('wrong');
-        lab.querySelector('input').disabled=true;
-      });
-
-      // رسالة
-      const st = document.getElementById('status');
-      st.innerHTML = correct ? `<span class="ok">✓ إجابة صحيحة</span>` :
-        `<span class="bad">✗ إجابة غير صحيحة</span>`;
-
-      // إظهار التفسير مباشرة بعد الإجابة إن رغبت
-      if(QUIZ.show_explanations_after==="answer"){
-        const exp = document.getElementById('expPanel'); exp.style.display='block';
-      }
-    });
-  });
-
-  // أزرار التنقّل
-  el.prev.disabled = state.idx===0;
-  el.next.disabled = state.idx>=QUIZ.questions.length-1;
-}
-
-function showResult(){
-  const total = QUIZ.questions.length;
-  const correct = state.correctness.filter(Boolean).length;
-  const percent = Math.round(correct/total*100);
-
-  el.bar.style.width = "100%";
-  el.card.innerHTML = `
-    <div class="result">
-      <div style="font-size:22px;font-weight:700">انتهى الاختبار</div>
-      <div class="score">${percent}% <small>(صحيح: ${correct} من ${total})</small></div>
-      <div>
-        <button class="btn" id="againBtn">إعادة المحاولة</button>
-      </div>
-      <div class="review">
-        <h3>مراجعة الإجابات</h3>
-        ${
-          state.order.map((qi,i)=>{
-            const q = QUIZ.questions[qi];
-            const you = state.answers[qi];
-            const ok = (you===q.answer_index);
-            return `
-              <details>
-                <summary>${i+1}. ${ok?'<span class="green">✓</span>':'<span class="red">✗</span>'} ${q.question}</summary>
-                <div style="margin-top:8px">
-                  <div><strong>إجابتك:</strong> ${you!=null? q.choices[you] : '—'}</div>
-                  <div><strong>الصحيحة:</strong> ${q.choices[q.answer_index]}</div>
-                  <div style="margin-top:8px"><strong>التفسير:</strong> ${q.explanation || ''}</div>
-                </div>
-              </details>
-            `;
-          }).join('')
-        }
-      </div>
+    <div class="tools">
+      <button class="btn-sm hint-btn">💡 تلميح</button>
+      <button class="btn-sm exp-btn">📘 تفسير</button>
     </div>
+
+    <div class="panel hint">${Q.hint || "—"}</div>
+    <div class="panel exp"><strong>الحل:</strong> ${Q.exp || "—"}</div>
   `;
-  if (window.MathJax && window.MathJax.typesetPromise) MathJax.typesetPromise();
 
-  const again = document.getElementById('againBtn');
-  again.onclick = ()=> resetQuiz();
-  el.prev.disabled = true;
-  el.next.style.display = "none";
-  el.finish.style.display = "none";
-  el.retry.style.display = "inline-block";
-  el.retry.onclick = ()=> resetQuiz();
-}
+  // تفعيل الأزرار
+  const hintBtn = card.querySelector('.hint-btn');
+  const expBtn  = card.querySelector('.exp-btn');
+  const hintP   = card.querySelector('.panel.hint');
+  const expP    = card.querySelector('.panel.exp');
 
-function resetQuiz(){
-  state.idx=0;
-  state.order = QUIZ.shuffle_questions ? shuffle([...QUIZ.questions.keys()]) : [...QUIZ.questions.keys()];
-  state.answers = Array(QUIZ.questions.length).fill(null);
-  state.correctness = Array(QUIZ.questions.length).fill(false);
-  el.next.style.display = "inline-block";
-  el.finish.style.display = "inline-block";
-  el.retry.style.display = "none";
-  render();
-}
+  hintBtn.onclick = ()=> hintP.style.display = hintP.style.display==='block'?'none':'block';
+  expBtn.onclick  = ()=> expP.style.display  = expP.style.display==='block' ?'none':'block';
 
-// أزرار عامّة
-el.prev.onclick = ()=>{ if(state.idx>0){ state.idx--; render(); } };
-el.next.onclick = ()=>{ if(state.idx<QUIZ.questions.length-1){ state.idx++; render(); } };
-el.finish.onclick = ()=> showResult();
+  container.appendChild(card);
+});
 
-// بداية
-render();
+/* ————— التصحيح الجماعي ————— */
+const gradeBtn = document.getElementById('gradeBtn');
+const toggleSolBtn = document.getElementById('toggleSolBtn');
+const scoreBox = document.getElementById('scoreBox');
+
+gradeBtn.onclick = () => {
+  let correct = 0;
+  QUESTIONS.forEach((Q,idx)=>{
+    const card = container.querySelector(`.card[data-index="${idx}"]`);
+    const labels = [...card.querySelectorAll('.choice')];
+    const radios  = [...card.querySelectorAll('input[type="radio"]')];
+    const chosen = radios.find(r=>r.checked)?.value;
+    labels.forEach((lab,i)=>{
+      lab.classList.remove('correct','wrong');
+      if(i == Q.ans) lab.classList.add('correct');
+      if(chosen!=null && +chosen !== Q.ans && +chosen===i) lab.classList.add('wrong');
+    });
+    if(chosen!=null && +chosen===Q.ans) correct++;
+  });
+  scoreBox.textContent = `النتيجة: ${correct} / ${QUESTIONS.length} ( ${Math.round(correct/QUESTIONS.length*100)}% )`;
+  if (window.MathJax?.typesetPromise) MathJax.typesetPromise();
+};
+
+toggleSolBtn.onclick = () => {
+  const all = document.querySelectorAll('.panel.exp');
+  const show = [...all].some(p=>p.style.display!=='block');
+  all.forEach(p=>p.style.display = show?'block':'none');
+  if (window.MathJax?.typesetPromise) MathJax.typesetPromise();
+};
+
+/* تفعيل MathJax أول مرة */
+if (window.MathJax?.typesetPromise) MathJax.typesetPromise();
 </script>
 </body>
 </html>
